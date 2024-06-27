@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\InputReader\InputReader.csproj" />
+    <ProjectReference Include="..\..\src\InputReader.csproj" />
   </ItemGroup>
 
 </Project>
