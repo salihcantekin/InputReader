@@ -174,6 +174,18 @@ public abstract class
 
         return this;
     }
+    
+    public IInputReader<TInputType, TCustomInputValueType> WithDateOnlyValueConverter(string format = "yyyy-MM-dd")
+    {
+        valueConverter = (IValueConverter<TInputType>)new DateOnlyValueConverter(format);
+        return this;
+    }
+    
+    public IInputReader<TInputType, TCustomInputValueType> WithDateTimeValueConverter(string format = "yyyy-MM-dd HH:mm:ss")
+    {
+        valueConverter = (IValueConverter<TInputType>)new TimeOnlyValueConverter(format);
+        return this;
+    }
 
     #endregion
 

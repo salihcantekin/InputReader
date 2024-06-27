@@ -47,4 +47,15 @@ var intResult = Input
 Console.WriteLine("IsValid: " + intResult.IsValid);
 Console.WriteLine("Value: " + intResult.Value);
 
+var dateInput = Input.DateOnly("Enter Date [yyyy-MM-dd]: ").WithDateOnlyValueConverter().Read();
+
+Console.WriteLine("IsValid: " + dateInput.IsValid);
+Console.WriteLine("Value: " + dateInput.Value);
+
+var timeResult = Input.TimeOnly("Enter a time (HH:mm:ss): ")
+    .WithDateTimeValueConverter("HH:mm:ss")
+    .Read();
+
+Console.WriteLine("IsValid: " + timeResult.IsValid);
+Console.WriteLine("Value: " + timeResult.Value);
 
