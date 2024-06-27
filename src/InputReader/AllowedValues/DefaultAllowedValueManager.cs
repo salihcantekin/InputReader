@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+
+namespace InputReader.AllowedValues;
+
+internal class DefaultAllowedValueManager<T> : IAllowedValueProcessor<T>
+{
+    private readonly HashSet<T> allowedValuesHashSet;
+    private IEqualityComparer<T> allowedValuesComparer;
+    private bool isCaseInSensitive;
+
+    public DefaultAllowedValueManager(IEqualityComparer<T> comparer = null)
+    {
+        SetEqualityComparer(comparer ?? EqualityComparer<T>.Default);
+        allowedValuesHashSet = new(allowedValuesComparer);
+    }
+
+    public IImmutableList<T> Values => allowedValuesHashSet.ToImmutableList();
+
+    public bool IsEnabled => allowedValuesHashSet?.Count > 0;
+
+    public bool IsCaseInSensitive => isCaseInSensitive;
+
+    public void SetEqualityComparer(IEqualityComparer<T> comparer)
+    {
+        allowedValuesComparer = comparer;
+
+        isCaseInSensitive = comparer == StringComparer.OrdinalIgnoreCase
+                         || comparer == StringComparer.InvariantCultureIgnoreCase;
+    }
+
+    public bool IsAllowedValue(T value)
+    {
+        // No need to check the value
+        if (allowedValuesHashSet.Count == 0)
+            return true;
+
+        return allowedValuesHashSet.Contains(value);
+    }
+
+    public bool AddAllowedValue(T value)
+    {
+        return allowedValuesHashSet.Add(value);
+    }
+
+    public void AddAllowedValues(IEnumerable<T> values)
+    {
+        foreach (var value in values)
+        {
+            _ = AddAllowedValue(value);
+        }
+    }
+}

@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<AssemblyName>InputReader</AssemblyName>
+		<RootNamespace>InputReader</RootNamespace>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<IsPackable>true</IsPackable>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>ConsoleInputReader</PackageId>
+		<PackageTags>Console Reader;Console Input Reader;ConsoleReader</PackageTags>
+
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<Company>TechBuddyTR Youtube</Company>
+		<Authors>Salih Cantekin, Community</Authors>
+		<Description>Provides helper functions to read input value from console</Description>
+		<PackageIcon>logo.png</PackageIcon>
+		<Copyright>TechBuddyTR Youtube</Copyright>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageProjectUrl>https://github.com/salihcantekin/InputReader</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/salihcantekin/InputReader</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<Content Include="logo.png" Pack="true" PackagePath="">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="licenses\LICENSE.txt" Pack="true" PackagePath="" />
+		<None Include="README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
+	</ItemGroup>
+
+</Project>
