@@ -1,4 +1,5 @@
 ﻿using InputReader;
+using InputReader.InputReaders.Extensions;
 
 //var input = Input.String("Your Email Address: ").ReadValidEmail();
 
@@ -49,14 +50,15 @@
 
 var dateInput = Input.DateOnly("Enter Date [dd.MM.yyyy]: ")
                     .WithDateOnlyValueConverter(format: "dd.MM.yyyy")
-                    .Read();
+                    .ReadUntilInRange("01.01.2021", "31.12.2021", "dd.MM.yyyy");
+//.Read();
 
 Console.WriteLine("IsValid: " + dateInput.IsValid);
 Console.WriteLine("Value: " + dateInput.Value);
 
-var timeResult = Input.TimeOnly("Enter a time (HH:mm:ss): ")
-                    .WithTimeOnlyValueConverter("HH:mm:ss")
-                    .Read();
+var timeResult = Input.TimeOnly("Enter a time (HH:mm:ss): ", "HH:mm:ss")
+                    .ReadUntilInRange("10:00", "18:00", "HH:mm");
+                    //.Read();
 
 Console.WriteLine("IsValid: " + timeResult.IsValid);
 Console.WriteLine("Value: " + timeResult.Value);

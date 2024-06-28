@@ -6,20 +6,19 @@ namespace InputReader.InputReaders;
 
 public sealed class DateOnlyInputReader : BaseInputReader<CustomDateOnly, DateOnlyInputValue>
 {
-    public static DateOnlyInputReader DateOnly(string message = null) => new(message);
+    public static DateOnlyInputReader DateOnly(string message = null, string format = "HH:mm:ss") => new(message, format);
 
-    public DateOnlyInputReader(string message) : base(message)
+    public DateOnlyInputReader(string message, string format = "HH:mm:ss") : base(message)
     {
+        WithDateOnlyValueConverter(format);
     }
 
-    public DateOnlyInputReader()
+    public DateOnlyInputReader() : this(null)
     {
     }
 
     public IInputReader<CustomDateOnly, DateOnlyInputValue> WithDateOnlyValueConverter(string format = "yyyy-MM-dd")
     {
-        WithValueConverter(new DateOnlyValueConverter(format));
-
-        return this;
+        return WithValueConverter(new DateOnlyValueConverter(format));
     }
-}   
+}

@@ -1,7 +1,9 @@
-﻿using InputReader.InputReaders.Interfaces;
+﻿using InputReader.Converters.CustomConverters;
+using InputReader.InputReaders;
+using InputReader.InputReaders.Interfaces;
 using System;
 
-namespace InputReader;
+namespace InputReader.InputReaders.Extensions;
 
 public static partial class InputReaderExtensions
 {

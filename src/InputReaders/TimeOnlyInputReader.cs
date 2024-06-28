@@ -6,19 +6,19 @@ namespace InputReader.InputReaders;
 
 public sealed class TimeOnlyInputReader : BaseInputReader<CustomTimeOnly, TimeOnlyInputValue>
 {
-    public static TimeOnlyInputReader TimeOnly(string message = null) => new(message);
+    public static TimeOnlyInputReader TimeOnly(string message = null, string format = "HH:mm:ss") => new(message, format);
 
-    public TimeOnlyInputReader(string message) : base(message)
+    public TimeOnlyInputReader(string message, string format = "HH:mm:ss") : base(message)
     {
+        WithTimeOnlyValueConverter(format);
     }
 
-    public TimeOnlyInputReader()
+    public TimeOnlyInputReader(): this(null)
     {
     }
 
     public IInputReader<CustomTimeOnly, TimeOnlyInputValue> WithTimeOnlyValueConverter(string format = "HH:mm:ss")
     {
-        WithValueConverter(new TimeOnlyValueConverter(format));
-        return this;
+        return WithValueConverter(new TimeOnlyValueConverter(format));
     }
 }

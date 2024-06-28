@@ -5,17 +5,17 @@ namespace InputReader.Converters.CustomConverters;
 
 public readonly struct CustomTimeOnly : IComparable<CustomTimeOnly>, IEquatable<CustomTimeOnly>
 {
-    private readonly TimeSpan timeSpan;
+    internal readonly TimeSpan TimeSpan { get; }
     
     private CustomTimeOnly(TimeSpan timeSpan)        
     {
-        this.timeSpan = timeSpan;
+        this.TimeSpan = timeSpan;
     }
 
-    public int Hour => timeSpan.Hours;
-    public int Minute => timeSpan.Minutes;
-    public int Second => timeSpan.Seconds;
-    public int Millisecond => timeSpan.Milliseconds;
+    public int Hour => TimeSpan.Hours;
+    public int Minute => TimeSpan.Minutes;
+    public int Second => TimeSpan.Seconds;
+    public int Millisecond => TimeSpan.Milliseconds;
 
     public static bool TryParseExact(string s, string format, IFormatProvider provider, DateTimeStyles style, out CustomTimeOnly result)
     {
@@ -28,11 +28,18 @@ public readonly struct CustomTimeOnly : IComparable<CustomTimeOnly>, IEquatable<
         return false;
     }
 
-    public int CompareTo(CustomTimeOnly other) => timeSpan.CompareTo(other.timeSpan);
-    public bool Equals(CustomTimeOnly other) => timeSpan.Equals(other.timeSpan);
+    public int CompareTo(CustomTimeOnly other) => TimeSpan.CompareTo(other.TimeSpan);
+    public bool Equals(CustomTimeOnly other) => TimeSpan.Equals(other.TimeSpan);
     public override bool Equals(object obj) => obj is CustomTimeOnly other && Equals(other);
-    public override int GetHashCode() => timeSpan.GetHashCode();
+    public override int GetHashCode() => TimeSpan.GetHashCode();
+    public override string ToString() => TimeSpan.ToString(@"hh\:mm\:ss");
+
     public static bool operator ==(CustomTimeOnly left, CustomTimeOnly right) => left.Equals(right);
     public static bool operator !=(CustomTimeOnly left, CustomTimeOnly right) => !left.Equals(right);
-    public override string ToString() => timeSpan.ToString(@"hh\:mm\:ss");
+
+    public static bool operator >=(CustomTimeOnly left, CustomTimeOnly right) => left.TimeSpan >= right.TimeSpan;
+    public static bool operator <=(CustomTimeOnly left, CustomTimeOnly right) => left.TimeSpan <= right.TimeSpan;
+
+    public static implicit operator TimeSpan(CustomTimeOnly customTimeOnly) => customTimeOnly.TimeSpan;
+    public static implicit operator CustomTimeOnly(TimeSpan timeSpan) => new(timeSpan);
 }
