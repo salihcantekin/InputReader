@@ -6,7 +6,7 @@ namespace InputReader.AllowedValues;
 
 internal class DefaultAllowedValueManager<T> : IAllowedValueProcessor<T>
 {
-    private readonly HashSet<T> allowedValuesHashSet;
+    private HashSet<T> allowedValuesHashSet;
     private IEqualityComparer<T> allowedValuesComparer;
     private bool isCaseInSensitive;
 
@@ -28,6 +28,9 @@ internal class DefaultAllowedValueManager<T> : IAllowedValueProcessor<T>
 
         isCaseInSensitive = comparer == StringComparer.OrdinalIgnoreCase
                          || comparer == StringComparer.InvariantCultureIgnoreCase;
+
+        // To be able to change the comparer
+        allowedValuesHashSet = new(allowedValuesHashSet, allowedValuesComparer);
     }
 
     public bool IsAllowedValue(T value)
@@ -35,7 +38,7 @@ internal class DefaultAllowedValueManager<T> : IAllowedValueProcessor<T>
         // No need to check the value
         if (allowedValuesHashSet.Count == 0)
             return true;
-
+        
         return allowedValuesHashSet.Contains(value);
     }
 

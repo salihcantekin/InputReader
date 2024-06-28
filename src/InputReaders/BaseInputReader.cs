@@ -133,6 +133,22 @@ public abstract class
 
     #region WithAllowedValues Methods
 
+    public IInputReader<TInputType, TCustomInputValueType> WithAllowedValues(bool caseInsensitive = true, params TInputType[] allowedValues)
+    {
+        return WithAllowedValues(allowedValues.Select(i => i.ToString()), caseInsensitive);
+    }
+
+    public IInputReader<TInputType, TCustomInputValueType> WithAllowedValues(params TInputType[] allowedValues)
+    {
+        return WithAllowedValues(allowedValues.Select(i => i.ToString()), false);
+    }
+
+    public IInputReader<TInputType, TCustomInputValueType> WithAllowedValues(IEnumerable<TInputType> allowedValues,
+        bool caseInsensitive = true)
+    {
+        return WithAllowedValues(allowedValues.Select(i => i.ToString()), caseInsensitive);
+    }
+
     public IInputReader<TInputType, TCustomInputValueType> WithAllowedValues(IEnumerable<string> allowedValues,
         bool caseInsensitive = true)
     {
