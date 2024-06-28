@@ -1,5 +1,6 @@
 ﻿using InputReader.AllowedValues;
 using InputReader.Converters;
+using InputReader.Converters.CustomConverters;
 using InputReader.InputReaders.Interfaces;
 using InputReader.PrintProcessor;
 using InputReader.Validators;
@@ -172,18 +173,6 @@ public abstract class
     {
         (valueConverter as DefaultValueConverter<TInputType>).InternalFunc = convertFunc;
 
-        return this;
-    }
-    
-    public IInputReader<TInputType, TCustomInputValueType> WithDateOnlyValueConverter(string format = "yyyy-MM-dd")
-    {
-        valueConverter = (IValueConverter<TInputType>)new DateOnlyValueConverter(format);
-        return this;
-    }
-    
-    public IInputReader<TInputType, TCustomInputValueType> WithDateTimeValueConverter(string format = "yyyy-MM-dd HH:mm:ss")
-    {
-        valueConverter = (IValueConverter<TInputType>)new TimeOnlyValueConverter(format);
         return this;
     }
 

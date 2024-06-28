@@ -5,7 +5,7 @@ namespace InputReader.Converters;
 
 public class DefaultValueConverter<TInputType> : IValueConverter<TInputType>
 {
-    internal Func<string, TInputType> InternalFunc;
+    internal Func<string, TInputType> InternalFunc { get; set; }
 
     public DefaultValueConverter(Func<string, TInputType> func = null)
     {
