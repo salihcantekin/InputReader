@@ -1,5 +1,6 @@
 ﻿using InputReader.AllowedValues;
 using InputReader.Converters;
+using InputReader.Converters.CustomConverters;
 using InputReader.InputReaders.Interfaces;
 using InputReader.PrintProcessor;
 using InputReader.Validators;
