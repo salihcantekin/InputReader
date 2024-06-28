@@ -15,7 +15,7 @@ var result = Input.Int("Do you agree? ").WithAllowedValues(1, 2)
 ////
 ////     return new IntInputValue(value);
 //// })
-//.ReadUntilValid();
+.ReadUntilValid();
 
 //Console.WriteLine("IsValid: " + result.IsValid);
 //Console.WriteLine("Value: {0}", result.Value);
