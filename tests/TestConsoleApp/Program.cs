@@ -1,7 +1,7 @@
 ﻿using InputReader;
 using InputReader.InputReaders.Extensions;
 
-//var input = Input.String("Your Email Address: ").ReadValidEmail();
+var input = Input.String("Your Email Address: ").ReadValidEmail();
 
 var result = Input.Int("Do you agree? ").WithAllowedValues(1, 2)
 

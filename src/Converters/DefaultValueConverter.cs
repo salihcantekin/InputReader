@@ -30,6 +30,12 @@ public class DefaultValueConverter<TInputType> : IValueConverter<TInputType>
 
     public bool TryConvertFromString(string consoleInput, out TInputType value)
     {
+        if (typeof(TInputType) == typeof(string))
+        {
+            value = (TInputType)(object)consoleInput; // Cast to object first
+            return true;
+        }
+
         value = default;
 
         try

@@ -13,7 +13,7 @@ internal class DefaultAllowedValueManager<T> : IAllowedValueProcessor<T>
     public DefaultAllowedValueManager(IEqualityComparer<T> comparer = null)
     {
         SetEqualityComparer(comparer ?? EqualityComparer<T>.Default);
-        allowedValuesHashSet = new(allowedValuesComparer);
+        allowedValuesHashSet ??= new(allowedValuesComparer);
     }
 
     public IImmutableList<T> Values => allowedValuesHashSet.ToImmutableList();
@@ -30,7 +30,8 @@ internal class DefaultAllowedValueManager<T> : IAllowedValueProcessor<T>
                          || comparer == StringComparer.InvariantCultureIgnoreCase;
 
         // To be able to change the comparer
-        allowedValuesHashSet = new(allowedValuesHashSet, allowedValuesComparer);
+        if (allowedValuesHashSet is not null)
+            allowedValuesHashSet = new(allowedValuesHashSet, allowedValuesComparer);
     }
 
     public bool IsAllowedValue(T value)
@@ -38,7 +39,7 @@ internal class DefaultAllowedValueManager<T> : IAllowedValueProcessor<T>
         // No need to check the value
         if (allowedValuesHashSet.Count == 0)
             return true;
-        
+
         return allowedValuesHashSet.Contains(value);
     }
 
