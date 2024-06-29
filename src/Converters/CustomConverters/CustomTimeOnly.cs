@@ -7,9 +7,18 @@ public readonly struct CustomTimeOnly : IComparable<CustomTimeOnly>, IEquatable<
 {
     internal readonly TimeSpan TimeSpan { get; }
     
+    public static CustomTimeOnly From(TimeSpan timeSpan) => new(timeSpan);
+    public static CustomTimeOnly From(int hour, int minute = 0, int second = 0) => new(hour, minute, second);
+
     private CustomTimeOnly(TimeSpan timeSpan)        
     {
         this.TimeSpan = timeSpan;
+    }
+
+    public CustomTimeOnly(int hour, int minute = 0, int second = 0) 
+        : this(new TimeSpan(hour, minute, second)) 
+    {
+
     }
 
     public int Hour => TimeSpan.Hours;

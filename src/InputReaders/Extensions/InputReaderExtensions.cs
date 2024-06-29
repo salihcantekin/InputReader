@@ -40,7 +40,7 @@ public static partial class InputReaderExtensions
 
 
 
-    public static TCustomInputValueType ReadValidEmail<TInputType, TCustomInputValueType>(
+    public static TCustomInputValueType ReadUntilValidEmail<TInputType, TCustomInputValueType>(
         this IInputReader<TInputType, TCustomInputValueType> reader)
         where TCustomInputValueType : InputValue<TInputType>
     {

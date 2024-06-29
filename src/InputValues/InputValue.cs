@@ -18,3 +18,5 @@ public record InputValue<T>(T Value)
         return new InputValue<T>(value);
     }
 }
+
+
