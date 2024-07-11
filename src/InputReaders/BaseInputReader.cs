@@ -26,7 +26,7 @@ public abstract class
     private readonly HashSet<IPreValidator> preValidators = [];
     private readonly HashSet<IPostValidator<TInputType>> postValidators = [];
     
-    private Action<TCustomInputValueType, IPrintProcessor> readAction;
+    private Action<TCustomInputValueType, IPrintProcessor> iterationAction;
 
     public BaseInputReader()
     {
@@ -68,7 +68,7 @@ public abstract class
         if (result is not null)
             result.IsValid = success;
 
-        readAction?.Invoke(result, printProcessor);
+        iterationAction?.Invoke(result, printProcessor);
         
         return result;
     }
@@ -109,7 +109,7 @@ public abstract class
     
     public IInputReader<TInputType, TCustomInputValueType> WithIteration(Action<TCustomInputValueType, IPrintProcessor> action)
     {
-        readAction = action;
+        iterationAction = action;
         return this;
     }
 
