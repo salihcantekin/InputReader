@@ -14,8 +14,6 @@ using InputReader.InputReaders.Extensions;
 //Console.WriteLine("IsValid: " + intResult.IsValid);
 //Console.WriteLine("Value: " + intResult.Value);
 
-
-
 var intResult = Input
                     .DateOnly()
                     //.ReadUntilValid()
@@ -120,4 +118,3 @@ var intResult = Input
 
 //Console.WriteLine("IsValid: " + timeResult.IsValid);
 //Console.WriteLine("Value: " + timeResult.Value);
-
