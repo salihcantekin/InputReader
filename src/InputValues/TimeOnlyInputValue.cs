@@ -2,10 +2,7 @@
 
 namespace InputReader;
 
-public record TimeOnlyInputValue : InputValue<CustomTimeOnly>
+public record TimeOnlyInputValue(CustomTimeOnly? Value) : InputValue<CustomTimeOnly?>(Value)
 {
-    public TimeOnlyInputValue(CustomTimeOnly value) : base(value)
-    {
-        Value = value;
-    }
+    
 }

@@ -3,7 +3,7 @@ using InputReader.Validators;
 
 namespace InputReader;
 
-public class CharInputReader : BaseInputReader<char, CharInputValue>
+public class CharInputReader : BaseInputReader<char?, CharInputValue>
 {
     public static CharInputReader Chr(string message = null) => new(message);
 

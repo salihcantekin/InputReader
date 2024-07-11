@@ -16,6 +16,11 @@ internal class DefaultAllowedValueManager<T> : IAllowedValueProcessor<T>
         allowedValuesHashSet ??= new(allowedValuesComparer);
     }
 
+    internal void ClearAllowedValues()
+    {
+        allowedValuesHashSet.Clear();
+    }
+
     public IImmutableList<T> Values => allowedValuesHashSet.ToImmutableList();
 
     public bool IsEnabled => allowedValuesHashSet?.Count > 0;
@@ -55,4 +60,6 @@ internal class DefaultAllowedValueManager<T> : IAllowedValueProcessor<T>
             _ = AddAllowedValue(value);
         }
     }
+
+    
 }

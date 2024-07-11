@@ -1,6 +1,5 @@
 ﻿using InputReader.AllowedValues;
 using InputReader.Converters;
-using InputReader.Converters.CustomConverters;
 using InputReader.InputReaders.Interfaces;
 using InputReader.PrintProcessor;
 using InputReader.Validators;
@@ -15,6 +14,7 @@ public abstract class
     IPreValidatable<TInputType, TCustomInputValueType>
     where TCustomInputValueType : InputValue<TInputType>
 {
+
     private IValueConverter<TInputType> valueConverter;
     private bool isPreBuildProcessed;
 
@@ -41,6 +41,9 @@ public abstract class
 
     #region Read Methods
 
+    // TODO: Refactor this method
+    // UNDONE
+    // MY_NEW_TODO
     public virtual TCustomInputValueType Read()
     {
         /* ############## STEPS #############
@@ -57,7 +60,8 @@ public abstract class
          */
 
         var (success, value) = ReadGeneric();
-        var result = Activator.CreateInstance(typeof(TCustomInputValueType), value) as TCustomInputValueType;
+
+        var result = Activator.CreateInstance(typeof(TCustomInputValueType), success ? value : null) as TCustomInputValueType;
 
         if (result is not null)
             result.IsValid = success;
@@ -132,6 +136,12 @@ public abstract class
 
 
     #region WithAllowedValues Methods
+
+    public IInputReader<TInputType, TCustomInputValueType> ClearAllowedValues()
+    {
+        allowedValueProcessor.ClearAllowedValues();
+        return this;
+    }
 
     public IInputReader<TInputType, TCustomInputValueType> WithAllowedValues(bool caseInsensitive = true, params TInputType[] allowedValues)
     {

@@ -1,17 +1,16 @@
-﻿using System;
+﻿using InputReader.Converters.CustomConverters;
+using System;
 using System.Globalization;
-using InputReader.Converters.CustomConverters;
 
 namespace InputReader.Converters;
 
-public class DateOnlyValueConverter(string format = "yyyy-MM-dd") : IValueConverter<CustomDateOnly>
+public class DateOnlyValueConverter(string format = "yyyy-MM-dd") : IValueConverter<CustomDateOnly?>
 {
-    public bool TryConvertFromString(string consoleInput, out CustomDateOnly value)
+    public bool TryConvertFromString(string consoleInput, out CustomDateOnly? value)
     {
         try
         {
-            return CustomDateOnly.TryParseExact(consoleInput, format, CultureInfo.InvariantCulture, DateTimeStyles.None,
-                out value);
+            return CustomDateOnly.TryParseExact(consoleInput, format, out value);
         }
         catch (ArgumentException)
         {

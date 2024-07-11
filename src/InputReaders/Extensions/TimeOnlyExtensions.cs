@@ -7,25 +7,18 @@ namespace InputReader.InputReaders.Extensions;
 
 public static class TimeOnlyExtensions
 {
-    public static TimeOnlyInputValue ReadUntilInRange(
-        this IInputReader<CustomTimeOnly, TimeOnlyInputValue> reader, CustomTimeOnly fromTime, CustomTimeOnly toTime)
-    {
-        return reader.ReadUntil(input =>
-        {
-            return input.Value >= fromTime && input.Value <= toTime;
-        });
-    }
-
-    public static TimeOnlyInputValue ReadUntilInRange(
-        this IInputReader<CustomTimeOnly, TimeOnlyInputValue> reader, string fromTime, string toTime, string format = "HH:mm:ss")
+    public static TimeOnlyInputValue ReadUntilInRange(this IInputReader<CustomTimeOnly?, TimeOnlyInputValue> reader,
+                                                      string fromTime,
+                                                      string toTime,
+                                                      string format = "HH:mm:ss")
     {
         TimeOnlyValueConverter converter = new(format);
-        if (!converter.TryConvertFromString(fromTime, out CustomTimeOnly fromTimeValue))
+        if (!converter.TryConvertFromString(fromTime, out CustomTimeOnly? fromTimeValue))
         {
             throw new ArgumentException("Invalid fromTime value");
         }
-        
-        if (!converter.TryConvertFromString(toTime, out CustomTimeOnly toTimeValue))
+
+        if (!converter.TryConvertFromString(toTime, out CustomTimeOnly? toTimeValue))
         {
             throw new ArgumentException("Invalid toTime value");
         }

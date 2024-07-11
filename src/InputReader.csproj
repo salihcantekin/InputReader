@@ -15,9 +15,6 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageId>ConsoleInputReader</PackageId>
 		<PackageTags>Console Reader;Console Input Reader;ConsoleReader</PackageTags>
-
-		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -26,8 +23,8 @@
 		<Description>Provides helper functions to read input value from console</Description>
 		<PackageIcon>logo.png</PackageIcon>
 		<Copyright>TechBuddyTR Youtube</Copyright>
-		<PackageLicenseFile>..\licenses\LICENSE.txt</PackageLicenseFile>
-		<PackageReadmeFile>..\README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageProjectUrl>https://github.com/salihcantekin/InputReader</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/salihcantekin/InputReader</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
@@ -38,6 +35,22 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\licenses\LICENSE.txt">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Include="..\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+	<!--<ItemGroup>
+		<None Include="..\README.md" pack="true" PackagePath="../." />
+		<None Include="../licenses/LICENSE.txt" pack="true" PackagePath="../." />
+	</ItemGroup>-->
 
 	<ItemGroup>
 		<PackageReference Include="System.Collections.Immutable" Version="8.0.0" />

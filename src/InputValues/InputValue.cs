@@ -1,4 +1,6 @@
-﻿namespace InputReader;
+﻿using System;
+
+namespace InputReader;
 
 public record InputValue<T>(T Value)
 {

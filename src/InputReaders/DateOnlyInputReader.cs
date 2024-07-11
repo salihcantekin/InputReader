@@ -4,11 +4,11 @@ using InputReader.InputReaders.Interfaces;
 
 namespace InputReader.InputReaders;
 
-public sealed class DateOnlyInputReader : BaseInputReader<CustomDateOnly, DateOnlyInputValue>
+public sealed class DateOnlyInputReader : BaseInputReader<CustomDateOnly?, DateOnlyInputValue>
 {
-    public static DateOnlyInputReader DateOnly(string message = null, string format = "HH:mm:ss") => new(message, format);
+    public static DateOnlyInputReader DateOnly(string message = null, string format = "yyyy-MM-dd") => new(message, format);
 
-    public DateOnlyInputReader(string message, string format = "HH:mm:ss") : base(message)
+    public DateOnlyInputReader(string message, string format = "yyyy-MM-dd") : base(message)
     {
         WithDateOnlyValueConverter(format);
     }
@@ -17,7 +17,7 @@ public sealed class DateOnlyInputReader : BaseInputReader<CustomDateOnly, DateOn
     {
     }
 
-    public IInputReader<CustomDateOnly, DateOnlyInputValue> WithDateOnlyValueConverter(string format = "yyyy-MM-dd")
+    public IInputReader<CustomDateOnly?, DateOnlyInputValue> WithDateOnlyValueConverter(string format = "yyyy-MM-dd")
     {
         return WithValueConverter(new DateOnlyValueConverter(format));
     }

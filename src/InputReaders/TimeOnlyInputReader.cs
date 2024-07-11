@@ -4,7 +4,7 @@ using InputReader.InputReaders.Interfaces;
 
 namespace InputReader.InputReaders;
 
-public sealed class TimeOnlyInputReader : BaseInputReader<CustomTimeOnly, TimeOnlyInputValue>
+public sealed class TimeOnlyInputReader : BaseInputReader<CustomTimeOnly?, TimeOnlyInputValue>
 {
     public static TimeOnlyInputReader TimeOnly(string message = null, string format = "HH:mm:ss") => new(message, format);
 
@@ -13,11 +13,11 @@ public sealed class TimeOnlyInputReader : BaseInputReader<CustomTimeOnly, TimeOn
         WithTimeOnlyValueConverter(format);
     }
 
-    public TimeOnlyInputReader(): this(null)
+    public TimeOnlyInputReader() : this(null)
     {
     }
 
-    public IInputReader<CustomTimeOnly, TimeOnlyInputValue> WithTimeOnlyValueConverter(string format = "HH:mm:ss")
+    public IInputReader<CustomTimeOnly?, TimeOnlyInputValue> WithTimeOnlyValueConverter(string format = "HH:mm:ss")
     {
         return WithValueConverter(new TimeOnlyValueConverter(format));
     }

@@ -1,22 +1,23 @@
-﻿using System;
+﻿using InputReader.InputReaders.Interfaces;
+using System;
 using System.Globalization;
 
 namespace InputReader.Converters.CustomConverters;
 
-public readonly struct CustomTimeOnly : IComparable<CustomTimeOnly>, IEquatable<CustomTimeOnly>
+public readonly struct CustomTimeOnly : IComparable<CustomTimeOnly>, IEquatable<CustomTimeOnly>, IInRangeCompatible<CustomTimeOnly>
 {
     internal readonly TimeSpan TimeSpan { get; }
-    
+
     public static CustomTimeOnly From(TimeSpan timeSpan) => new(timeSpan);
     public static CustomTimeOnly From(int hour, int minute = 0, int second = 0) => new(hour, minute, second);
 
-    private CustomTimeOnly(TimeSpan timeSpan)        
+    private CustomTimeOnly(TimeSpan timeSpan)
     {
         this.TimeSpan = timeSpan;
     }
 
-    public CustomTimeOnly(int hour, int minute = 0, int second = 0) 
-        : this(new TimeSpan(hour, minute, second)) 
+    public CustomTimeOnly(int hour, int minute = 0, int second = 0)
+        : this(new TimeSpan(hour, minute, second))
     {
 
     }
@@ -26,7 +27,12 @@ public readonly struct CustomTimeOnly : IComparable<CustomTimeOnly>, IEquatable<
     public int Second => TimeSpan.Seconds;
     public int Millisecond => TimeSpan.Milliseconds;
 
-    public static bool TryParseExact(string s, string format, IFormatProvider provider, DateTimeStyles style, out CustomTimeOnly result)
+    public static bool TryParseExact(string s, string format, out CustomTimeOnly? result)
+    {
+        return TryParseExact(s, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
+    }
+
+    public static bool TryParseExact(string s, string format, IFormatProvider provider, DateTimeStyles style, out CustomTimeOnly? result)
     {
         if (DateTime.TryParseExact(s, format, provider, style, out var dateTime))
         {
@@ -37,11 +43,18 @@ public readonly struct CustomTimeOnly : IComparable<CustomTimeOnly>, IEquatable<
         return false;
     }
 
+    public bool IsInRange(CustomTimeOnly fromValue, CustomTimeOnly toValue)
+    {
+        return this >= fromValue && this <= toValue;
+    }
+
     public int CompareTo(CustomTimeOnly other) => TimeSpan.CompareTo(other.TimeSpan);
     public bool Equals(CustomTimeOnly other) => TimeSpan.Equals(other.TimeSpan);
     public override bool Equals(object obj) => obj is CustomTimeOnly other && Equals(other);
     public override int GetHashCode() => TimeSpan.GetHashCode();
     public override string ToString() => TimeSpan.ToString(@"hh\:mm\:ss");
+
+    
 
     public static bool operator ==(CustomTimeOnly left, CustomTimeOnly right) => left.Equals(right);
     public static bool operator !=(CustomTimeOnly left, CustomTimeOnly right) => !left.Equals(right);

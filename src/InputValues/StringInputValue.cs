@@ -1,12 +1,7 @@
 ﻿namespace InputReader;
 
-public record StringInputValue : InputValue<string>
+public record StringInputValue(string Value) : InputValue<string>(Value)
 {
     public bool IsNullOrEmpty() => string.IsNullOrWhiteSpace(Value);
     public bool IsNull() => Value is null;
-
-    public StringInputValue(string value) : base(value)
-    {
-
-    }
 }
