@@ -4,6 +4,7 @@ using InputReader.InputReaders.Interfaces;
 using System;
 
 namespace InputReader.InputReaders.Extensions;
+
 public static class DateOnlyExtensions
 {
     public static DateOnlyInputValue ReadUntilInRange(
