@@ -14,10 +14,10 @@ using InputReader.InputReaders.Extensions;
 //Console.WriteLine("IsValid: " + intResult.IsValid);
 //Console.WriteLine("Value: " + intResult.Value);
 
-var intResult = Input
-                    .DateOnly()
-                    //.ReadUntilValid()
-                    .ReadUntilValid();
+//var intResult = Input
+//                    .DateOnly()
+//                    //.ReadUntilValid()
+//                    .ReadUntilValid();
                     //.ReadUntil(number =>
                     //{
                     //    if (number.IsZero())
@@ -25,6 +25,8 @@ var intResult = Input
 
                     //    return false;
                     //});
+
+var tcknResult = Input.CitizenShipNumber("Lütfen TCKN Giriniz: ").ReadUntilValid();
 
 
 

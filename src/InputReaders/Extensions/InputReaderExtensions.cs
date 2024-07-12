@@ -14,6 +14,8 @@ public static partial class InputReaderExtensions
         do
         {
             result = reader.Read();
+            if (!result.IsValid)
+                Console.WriteLine("Geçersiz değer girdiniz! \n"); //Kullanıcı hatalı giriş yapınca bilgilendirilebilir
 
         } while (!result.IsValid);
 

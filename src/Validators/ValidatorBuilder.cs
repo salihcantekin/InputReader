@@ -11,6 +11,9 @@ internal class ValidatorBuilder
 
     private static IPreValidator intValidator;
     public static IPreValidator BuildIntInputPreValidator() => intValidator ??= new IntInputPreValidator();
+    private static IPreValidator citizenShipNumberValidator;
+
+    public static IPreValidator BuildCitizenShipNumberValidator() => citizenShipNumberValidator ??= new CitizenShipNumberPreValidator();
 
 
     public static IPreValidator SetCustomPreValidator(Func<string, bool> validatorFunc)
