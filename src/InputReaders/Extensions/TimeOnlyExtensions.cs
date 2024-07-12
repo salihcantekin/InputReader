@@ -2,6 +2,7 @@
 using InputReader.Converters.CustomConverters;
 using InputReader.InputReaders.Interfaces;
 using System;
+using InputReader.Converters.Constants;
 
 namespace InputReader.InputReaders.Extensions;
 
@@ -10,7 +11,7 @@ public static class TimeOnlyExtensions
     public static TimeOnlyInputValue ReadUntilInRange(this IInputReader<CustomTimeOnly?, TimeOnlyInputValue> reader,
                                                       string fromTime,
                                                       string toTime,
-                                                      string format = "HH:mm:ss")
+                                                      string format = RelatedConstant.Time)
     {
         TimeOnlyValueConverter converter = new(format);
         if (!converter.TryConvertFromString(fromTime, out CustomTimeOnly? fromTimeValue))

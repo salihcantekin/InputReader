@@ -1,4 +1,5 @@
 ﻿using InputReader.Converters;
+using InputReader.Converters.Constants;
 using InputReader.Converters.CustomConverters;
 using InputReader.InputReaders.Interfaces;
 
@@ -6,9 +7,9 @@ namespace InputReader.InputReaders;
 
 public sealed class TimeOnlyInputReader : BaseInputReader<CustomTimeOnly?, TimeOnlyInputValue>
 {
-    public static TimeOnlyInputReader TimeOnly(string message = null, string format = "HH:mm:ss") => new(message, format);
+    public static TimeOnlyInputReader TimeOnly(string message = null, string format = RelatedConstant.Time) => new(message, format);
 
-    public TimeOnlyInputReader(string message, string format = "HH:mm:ss") : base(message)
+    public TimeOnlyInputReader(string message, string format = RelatedConstant.Time) : base(message)
     {
         WithTimeOnlyValueConverter(format);
     }
@@ -17,7 +18,7 @@ public sealed class TimeOnlyInputReader : BaseInputReader<CustomTimeOnly?, TimeO
     {
     }
 
-    public IInputReader<CustomTimeOnly?, TimeOnlyInputValue> WithTimeOnlyValueConverter(string format = "HH:mm:ss")
+    public IInputReader<CustomTimeOnly?, TimeOnlyInputValue> WithTimeOnlyValueConverter(string format = RelatedConstant.Time)
     {
         return WithValueConverter(new TimeOnlyValueConverter(format));
     }

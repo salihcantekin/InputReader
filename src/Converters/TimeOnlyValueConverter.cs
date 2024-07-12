@@ -1,9 +1,10 @@
 ﻿using InputReader.Converters.CustomConverters;
 using System;
+using InputReader.Converters.Constants;
 
 namespace InputReader.Converters;
 
-public class TimeOnlyValueConverter(string format = "HH:mm:ss") : IValueConverter<CustomTimeOnly?>
+public class TimeOnlyValueConverter(string format = RelatedConstant.Time) : IValueConverter<CustomTimeOnly?>
 {
     public bool TryConvertFromString(string consoleInput, out CustomTimeOnly? value)
     {
