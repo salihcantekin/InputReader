@@ -4,12 +4,12 @@ namespace InputReader.InputReaders.Extensions;
 
 public static class InRangeExtensions
 {
-    public static TCustomInputValueType ReadUntilInRange<TInputType, TCustomInputValueType>(
-        this IInputReader<TInputType?, TCustomInputValueType> reader,
+    public static TInputValueType ReadUntilInRange<TInputType, TInputValueType>(
+        this IInputReader<TInputType?, TInputValueType> reader,
         TInputType? from,
         TInputType? to)
         where TInputType : struct, IInRangeCompatible<TInputType>
-        where TCustomInputValueType : InputValue<TInputType?>
+        where TInputValueType : InputValue<TInputType?>
     {
         return reader.ReadUntil(input =>
         {

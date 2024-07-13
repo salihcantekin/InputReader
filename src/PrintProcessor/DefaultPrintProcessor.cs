@@ -25,6 +25,11 @@ public class DefaultPrintProcessor : IPrintProcessor
         Console.WriteLine(message);
     }
 
+    public void PrintError(string message)
+    {
+        Console.Error.WriteLine(message);
+    }
+
     public void PrintAllowedValues(IEnumerable<string> allowedValues, bool isCaseInSensitive)
     {
         var allowedMessage = $"({string.Join(',', allowedValues)}{(isCaseInSensitive ? '°' : '\0')}) ";

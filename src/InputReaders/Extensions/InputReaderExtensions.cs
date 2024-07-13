@@ -5,11 +5,11 @@ namespace InputReader.InputReaders.Extensions;
 
 public static partial class InputReaderExtensions
 {
-    public static TCustomInputValueType ReadUntilValid<TInputType, TCustomInputValueType>(
-        this IInputReader<TInputType, TCustomInputValueType> reader)
-        where TCustomInputValueType : InputValue<TInputType>
+    public static TInputValueType ReadUntilValid<TInputType, TInputValueType>(
+        this IInputReader<TInputType, TInputValueType> reader)
+        where TInputValueType : InputValue<TInputType>
     {
-        TCustomInputValueType result;
+        TInputValueType result;
 
         do
         {
@@ -20,9 +20,9 @@ public static partial class InputReaderExtensions
         return result;
     }
 
-    public static TCustomInputValueType ReadUntil<TInputType, TCustomInputValueType>(
-        this IInputReader<TInputType, TCustomInputValueType> reader, Func<TCustomInputValueType, bool> valuePredicate)
-        where TCustomInputValueType : InputValue<TInputType>
+    public static TInputValueType ReadUntil<TInputType, TInputValueType>(
+        this IInputReader<TInputType, TInputValueType> reader, Func<TInputValueType, bool> valuePredicate)
+        where TInputValueType : InputValue<TInputType>
     {
         do
         {
@@ -36,9 +36,9 @@ public static partial class InputReaderExtensions
         } while (true);
     }
 
-    public static TCustomInputValueType ReadUntilValidEmail<TInputType, TCustomInputValueType>(
-        this IInputReader<TInputType, TCustomInputValueType> reader)
-        where TCustomInputValueType : InputValue<TInputType>
+    public static TInputValueType ReadUntilValidEmail<TInputType, TInputValueType>(
+        this IInputReader<TInputType, TInputValueType> reader)
+        where TInputValueType : InputValue<TInputType>
     {
         return reader.ReadUntil(input =>
         {

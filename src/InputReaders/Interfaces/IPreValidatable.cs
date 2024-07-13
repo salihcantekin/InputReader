@@ -3,9 +3,9 @@ using System;
 
 namespace InputReader.InputReaders.Interfaces;
 
-public interface IPreValidatable<TInputType, TCustomInputValueType>
-    where TCustomInputValueType : InputValue<TInputType>
+public interface IPreValidatable<TInputType, TInputValueType>
+    where TInputValueType : InputValue<TInputType>
 {
-    IInputReader<TInputType, TCustomInputValueType> WithPreValidator<TPreValidator>(TPreValidator validator) where TPreValidator : IPreValidator;
-    IInputReader<TInputType, TCustomInputValueType> WithPreValidator(Func<string, bool> validatorFunc);
+    IInputReader<TInputType, TInputValueType> WithPreValidator<TPreValidator>(TPreValidator validator) where TPreValidator : IPreValidator;
+    IInputReader<TInputType, TInputValueType> WithPreValidator(Func<string, bool> validatorFunc);
 }

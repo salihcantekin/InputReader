@@ -16,7 +16,7 @@ internal class DefaultAllowedValueManager<T> : IAllowedValueProcessor<T>
         allowedValuesHashSet ??= new(allowedValuesComparer);
     }
 
-    internal void ClearAllowedValues()
+    public void ClearAllowedValues()
     {
         allowedValuesHashSet.Clear();
     }

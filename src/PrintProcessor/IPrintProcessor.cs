@@ -10,5 +10,7 @@ public interface IPrintProcessor
     void PrintLine(string message);
     void PrintLine(char chr);
 
+    void PrintError(string message);
+
     void PrintAllowedValues(IEnumerable<string> allowedValues, bool isCaseInSensitive);
 }

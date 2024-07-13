@@ -1,4 +1,4 @@
-﻿using InputReader.InputReaders;
+﻿using InputReader.InputReaders.BaseInputReaders;
 
 namespace InputReader;
 

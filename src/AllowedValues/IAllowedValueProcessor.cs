@@ -14,6 +14,8 @@ public interface IAllowedValueProcessor<T>
 
     bool IsAllowedValue(T value);
 
+    void ClearAllowedValues();
+
     bool AddAllowedValue(T value);
     void AddAllowedValues(IEnumerable<T> values);
 }

@@ -1,6 +1,6 @@
 ﻿namespace InputReader.Converters;
 
-public interface IValueConverter<TCustomInputValueType>
+public interface IValueConverter<TInputValueType>
 {
-    bool TryConvertFromString(string consoleInput, out TCustomInputValueType value);
+    bool TryConvertFromString(string consoleInput, out TInputValueType value);
 }

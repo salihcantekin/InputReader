@@ -1,5 +1,6 @@
 ﻿using InputReader.Converters;
 using InputReader.Converters.CustomConverters;
+using InputReader.InputReaders.BaseInputReaders;
 using InputReader.InputReaders.Interfaces;
 
 namespace InputReader.InputReaders;

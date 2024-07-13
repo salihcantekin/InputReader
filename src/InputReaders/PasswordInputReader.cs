@@ -1,4 +1,4 @@
-﻿using InputReader.InputReaders;
+﻿using InputReader.InputReaders.BaseInputReaders;
 using InputReader.InputReaders.ConsoleReaders;
 using InputReader.InputValues;
 
@@ -11,8 +11,7 @@ public sealed class PasswordInputReader : BaseInputReader<string, PasswordInputV
 
     public PasswordInputReader(string message, char passwordChar = DefaultPasswordChar) : base(message)
     {
-
-        SetConsoleReader(new PasswordConsoleReader(passwordChar, printProcessor));
+        SetConsoleReader(new PasswordConsoleReader(passwordChar, PrintProcessor));
     }
 
     public PasswordInputReader() : base()

@@ -13,8 +13,8 @@ public interface IInputReaderBase
 }
 
 
-public interface IInputReaderBase<TInputType, out TCustomInputValueType> //: IInputReaderBase
-    where TCustomInputValueType : InputValue<TInputType>
+public interface IInputReaderBase<TInputType, out TInputValueType> //: IInputReaderBase
+    where TInputValueType : InputValue<TInputType>
 {
-    TCustomInputValueType Read();
+    TInputValueType Read();
 }

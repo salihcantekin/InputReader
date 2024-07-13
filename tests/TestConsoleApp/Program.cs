@@ -1,7 +1,12 @@
 ﻿using InputReader;
 using InputReader.InputReaders.Extensions;
 
-var iteractionTest = Input.Int("Enter a number: ")
+_ = Input.Int("Error a number: ")
+            .WithErrorMessage("Invalid input. Please try again.")
+            .ReadUntilValid();
+
+var iteractionTest = Input
+                    .Int("Enter a number: ")
                     .WithIteration((input, printer) =>
                     {
                         if (!input.IsValid)
