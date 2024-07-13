@@ -1,7 +1,15 @@
 ﻿using InputReader;
-using InputReader.Converters.CustomConverters;
 using InputReader.InputReaders.Extensions;
-using System.Security;
+
+var iteractionTest = Input.Int("Enter a number: ")
+                    .WithIteration((input, printer) =>
+                    {
+                        if (!input.IsValid)
+                            printer.PrintLine("Invalid input. Please try again.");
+                        else
+                            printer.PrintLine("You entered: " + input.Value);
+                    })
+                    .ReadUntilValid();
 
 var passwordResult = Input
                     .Password("Enter your password: ")
@@ -11,37 +19,6 @@ var oneDigitInteger = Input
                 .Int("Input a number that is one digit only")
                 .WithPreValidator(input => input?.Length == 1)
                 .ReadUntilValid();
-
-
-Console.Write("Enter your password: ");
-
-var pwd = new SecureString();
-do
-{
-    var consoleKeyInfo = Console.ReadKey(intercept: true);
-    if (consoleKeyInfo.Key == ConsoleKey.Enter)
-    {
-        break;
-    }
-    else if (consoleKeyInfo.Key == ConsoleKey.Backspace)
-    {
-        if (pwd.Length == 0)
-        {
-            continue;
-        }
-
-        pwd.RemoveAt(pwd.Length - 1);
-        Console.Write("\b \b");
-    }
-    else
-    {
-        pwd.AppendChar(consoleKeyInfo.KeyChar);
-        Console.Write("*");
-    }
-
-
-} while (true);
-
 
 //var intResult = Input
 //                .Char("Enter a char: ")
