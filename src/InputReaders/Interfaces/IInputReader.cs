@@ -1,6 +1,7 @@
 ﻿using InputReader.Converters;
 using System;
 using System.Collections.Generic;
+using InputReader.PrintProcessor;
 
 namespace InputReader.InputReaders.Interfaces;
 
@@ -20,4 +21,7 @@ public interface IInputReader<TInputType, TCustomInputValueType> : IInputReaderB
 
     IInputReader<TInputType, TCustomInputValueType> WithValueConverter(
         IValueConverter<TInputType> converter);
+    
+    IInputReader<TInputType, TCustomInputValueType> WithIteration(
+        Action<TCustomInputValueType, IPrintProcessor> action);
 }

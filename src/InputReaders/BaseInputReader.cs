@@ -28,6 +28,7 @@ public abstract class
 
     private readonly HashSet<IPreValidator> preValidators = [];
     private readonly HashSet<IPostValidator<TInputType>> postValidators = [];
+    private Action<TCustomInputValueType, IPrintProcessor> iterationAction;
 
     public FrozenSet<IPreValidator> PreValidators => preValidators.ToFrozenSet();
     public FrozenSet<IPostValidator<TInputType>> PostValidators => postValidators.ToFrozenSet();
@@ -73,6 +74,8 @@ public abstract class
         if (result is not null)
             result.IsValid = success;
 
+        iterationAction?.Invoke(result, printProcessor);
+        
         return result;
     }
 
@@ -108,6 +111,12 @@ public abstract class
         {
             return (false, default);
         }
+    }
+    
+    public IInputReader<TInputType, TCustomInputValueType> WithIteration(Action<TCustomInputValueType, IPrintProcessor> action)
+    {
+        iterationAction = action;
+        return this;
     }
 
     #endregion
