@@ -10,6 +10,16 @@ public class DefaultPrintProcessor : IPrintProcessor
         Console.Write(message);
     }
 
+    public void Print(char chr)
+    {
+        Console.Write(chr);
+    }
+
+    public void PrintLine(char chr)
+    {
+        Console.WriteLine(chr);
+    }
+
     public void PrintLine(string message)
     {
         Console.WriteLine(message);
@@ -20,4 +30,6 @@ public class DefaultPrintProcessor : IPrintProcessor
         var allowedMessage = $"({string.Join(',', allowedValues)}{(isCaseInSensitive ? '°' : '\0')}) ";
         Print(allowedMessage);
     }
+
+    
 }

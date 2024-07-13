@@ -1,10 +1,13 @@
 ﻿using InputReader.AllowedValues;
 using InputReader.Converters;
+using InputReader.InputReaders.ConsoleReaders;
 using InputReader.InputReaders.Interfaces;
 using InputReader.PrintProcessor;
 using InputReader.Validators;
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace InputReader.InputReaders;
@@ -14,22 +17,26 @@ public abstract class
     IPreValidatable<TInputType, TCustomInputValueType>
     where TCustomInputValueType : InputValue<TInputType>
 {
-
+    private IInputReaderBase consoleReader;
     private IValueConverter<TInputType> valueConverter;
     private bool isPreBuildProcessed;
 
     private DefaultAllowedValueManager<string> allowedValueProcessor;
-    private readonly DefaultPrintProcessor printProcessor;
+    internal readonly IPrintProcessor printProcessor;
 
     private string generatedMessage;
 
     private readonly HashSet<IPreValidator> preValidators = [];
     private readonly HashSet<IPostValidator<TInputType>> postValidators = [];
 
+    public FrozenSet<IPreValidator> PreValidators => preValidators.ToFrozenSet();
+    public FrozenSet<IPostValidator<TInputType>> PostValidators => postValidators.ToFrozenSet();
+
     public BaseInputReader()
     {
         valueConverter = new DefaultValueConverter<TInputType>();
         printProcessor = new DefaultPrintProcessor();
+        consoleReader = new DefaultConsoleReader();
     }
 
     public BaseInputReader(string message)
@@ -76,7 +83,7 @@ public abstract class
             ProcessPreBuild();
             ProcessPrint();
 
-            var m = IInputReaderBase.ReadLine();
+            var m = consoleReader.ReadLine();
 
             // preValidators
             if (preValidators.Count > 0 && preValidators.Any(v => !v.IsValid(m)))
@@ -133,7 +140,6 @@ public abstract class
     }
 
     #endregion
-
 
     #region WithAllowedValues Methods
 
@@ -231,4 +237,13 @@ public abstract class
         if (allowedValueProcessor.IsEnabled)
             printProcessor.PrintAllowedValues(allowedValueProcessor.Values, allowedValueProcessor.IsCaseInSensitive);
     }
+
+    #region Internals
+
+    internal void SetConsoleReader(IInputReaderBase reader)
+    {
+        consoleReader = reader;
+    }
+
+    #endregion
 }

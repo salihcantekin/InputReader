@@ -4,12 +4,16 @@ namespace InputReader.InputReaders.Interfaces;
 
 public interface IInputReaderBase
 {
-    static string ReadLine() => Console.ReadLine();
-    static ConsoleKeyInfo ReadKey() => Console.ReadKey();
+    string ReadLine();
+    ConsoleKeyInfo ReadKey(bool intercept = false);
+    ConsoleKeyInfo ReadKey();
+
+    //static string ReadLine() => Console.ReadLine();
+    //static ConsoleKeyInfo ReadKey() => Console.ReadKey();
 }
 
 
-public interface IInputReaderBase<TInputType, out TCustomInputValueType> : IInputReaderBase
+public interface IInputReaderBase<TInputType, out TCustomInputValueType> //: IInputReaderBase
     where TCustomInputValueType : InputValue<TInputType>
 {
     TCustomInputValueType Read();

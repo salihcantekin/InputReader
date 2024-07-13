@@ -1,6 +1,47 @@
 ﻿using InputReader;
 using InputReader.Converters.CustomConverters;
 using InputReader.InputReaders.Extensions;
+using System.Security;
+
+var passwordResult = Input
+                    .Password("Enter your password: ")
+                    .ReadUntilValid();
+
+var oneDigitInteger = Input
+                .Int("Input a number that is one digit only")
+                .WithPreValidator(input => input?.Length == 1)
+                .ReadUntilValid();
+
+
+Console.Write("Enter your password: ");
+
+var pwd = new SecureString();
+do
+{
+    var consoleKeyInfo = Console.ReadKey(intercept: true);
+    if (consoleKeyInfo.Key == ConsoleKey.Enter)
+    {
+        break;
+    }
+    else if (consoleKeyInfo.Key == ConsoleKey.Backspace)
+    {
+        if (pwd.Length == 0)
+        {
+            continue;
+        }
+
+        pwd.RemoveAt(pwd.Length - 1);
+        Console.Write("\b \b");
+    }
+    else
+    {
+        pwd.AppendChar(consoleKeyInfo.KeyChar);
+        Console.Write("*");
+    }
+
+
+} while (true);
+
 
 //var intResult = Input
 //                .Char("Enter a char: ")
@@ -20,13 +61,13 @@ var intResult = Input
                     .DateOnly()
                     //.ReadUntilValid()
                     .ReadUntilValid();
-                    //.ReadUntil(number =>
-                    //{
-                    //    if (number.IsZero())
-                    //        return true;
+//.ReadUntil(number =>
+//{
+//    if (number.IsZero())
+//        return true;
 
-                    //    return false;
-                    //});
+//    return false;
+//});
 
 
 
@@ -36,10 +77,7 @@ var intResult = Input
 //    // doSomething
 //}
 
-//var oneDigitInteger = Input
-//                .Int("Input a number that is one digit only")
-//                .WithPreValidator(input => input?.Length == 1)
-//                .ReadUntilValid();
+
 
 //int myNumber = oneDigitInteger;
 

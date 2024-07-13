@@ -10,6 +10,7 @@ public record InputValue<T>(T Value)
 
     public override string ToString() => Value?.ToString();
 
+    // generate implicit operators but nullable
     public static implicit operator T(InputValue<T> wrapper)
     {
         return wrapper.Value;
@@ -19,6 +20,19 @@ public record InputValue<T>(T Value)
     {
         return new InputValue<T>(value);
     }
+
+
+    //public static implicit operator T(InputValue<T?> wrapper)
+    //{
+    //    return wrapper.Value;
+    //}
+
+    //public static implicit operator InputValue<T>(T? value)
+    //{
+    //    return new InputValue<T>(value);
+    //}
+
+    //public static implicit operator
 }
 
 

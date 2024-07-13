@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InputReaderUnitTest", "tests\InputReaderUnitTest\InputReaderUnitTest.csproj", "{38A45C20-E606-4303-B463-E48CAB92F114}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{7D0BFF2C-D856-4492-9792-D913C072EBC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D0BFF2C-D856-4492-9792-D913C072EBC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D0BFF2C-D856-4492-9792-D913C072EBC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38A45C20-E606-4303-B463-E48CAB92F114}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38A45C20-E606-4303-B463-E48CAB92F114}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38A45C20-E606-4303-B463-E48CAB92F114}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38A45C20-E606-4303-B463-E48CAB92F114}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -36,6 +42,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D252A010-2F6C-4F00-BAAA-234627A0F354} = {05B94556-31B2-48A8-88EA-9AF077FB96B1}
 		{7D0BFF2C-D856-4492-9792-D913C072EBC5} = {F90CE8ED-94F0-4CAA-B2E8-0166BEA0DE2E}
+		{38A45C20-E606-4303-B463-E48CAB92F114} = {05B94556-31B2-48A8-88EA-9AF077FB96B1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {22CE323C-F3C1-4B72-905C-B148BBA6C73D}
