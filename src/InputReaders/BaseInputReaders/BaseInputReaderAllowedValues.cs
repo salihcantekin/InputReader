@@ -10,13 +10,13 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
     : IInputReader<TInputType, TInputValueType>, IPreValidatable<TInputType, TInputValueType>
     where TInputValueType : InputValue<TInputType>
 {
-    internal IAllowedValueProcessor<string> AllowedValueProcessor;
+    private IAllowedValueProcessor<string> allowedValueProcessor;
 
     #region WithAllowedValues Methods
 
     public IInputReader<TInputType, TInputValueType> ClearAllowedValues()
     {
-        AllowedValueProcessor?.ClearAllowedValues();
+        allowedValueProcessor?.ClearAllowedValues();
         return this;
     }
 
@@ -25,9 +25,12 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         if (allowedValues is null)
             throw new ArgumentNullException(nameof(allowedValues));
 
-        AllowedValueProcessor ??= new DefaultAllowedValueManager<string>();
+        allowedValueProcessor ??= new DefaultAllowedValueManager<string>();
 
-        AllowedValueProcessor.AddAllowedValues(allowedValues);
+        allowedValueProcessor.AddAllowedValues(allowedValues);
+
+        var allowedValueQueueItem = new AllowedValuesCheckQueueItem(allowedValueProcessor);
+        AddItemToQueue(allowedValueQueueItem);
 
         return this;
     }
@@ -55,7 +58,7 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         WithAllowedValues(allowedValues);
 
         if (caseInsensitive)
-            AllowedValueProcessor.SetEqualityComparer(StringComparer.OrdinalIgnoreCase);
+            allowedValueProcessor.SetEqualityComparer(StringComparer.OrdinalIgnoreCase);
 
         return this;
     }
@@ -65,17 +68,17 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
 
     internal bool IsAllowedValuesEnabled()
     {
-        return AllowedValueProcessor != null && AllowedValueProcessor.IsEnabled;
+        return allowedValueProcessor != null && allowedValueProcessor.IsEnabled;
     }
 
     internal bool AllowedValuesCheckRequired()
     {
-        return IsAllowedValuesEnabled() && AllowedValueProcessor.Values.Count > 0;
+        return IsAllowedValuesEnabled() && allowedValueProcessor.Values.Count > 0;
     }
 
     internal bool IsAllowedValue(string value)
     {
-        return AllowedValueProcessor.IsAllowedValue(value);
+        return allowedValueProcessor.IsAllowedValue(value);
     }
 
     #endregion

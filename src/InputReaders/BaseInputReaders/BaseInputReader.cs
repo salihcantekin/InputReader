@@ -1,33 +1,23 @@
-﻿using InputReader.AllowedValues;
-using InputReader.Converters;
+﻿using InputReader.Converters;
 using InputReader.InputReaders.ConsoleReaders;
 using InputReader.InputReaders.Interfaces;
+using InputReader.InputReaders.Queue;
+using InputReader.InputReaders.Queue.QueueItems;
 using InputReader.PrintProcessor;
-using InputReader.Validators;
 using System;
-using System.Collections.Frozen;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 
 namespace InputReader.InputReaders.BaseInputReaders;
 
-
-
-
-
-
-
 public abstract partial class BaseInputReader<TInputType, TInputValueType>
 : IInputReader<TInputType, TInputValueType>, IPreValidatable<TInputType, TInputValueType>
-where TInputValueType : InputValue<TInputType>
+    where TInputValueType : InputValue<TInputType>
 {
     private IInputReaderBase consoleReader;
-
-    internal readonly IPrintProcessor PrintProcessor;
-
+    protected readonly IPrintProcessor PrintProcessor;
     private Action<TInputValueType, IPrintProcessor> iterationAction;
 
+    internal SortedList<int, IQueueItem> queueItems;
 
 
     public BaseInputReader()
@@ -35,7 +25,21 @@ where TInputValueType : InputValue<TInputType>
         WithValueConverter(new DefaultValueConverter<TInputType>());
         PrintProcessor = new DefaultPrintProcessor();
         consoleReader = new DefaultConsoleReader();
+
+        queueItems = [];
+
+        var consoleReadLineQueueItem = new ConsoleReadLineQueueItem(consoleReader);
+        var valueConverterQueueItem = new ValueConverterQueueItem<TInputType>(valueConverter);
+
+        AddItemToQueue(consoleReadLineQueueItem);
+        AddItemToQueue(valueConverterQueueItem);
     }
+
+    internal void AddItemToQueue(IQueueItem item)
+    {
+        queueItems[item.Order] = item;
+    }
+
 
     internal void SetConsoleReader(IInputReaderBase reader)
     {
@@ -58,8 +62,6 @@ where TInputValueType : InputValue<TInputType>
           - AllowedValue Check (Opt) (rawValue)
           - Use ValueConverter.Convert (ValueConverter)
           - AllowedValue Check (Opt) (Converted Type) (OPT)
-
-          - PostValidators
          */
 
         var (success, value) = ReadGeneric();
@@ -75,6 +77,28 @@ where TInputValueType : InputValue<TInputType>
     }
 
     protected (bool success, TInputType result) ReadGeneric()
+    {
+        QueueItemResult previousItemResult = null;
+        for (int i = 0; i < queueItems.Count; i++)
+        {
+            try
+            {
+                var item = queueItems.Values[i];
+                previousItemResult = item.Execute(previousItemResult);
+
+                if (previousItemResult?.IsFailed == true)
+                    return default;
+            }
+            catch
+            {
+                return (false, default);
+            }
+        }
+
+        return (true, (TInputType)previousItemResult.Result);
+    }
+
+    protected (bool success, TInputType result) ReadGeneric_()
     {
         try
         {
@@ -93,10 +117,6 @@ where TInputValueType : InputValue<TInputType>
             var success = valueConverter.TryConvertFromString(m, out var value);
 
             if (!success)
-                return default;
-
-            // postValidators
-            if (AnyPostValidatorFailed(value))
                 return default;
 
             return (true, value);
@@ -136,7 +156,7 @@ where TInputValueType : InputValue<TInputType>
         PrintProcessor.Print(generatedMessage);
 
         if (IsAllowedValuesEnabled())
-            PrintProcessor.PrintAllowedValues(AllowedValueProcessor.Values, AllowedValueProcessor.IsCaseInSensitive);
+            PrintProcessor.PrintAllowedValues(allowedValueProcessor.Values, allowedValueProcessor.IsCaseInSensitive);
     }
 
 }

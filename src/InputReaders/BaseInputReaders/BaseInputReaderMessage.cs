@@ -22,6 +22,10 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
     public virtual IInputReader<TInputType, TInputValueType> WithMessage(string message)
     {
         generatedMessage = message;
+
+        var printQueueItem = new ProcessPrintQueueItem(PrintProcessor, allowedValueProcessor, generatedMessage);
+        AddItemToQueue(printQueueItem);
+
         return this;
     }
 

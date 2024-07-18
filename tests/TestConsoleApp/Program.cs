@@ -1,10 +1,13 @@
 ﻿using InputReader;
 using InputReader.InputReaders.Extensions;
 
-_ = Input.Int("Error a number: ")
-            .WithErrorMessage("Invalid input. Please try again.")
-            .ReadUntilValid();
+var ynResult = Input.YesNo("Yes No: ")
+                    .ReadUntilValid();
 
+Console.WriteLine("IsValid: " + ynResult.IsValid);
+Console.WriteLine("Value: " + ynResult.Value);
+
+return;
 var iteractionTest = Input
                     .Int("Enter a number: ")
                     .WithIteration((input, printer) =>

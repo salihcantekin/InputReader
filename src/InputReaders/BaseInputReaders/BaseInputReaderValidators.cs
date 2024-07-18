@@ -25,6 +25,10 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
     {
         preValidators ??= [];
         preValidators.Add(validator);
+
+        var preValidatorQueueItem = new PreValidatorQueueItem(preValidators);
+        AddItemToQueue(preValidatorQueueItem);
+
         return this;
     }
 
@@ -45,10 +49,5 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
     private bool AnyPreValidatorFailed(string value)
     {
         return preValidators?.Any(v => !v.IsValid(value)) ?? false;
-    }
-
-    private bool AnyPostValidatorFailed(TInputType value)
-    {
-        return postValidators?.Any(v => !v.IsValid(value)) ?? false;
     }
 }
