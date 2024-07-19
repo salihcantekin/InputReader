@@ -36,5 +36,5 @@ public class DefaultPrintProcessor : IPrintProcessor
         Print(allowedMessage);
     }
 
-    
+
 }

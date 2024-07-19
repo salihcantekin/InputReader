@@ -42,9 +42,9 @@ public readonly struct CustomDateOnly(int year, int month, int day) : IComparabl
     public bool Equals(CustomDateOnly other) => DateTime.Equals(other.DateTime);
     public override bool Equals(object obj) => obj is CustomDateOnly other && Equals(other);
     public override int GetHashCode() => DateTime.GetHashCode();
-    public override string ToString() => DateTime.ToString("yyyy-MM-dd");
+    public override string ToString() => DateTime.ToString(Constants.Format.DateFormat);
 
-    
+
 
     public static bool operator ==(CustomDateOnly left, CustomDateOnly right) => left.Equals(right);
     public static bool operator !=(CustomDateOnly left, CustomDateOnly right) => !left.Equals(right);

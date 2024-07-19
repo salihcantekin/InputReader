@@ -1,8 +1,9 @@
 ﻿using InputReader.InputReaders.Interfaces;
+using InputReader.InputReaders.Queue.QueueItems;
 using InputReader.Validators;
+using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
-using System;
 using System.Linq;
 
 namespace InputReader.InputReaders.BaseInputReaders;
@@ -13,7 +14,7 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
 {
     private HashSet<IPreValidator> preValidators;
     private HashSet<IPostValidator<TInputType>> postValidators;
-    private bool isPreBuildProcessed;
+    private readonly bool isPreBuildProcessed;
 
     public FrozenSet<IPreValidator> PreValidators => preValidators.ToFrozenSet();
     public FrozenSet<IPostValidator<TInputType>> PostValidators => postValidators.ToFrozenSet();

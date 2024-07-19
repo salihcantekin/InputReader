@@ -1,4 +1,5 @@
 ﻿using InputReader.AllowedValues;
+using InputReader.PrintProcessor;
 
 namespace InputReader.InputReaders.Queue.QueueItems;
 
@@ -8,10 +9,9 @@ internal class AllowedValuesCheckQueueItem(IAllowedValueProcessor<string> allowe
 
     public QueueItemResult Execute(QueueItemResult previousItemResult)
     {
-        var checkRequired = allowedValueProcessor != null
-            && allowedValueProcessor.IsEnabled;
+        var checkRequired = allowedValueProcessor?.IsEnabled;
 
-        if (!checkRequired)
+        if (checkRequired == false)
             return QueueItemResult.FromResult(null, previousItemResult);
 
         var isAllowed = allowedValueProcessor.IsAllowedValue(previousItemResult.Result.ToString());

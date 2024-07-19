@@ -1,5 +1,4 @@
-﻿using InputReader.InputReaders.Interfaces;
-using InputReader.PrintProcessor;
+﻿using InputReader.PrintProcessor;
 using System;
 using System.Security;
 
@@ -28,14 +27,14 @@ internal sealed class PasswordConsoleReader : DefaultConsoleReader
             if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
             {
                 password.AppendChar(key.KeyChar);
-                printProcessor.Print(passwordChar);                
+                printProcessor.Print(passwordChar);
             }
             else
             {
                 if (key.Key == ConsoleKey.Backspace && password.Length > 0)
                 {
                     password.RemoveAt(password.Length - 1);
-                    printProcessor.Print("\b \b"); // Remove the last character from the console
+                    printProcessor.Print(Constants.Chars.DoubleBackspace); // Remove the last character from the console
                 }
             }
 

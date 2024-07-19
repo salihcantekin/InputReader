@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace InputReader;
+﻿namespace InputReader;
 
 public record InputValue<T>(T Value)
 {
@@ -8,7 +6,9 @@ public record InputValue<T>(T Value)
 
     public bool IsValid { get; set; }
 
-    public override string ToString() => Value?.ToString();
+    protected internal virtual string DefaultErrorMessage => "Invalid value. Please try again.";
+
+    public sealed override string ToString() => Value?.ToString();
 
     // generate implicit operators but nullable
     public static implicit operator T(InputValue<T> wrapper)
@@ -20,19 +20,6 @@ public record InputValue<T>(T Value)
     {
         return new InputValue<T>(value);
     }
-
-
-    //public static implicit operator T(InputValue<T?> wrapper)
-    //{
-    //    return wrapper.Value;
-    //}
-
-    //public static implicit operator InputValue<T>(T? value)
-    //{
-    //    return new InputValue<T>(value);
-    //}
-
-    //public static implicit operator
 }
 
 

@@ -1,19 +1,17 @@
-﻿using InputReader.InputReaders.Queue;
-using InputReader.Validators;
+﻿using InputReader.Validators;
 using System.Collections.Generic;
 
 namespace InputReader.InputReaders.Queue.QueueItems;
 
-internal class PreValidatorQueueItem(HashSet<IPreValidator> validators) : IQueueItem
+public sealed class PreValidatorQueueItem(HashSet<IPreValidator> validators) : IQueueItem
 {
     public int Order => 3;
 
     public QueueItemResult Execute(QueueItemResult previousItemResult)
     {
-        var validationRequired = validators != null
-                              && validators.Count > 0;
+        var validationRequired = validators?.Count > 0;
 
-        if (!validationRequired)
+        if (validationRequired == false)
             return QueueItemResult.FromResult(null, previousItemResult);
 
         var message = previousItemResult.GetOutputParam("line").ToString();

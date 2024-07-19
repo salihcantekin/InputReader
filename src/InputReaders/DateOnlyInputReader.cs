@@ -7,9 +7,9 @@ namespace InputReader.InputReaders;
 
 public sealed class DateOnlyInputReader : BaseInputReader<CustomDateOnly?, DateOnlyInputValue>
 {
-    public static DateOnlyInputReader DateOnly(string message = null, string format = "yyyy-MM-dd") => new(message, format);
+    public static DateOnlyInputReader DateOnly(string message = null, string format = Constants.Format.DateFormat) => new(message, format);
 
-    public DateOnlyInputReader(string message, string format = "yyyy-MM-dd") : base(message)
+    public DateOnlyInputReader(string message, string format = Constants.Format.DateFormat) : base(message)
     {
         WithDateOnlyValueConverter(format);
     }
@@ -18,7 +18,7 @@ public sealed class DateOnlyInputReader : BaseInputReader<CustomDateOnly?, DateO
     {
     }
 
-    public IInputReader<CustomDateOnly?, DateOnlyInputValue> WithDateOnlyValueConverter(string format = "yyyy-MM-dd")
+    public IInputReader<CustomDateOnly?, DateOnlyInputValue> WithDateOnlyValueConverter(string format = Constants.Format.DateFormat)
     {
         return WithValueConverter(new DateOnlyValueConverter(format));
     }

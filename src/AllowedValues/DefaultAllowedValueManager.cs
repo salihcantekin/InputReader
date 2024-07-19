@@ -61,5 +61,5 @@ internal class DefaultAllowedValueManager<T> : IAllowedValueProcessor<T>
         }
     }
 
-    
+
 }

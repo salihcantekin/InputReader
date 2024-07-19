@@ -15,10 +15,8 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
 {
     private IInputReaderBase consoleReader;
     protected readonly IPrintProcessor PrintProcessor;
-    private Action<TInputValueType, IPrintProcessor> iterationAction;
 
     internal SortedList<int, IQueueItem> queueItems;
-
 
     public BaseInputReader()
     {
@@ -28,11 +26,9 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
 
         queueItems = [];
 
-        var consoleReadLineQueueItem = new ConsoleReadLineQueueItem(consoleReader);
-        var valueConverterQueueItem = new ValueConverterQueueItem<TInputType>(valueConverter);
-
-        AddItemToQueue(consoleReadLineQueueItem);
-        AddItemToQueue(valueConverterQueueItem);
+        AddItemToQueue(new ConsoleReadLineQueueItem(consoleReader));
+        AddItemToQueue(new ValueConverterQueueItem<TInputType>(valueConverter));
+        AddItemToQueue(new CreateInstanceQueueItem(typeof(TInputValueType)));
     }
 
     internal void AddItemToQueue(IQueueItem item)
@@ -40,17 +36,11 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         queueItems[item.Order] = item;
     }
 
-
     internal void SetConsoleReader(IInputReaderBase reader)
     {
         consoleReader = reader;
     }
 
-    #region Read Methods
-
-    // TODO: Refactor this method
-    // UNDONE
-    // MY_NEW_TODO
     public virtual TInputValueType Read()
     {
         /* ############## STEPS #############
@@ -64,99 +54,27 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
           - AllowedValue Check (Opt) (Converted Type) (OPT)
          */
 
-        var (success, value) = ReadGeneric();
-
-        var result = Activator.CreateInstance(typeof(TInputValueType), success ? value : null) as TInputValueType;
-
-        if (result is not null)
-            result.IsValid = success;
-
-        iterationAction?.Invoke(result, PrintProcessor);
-
-        return result;
-    }
-
-    protected (bool success, TInputType result) ReadGeneric()
-    {
         QueueItemResult previousItemResult = null;
         for (int i = 0; i < queueItems.Count; i++)
         {
-            try
-            {
-                var item = queueItems.Values[i];
-                previousItemResult = item.Execute(previousItemResult);
+            var item = queueItems.Values[i];
+            previousItemResult = item.Execute(previousItemResult);
 
-                if (previousItemResult?.IsFailed == true)
-                    return default;
-            }
-            catch
-            {
-                return (false, default);
-            }
+            if (previousItemResult?.IsFailed == true)
+                break;
         }
 
-        return (true, (TInputType)previousItemResult.Result);
-    }
-
-    protected (bool success, TInputType result) ReadGeneric_()
-    {
-        try
+        // intance of TInputValueType NOT created yet (CreateInstanceQueueItem didn't worked)
+        if (previousItemResult.GetOutputParam("InputValue") is not TInputValueType inputValue)
         {
-            ProcessPrint();
-
-            var m = consoleReader.ReadLine();
-
-            // preValidators
-            if (AnyPreValidatorFailed(m))
-                return default;
-
-            // allowed values check
-            if (AllowedValuesCheckRequired() && !IsAllowedValue(m))
-                return default;
-
-            var success = valueConverter.TryConvertFromString(m, out var value);
-
-            if (!success)
-                return default;
-
-            return (true, value);
+            object value = previousItemResult.GetOutputParam("converted_value");
+            inputValue = Activator.CreateInstance(typeof(TInputValueType), value) as TInputValueType;
         }
-        catch (ArgumentException)
-        {
-            return (false, default);
-        }
+
+        inputValue.IsValid = !previousItemResult.IsFailed;
+
+        iteractionDelegate.Invoke(inputValue, PrintProcessor);
+
+        return inputValue;
     }
-
-    public IInputReader<TInputType, TInputValueType> WithIteration(Action<TInputValueType, IPrintProcessor> action)
-    {
-        iterationAction = action;
-        return this;
-    }
-
-    #endregion
-
-    #region Pre-Build Methods
-
-    #endregion
-
-
-
-
-
-
-
-    public virtual IInputReader<TInputType, TInputValueType> WithDefaultValue(TInputType defaultValue)
-    {
-
-        return this;
-    }
-
-    private void ProcessPrint()
-    {
-        PrintProcessor.Print(generatedMessage);
-
-        if (IsAllowedValuesEnabled())
-            PrintProcessor.PrintAllowedValues(allowedValueProcessor.Values, allowedValueProcessor.IsCaseInSensitive);
-    }
-
 }

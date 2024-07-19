@@ -1,7 +1,7 @@
 ﻿using InputReader.Converters;
+using InputReader.PrintProcessor;
 using System;
 using System.Collections.Generic;
-using InputReader.PrintProcessor;
 
 namespace InputReader.InputReaders.Interfaces;
 
@@ -21,7 +21,7 @@ public interface IInputReader<TInputType, TInputValueType> : IInputReaderBase<TI
 
     IInputReader<TInputType, TInputValueType> WithValueConverter(
         IValueConverter<TInputType> converter);
-    
+
     IInputReader<TInputType, TInputValueType> WithIteration(
         Action<TInputValueType, IPrintProcessor> action);
 }

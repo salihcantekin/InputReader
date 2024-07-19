@@ -1,6 +1,6 @@
 ﻿namespace InputReader.InputReaders.Queue;
 
-internal interface IQueueItem
+public interface IQueueItem
 {
     int Order { get; } // to order the queue items
 

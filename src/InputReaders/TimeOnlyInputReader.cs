@@ -7,9 +7,9 @@ namespace InputReader.InputReaders;
 
 public sealed class TimeOnlyInputReader : BaseInputReader<CustomTimeOnly?, TimeOnlyInputValue>
 {
-    public static TimeOnlyInputReader TimeOnly(string message = null, string format = "HH:mm:ss") => new(message, format);
+    public static TimeOnlyInputReader TimeOnly(string message = null, string format = Constants.Format.TimeFormat) => new(message, format);
 
-    public TimeOnlyInputReader(string message, string format = "HH:mm:ss") : base(message)
+    public TimeOnlyInputReader(string message, string format = Constants.Format.TimeFormat) : base(message)
     {
         WithTimeOnlyValueConverter(format);
     }
@@ -18,7 +18,7 @@ public sealed class TimeOnlyInputReader : BaseInputReader<CustomTimeOnly?, TimeO
     {
     }
 
-    public IInputReader<CustomTimeOnly?, TimeOnlyInputValue> WithTimeOnlyValueConverter(string format = "HH:mm:ss")
+    public IInputReader<CustomTimeOnly?, TimeOnlyInputValue> WithTimeOnlyValueConverter(string format = Constants.Format.TimeFormat)
     {
         return WithValueConverter(new TimeOnlyValueConverter(format));
     }

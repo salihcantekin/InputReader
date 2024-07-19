@@ -1,12 +1,6 @@
-﻿using InputReader;
-using InputReader.Converters;
-using InputReader.InputReaders.BaseInputReaders;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using InputReader.Converters;
+using InputReader.InputReaders.Queue;
+using InputReader.InputReaders.Queue.QueueItems;
 
 namespace InputReaderUnitTest.InputReaders;
 internal class InputReadersTests

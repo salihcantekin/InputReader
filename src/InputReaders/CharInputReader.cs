@@ -1,7 +1,7 @@
 ﻿using InputReader.InputReaders.BaseInputReaders;
 using InputReader.Validators;
 
-namespace InputReader;
+namespace InputReader.InputReaders;
 
 public class CharInputReader : BaseInputReader<char?, CharInputValue>
 {

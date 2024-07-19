@@ -8,7 +8,7 @@ public sealed class YesNoInputReader : BaseInputReader<char?, YesNoInputValue>
 
     public YesNoInputReader(string message) : base(message)
     {
-        WithAllowedValues(caseInsensitive: true, 'y', 'n');
+        WithAllowedValues(caseInsensitive: true, Constants.Chars.YesLower, Constants.Chars.NoLower);
     }
 
     public YesNoInputReader() : this(null)

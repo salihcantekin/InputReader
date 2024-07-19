@@ -1,9 +1,8 @@
 ﻿using InputReader.InputReaders.Interfaces;
-using InputReader.InputReaders.Queue;
 
 namespace InputReader.InputReaders.Queue.QueueItems;
 
-internal class ConsoleReadLineQueueItem(IInputReaderBase inputReader) : IQueueItem
+public sealed class ConsoleReadLineQueueItem(IInputReaderBase inputReader) : IQueueItem
 {
     public int Order => 2;
 
@@ -12,6 +11,7 @@ internal class ConsoleReadLineQueueItem(IInputReaderBase inputReader) : IQueueIt
         var line = inputReader.ReadLine();
         var queueItem = QueueItemResult.FromResult(line, previousItemResult);
         queueItem.AddOutputParam("line", line); // so it can be used in any
+
         return queueItem;
     }
 }

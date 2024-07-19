@@ -1,8 +1,9 @@
 ﻿using InputReader.AllowedValues;
 using InputReader.InputReaders.Interfaces;
+using InputReader.InputReaders.Queue.QueueItems;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
 namespace InputReader.InputReaders.BaseInputReaders;
 
@@ -29,8 +30,7 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
 
         allowedValueProcessor.AddAllowedValues(allowedValues);
 
-        var allowedValueQueueItem = new AllowedValuesCheckQueueItem(allowedValueProcessor);
-        AddItemToQueue(allowedValueQueueItem);
+        AddItemToQueue(new AllowedValuesCheckQueueItem(allowedValueProcessor));
 
         return this;
     }

@@ -45,7 +45,7 @@ public static partial class InputReaderExtensions
             try
             {
                 var mail = new System.Net.Mail.MailAddress(input.Value.ToString());
-                
+
                 return true;
             }
             catch

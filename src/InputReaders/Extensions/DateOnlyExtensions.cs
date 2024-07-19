@@ -8,7 +8,7 @@ namespace InputReader.InputReaders.Extensions;
 public static class DateOnlyExtensions
 {
     public static DateOnlyInputValue ReadUntilInRange(
-        this IInputReader<CustomDateOnly?, DateOnlyInputValue> reader, string fromDate, string toDate, string format = "yyyy-MM-dd")
+        this IInputReader<CustomDateOnly?, DateOnlyInputValue> reader, string fromDate, string toDate, string format = Constants.Format.DateFormat)
     {
         DateOnlyValueConverter converter = new(format);
         if (!converter.TryConvertFromString(fromDate, out CustomDateOnly? fromDateValue))

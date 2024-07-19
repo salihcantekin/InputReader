@@ -1,32 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace InputReader.InputReaders.Queue;
 
-internal record QueueItemResult
+public record QueueItemResult
 {
     private QueueItemResult() { }
 
     public bool IsFailed { get; set; }
 
-    internal QueueItemResult PreviousItemResult { get; set; }
+    internal QueueItemResult PreviousItemResult { get; private set; }
 
     private Dictionary<string, object> OutputParams { get; set; } = new();
 
-    internal object Result { get; set; }
+    public object Result { get; internal set; }
 
-    internal void AddOutputParam(string key, object value)
+    public void AddOutputParam(string key, object value)
     {
         OutputParams ??= [];
 
         OutputParams[key] = value;
     }
 
-    internal object GetOutputParam(string key)
+    public object GetOutputParam(string key)
     {
-        return OutputParams[key];
+        return OutputParams.TryGetValue(key, out var value) ? value : null;
     }
 
 
@@ -40,5 +37,5 @@ internal record QueueItemResult
         };
     }
 
-    internal static QueueItemResult Failed() => new() { IsFailed = true };
+    public static QueueItemResult Failed() => new() { IsFailed = true };
 }

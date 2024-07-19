@@ -1,9 +1,20 @@
 ﻿using InputReader;
 using InputReader.InputReaders.Extensions;
 
-var ynResult = Input.YesNo("Yes No: ")
-                    .ReadUntilValid();
 
+//var dateInput = Input.DateOnly("Enter Date [dd.MM.yyyy]: ", format: DateFormat)
+//                    .ReadUntilInRange(fromDate: "01.01.2021",
+//                                      toDate: "31.12.2021",
+//                                      "dd.MM.yyyy");
+
+
+
+var ynResult = Input.YesNo("Yes No: ")
+                .WithErrorMessage()
+                //.WithErrorMessage("Invalid input. Please enter 'y' or 'n'.")
+                .Read();
+
+Console.WriteLine(ynResult);
 Console.WriteLine("IsValid: " + ynResult.IsValid);
 Console.WriteLine("Value: " + ynResult.Value);
 
@@ -122,12 +133,8 @@ var intResult = Input
 ////Console.WriteLine("IsValid: " + intResult.IsValid);
 ////Console.WriteLine("Value: " + intResult.Value);
 
-//var dateInput = Input.DateOnly("Enter Date [dd.MM.yyyy]: ", format: "dd.MM.yyyy")
-//                    .ReadUntilInRange( fromDate: "01.01.2021",
-//                                      toDate: "31.12.2021",
-//                                      "dd.MM.yyyy");
-////.WithDateOnlyValueConverter(format: "dd.MM.yyyy")
-////.Read();
+//.WithDateOnlyValueConverter(format: "dd.MM.yyyy")
+//.Read();
 
 //Console.WriteLine("IsValid: " + dateInput.IsValid);
 //Console.WriteLine("Value: " + dateInput.Value);

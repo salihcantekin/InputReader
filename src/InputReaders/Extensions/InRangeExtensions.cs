@@ -18,7 +18,7 @@ public static class InRangeExtensions
             {
                 return input.Value.Value.IsInRange(from.Value, to.Value);
             }
-            
+
             // Handle cases where input or range values are null
             // Adjust this logic based on your requirements
             return false;

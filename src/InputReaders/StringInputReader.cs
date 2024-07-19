@@ -1,6 +1,6 @@
 ﻿using InputReader.InputReaders.BaseInputReaders;
 
-namespace InputReader;
+namespace InputReader.InputReaders;
 
 public sealed class StringInputReader : BaseInputReader<string, StringInputValue>
 {

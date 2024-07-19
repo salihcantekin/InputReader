@@ -52,9 +52,9 @@ public readonly struct CustomTimeOnly : IComparable<CustomTimeOnly>, IEquatable<
     public bool Equals(CustomTimeOnly other) => TimeSpan.Equals(other.TimeSpan);
     public override bool Equals(object obj) => obj is CustomTimeOnly other && Equals(other);
     public override int GetHashCode() => TimeSpan.GetHashCode();
-    public override string ToString() => TimeSpan.ToString(@"hh\:mm\:ss");
+    public override string ToString() => TimeSpan.ToString(Constants.Format.TimeFormat);
 
-    
+
 
     public static bool operator ==(CustomTimeOnly left, CustomTimeOnly right) => left.Equals(right);
     public static bool operator !=(CustomTimeOnly left, CustomTimeOnly right) => !left.Equals(right);
