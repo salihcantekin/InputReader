@@ -20,6 +20,9 @@ public sealed class TimeOnlyInputReader : BaseInputReader<CustomTimeOnly?, TimeO
 
     public IInputReader<CustomTimeOnly?, TimeOnlyInputValue> WithTimeOnlyValueConverter(string format = Constants.Format.TimeFormat)
     {
-        return WithValueConverter(new TimeOnlyValueConverter(format));
+        return this.With(builder =>
+        {
+            builder.WithCustomConverter(new TimeOnlyValueConverter(format));
+        });
     }
 }

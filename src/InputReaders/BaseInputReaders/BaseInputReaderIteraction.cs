@@ -5,7 +5,7 @@ using System;
 
 namespace InputReader.InputReaders.BaseInputReaders;
 public abstract partial class BaseInputReader<TInputType, TInputValueType>
-    : IInputReader<TInputType, TInputValueType>, IPreValidatable<TInputType, TInputValueType>
+    : IInputReader<TInputType, TInputValueType>
     where TInputValueType : InputValue<TInputType>
 {
     private delegate void IteractionDelegate(TInputValueType result, IPrintProcessor printProcessor);

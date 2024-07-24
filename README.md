@@ -40,6 +40,7 @@ var oneOrTwoResult = Input.Int("Do you agree? ").WithAllowedValues(1, 2).Read();
 var yesNoResult = Input
                     .YesNo()
                     .WithMessage("Are you sure? ")
+                    .WithErrorMessage("Please enter either 'y' or 'n' ")
                     .WithAllowedValues(["y", "n"], caseInsensitive: true)
                     .Read();
 
@@ -70,6 +71,12 @@ var timeResult_2_ = Input
                     .TimeOnly("Enter a time (HH:mm:ss): ", "HH:mm:ss")
                     .ReadUntilInRange(CustomTimeOnly.From(hour: 10), CustomTimeOnly.From(hour: 18));
 
+var passWordResult = Input
+                        .Password("Enter your password: ", Constants.Chars.NoChar) // No char will be shown
+                      //.PassWord("Enter your password: ", Constants.Chars.Asterisk) // Asterisk will be shown")  
+                        .Read();
+
+
 ```
 
 All the readers, return a result object that's derived from `InputValue` class. This object contains the input value and a boolean property `IsValid` that indicates if the input is valid or not.
@@ -82,7 +89,9 @@ public record InputValue<T>(T Value)
 
     public bool IsValid { get; set; }
 
-    public override string ToString() => Value?.ToString();
+    protected internal virtual string DefaultErrorMessage => "Invalid value. Please try again.";
+
+    public sealed override string ToString() => Value?.ToString();
 
     public static implicit operator T(InputValue<T> wrapper)
     {

@@ -4,7 +4,7 @@ using InputReader.InputReaders.Queue.QueueItems;
 namespace InputReader.InputReaders.BaseInputReaders;
 
 public abstract partial class BaseInputReader<TInputType, TInputValueType>
-    : IInputReader<TInputType, TInputValueType>, IPreValidatable<TInputType, TInputValueType>
+    : IInputReader<TInputType, TInputValueType>
     where TInputValueType : InputValue<TInputType>
 {
     public BaseInputReader(string message)

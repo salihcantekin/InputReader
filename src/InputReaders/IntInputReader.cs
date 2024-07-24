@@ -9,10 +9,8 @@ public sealed class IntInputReader : BaseInputReader<int?, IntInputValue>
 
     public IntInputReader(string message) : base(message)
     {
-        WithPreValidator(ValidatorBuilder.BuildIntInputPreValidator());
+        SetPreValidator(ValidatorBuilder.BuildIntInputPreValidator());
     }
 
-    public IntInputReader() : this(null)
-    {
-    }
+    public IntInputReader() : this(null) { }
 }

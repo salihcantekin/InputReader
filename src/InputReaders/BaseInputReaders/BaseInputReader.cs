@@ -6,21 +6,23 @@ using InputReader.InputReaders.Queue.QueueItems;
 using InputReader.PrintProcessor;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace InputReader.InputReaders.BaseInputReaders;
 
 public abstract partial class BaseInputReader<TInputType, TInputValueType>
-: IInputReader<TInputType, TInputValueType>, IPreValidatable<TInputType, TInputValueType>
+: IInputReader<TInputType, TInputValueType>
     where TInputValueType : InputValue<TInputType>
 {
     private IInputReaderBase consoleReader;
-    protected readonly IPrintProcessor PrintProcessor;
+    protected IPrintProcessor PrintProcessor;
 
     internal SortedList<int, IQueueItem> queueItems;
 
     public BaseInputReader()
     {
-        WithValueConverter(new DefaultValueConverter<TInputType>());
+        valueConverter = new DefaultValueConverter<TInputType>();
         PrintProcessor = new DefaultPrintProcessor();
         consoleReader = new DefaultConsoleReader();
 
@@ -29,16 +31,6 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         AddItemToQueue(new ConsoleReadLineQueueItem(consoleReader));
         AddItemToQueue(new ValueConverterQueueItem<TInputType>(valueConverter));
         AddItemToQueue(new CreateInstanceQueueItem(typeof(TInputValueType)));
-    }
-
-    internal void AddItemToQueue(IQueueItem item)
-    {
-        queueItems[item.Order] = item;
-    }
-
-    internal void SetConsoleReader(IInputReaderBase reader)
-    {
-        consoleReader = reader;
     }
 
     public virtual TInputValueType Read()
@@ -73,8 +65,46 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
 
         inputValue.IsValid = !previousItemResult.IsFailed;
 
-        iteractionDelegate.Invoke(inputValue, PrintProcessor);
+        iteractionDelegate?.Invoke(inputValue, PrintProcessor);
 
         return inputValue;
+    }
+
+
+    internal void AddItemToQueue(IQueueItem item)
+    {
+        queueItems[item.Order] = item;
+    }
+
+    internal IInputReader<TInputType, TInputValueType> SetConsoleReader(IInputReaderBase reader)
+    {
+        consoleReader = reader;
+
+        var queueItem = GetOrCreateQueueItem(() => new ConsoleReadLineQueueItem(consoleReader));
+
+        queueItem.SetInputReader(reader);
+
+        return this;
+    }
+
+    internal IInputReader<TInputType, TInputValueType> SetPrintProcessor(IPrintProcessor printProcessor)
+    {
+        PrintProcessor = printProcessor;
+
+        return this;
+    }
+
+
+    private T GetOrCreateQueueItem<T>(Func<T> action) where T : IQueueItem
+    {
+        var queueItem = queueItems.FirstOrDefault(queueItems => queueItems.Value is T);
+
+        if (queueItems.ContainsKey(queueItem.Key)) // instance of T already created
+            return (T)queueItem.Value;
+
+        var item = action();
+        queueItems[queueItem.Key] = item;
+
+        return item;
     }
 }

@@ -9,7 +9,10 @@ public class CharInputReader : BaseInputReader<char?, CharInputValue>
 
     public CharInputReader(string message) : base(message)
     {
-        WithPreValidator(ValidatorBuilder.BuildCharInputValidator());
+        this.With(builder =>
+        {
+            builder.WithPreValidator(ValidatorBuilder.BuildCharInputValidator());
+        });
     }
 
     public CharInputReader() : this(null)

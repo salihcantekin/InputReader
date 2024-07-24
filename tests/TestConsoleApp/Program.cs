@@ -7,12 +7,35 @@ using InputReader.InputReaders.Extensions;
 //                                      toDate: "31.12.2021",
 //                                      "dd.MM.yyyy");
 
+var passResult = Input.Password("Enter your password: ", Constants.Chars.NoChar).Read();
 
+Console.WriteLine("IsValid: " + passResult.IsValid);
+Console.WriteLine("Value: " + passResult.Value);
 
-var ynResult = Input.YesNo("Yes No: ")
-                .WithErrorMessage()
+var ynResult = Input.Int("\nNumber: ")
+                .WithErrorMessage("Please enter value greater than 100")
+                //.WithIteration((value, printProcessor) =>
+                //{
+                //    if (value.IsLessThan(100))
+                //    {
+                //        printProcessor.Print("Please enter value greater than 100");
+                //    }
+                //})
+                .With(opt =>
+                {
+                    //opt.WithPreValidator(i =>
+                    //{
+                    //    var number = int.Parse(i);
+                    //    return number > 100;
+                    //});
+
+                    opt.WithCustomConverter(message =>
+                    {
+                        return int.Parse(message) * 2;
+                    });
+                })
                 //.WithErrorMessage("Invalid input. Please enter 'y' or 'n'.")
-                .Read();
+                .ReadUntilValid();
 
 Console.WriteLine(ynResult);
 Console.WriteLine("IsValid: " + ynResult.IsValid);
@@ -36,7 +59,10 @@ var passwordResult = Input
 
 var oneDigitInteger = Input
                 .Int("Input a number that is one digit only")
-                .WithPreValidator(input => input?.Length == 1)
+                .With(builder =>
+                {
+                    builder.WithPreValidator(input => input?.Length == 1);
+                })
                 .ReadUntilValid();
 
 //var intResult = Input

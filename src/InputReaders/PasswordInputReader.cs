@@ -11,10 +11,11 @@ public sealed class PasswordInputReader : BaseInputReader<string, PasswordInputV
 
     public PasswordInputReader(string message, char passwordChar = DefaultPasswordChar) : base(message)
     {
-        SetConsoleReader(new PasswordConsoleReader(passwordChar, PrintProcessor));
+        this.With(builder =>
+        {
+            builder.WithConsoleReader(new PasswordConsoleReader(passwordChar, PrintProcessor));
+        });
     }
 
-    public PasswordInputReader() : base()
-    {
-    }
+    public PasswordInputReader() : base() { }
 }

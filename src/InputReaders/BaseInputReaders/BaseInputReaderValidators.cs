@@ -9,19 +9,16 @@ using System.Linq;
 namespace InputReader.InputReaders.BaseInputReaders;
 
 public abstract partial class BaseInputReader<TInputType, TInputValueType>
-    : IInputReader<TInputType, TInputValueType>, IPreValidatable<TInputType, TInputValueType>
+    : IInputReader<TInputType, TInputValueType>
     where TInputValueType : InputValue<TInputType>
 {
     private HashSet<IPreValidator> preValidators;
-    private HashSet<IPostValidator<TInputType>> postValidators;
-    private readonly bool isPreBuildProcessed;
+    //private readonly HashSet<IPostValidator<TInputType>> postValidators;
 
     public FrozenSet<IPreValidator> PreValidators => preValidators.ToFrozenSet();
-    public FrozenSet<IPostValidator<TInputType>> PostValidators => postValidators.ToFrozenSet();
+    //public FrozenSet<IPostValidator<TInputType>> PostValidators => postValidators.ToFrozenSet();
 
-    #region Pre-Post Validators
-
-    public IInputReader<TInputType, TInputValueType> WithPreValidator<TPreValidator>(TPreValidator validator)
+    internal IInputReader<TInputType, TInputValueType> SetPreValidator<TPreValidator>(TPreValidator validator)
         where TPreValidator : IPreValidator
     {
         preValidators ??= [];
@@ -33,22 +30,8 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         return this;
     }
 
-    public void AddPostValidator<TPostValidator>(TPostValidator validator)
-        where TPostValidator : IPostValidator<TInputType>
+    internal IInputReader<TInputType, TInputValueType> SetPreValidator(Func<string, bool> validatorFunc)
     {
-        postValidators ??= [];
-        postValidators.Add(validator);
-    }
-
-    public IInputReader<TInputType, TInputValueType> WithPreValidator(Func<string, bool> validatorFunc)
-    {
-        return WithPreValidator(ValidatorBuilder.SetCustomPreValidator(validatorFunc));
-    }
-
-    #endregion
-
-    private bool AnyPreValidatorFailed(string value)
-    {
-        return preValidators?.Any(v => !v.IsValid(value)) ?? false;
+        return SetPreValidator(ValidatorBuilder.SetCustomPreValidator(validatorFunc));
     }
 }

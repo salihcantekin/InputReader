@@ -1,9 +1,22 @@
 ﻿using InputReader.Converters;
+using InputReader.InputReaders.Interfaces;
 
 namespace InputReader.InputReaders.Queue.QueueItems;
 
-public sealed class ValueConverterQueueItem<TInputType>(IValueConverter<TInputType> valueConverter) : IQueueItem
+public sealed class ValueConverterQueueItem<TInputType> : IQueueItem
 {
+    private IValueConverter<TInputType> valueConverter;
+
+    public ValueConverterQueueItem(IValueConverter<TInputType> valueConverter)
+    {
+        SetInputReader(valueConverter);
+    }
+
+    internal void SetInputReader(IValueConverter<TInputType> valueConverter)
+    {
+        this.valueConverter = valueConverter;
+    }
+
     public int Order => 5;
 
     public QueueItemResult Execute(QueueItemResult previousItemResult)

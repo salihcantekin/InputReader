@@ -1,4 +1,5 @@
 ﻿using InputReader.AllowedValues;
+using InputReader.Converters;
 using InputReader.InputReaders.Interfaces;
 using InputReader.InputReaders.Queue.QueueItems;
 using System;
@@ -8,7 +9,7 @@ using System.Linq;
 namespace InputReader.InputReaders.BaseInputReaders;
 
 public abstract partial class BaseInputReader<TInputType, TInputValueType>
-    : IInputReader<TInputType, TInputValueType>, IPreValidatable<TInputType, TInputValueType>
+    : IInputReader<TInputType, TInputValueType>
     where TInputValueType : InputValue<TInputType>
 {
     private IAllowedValueProcessor<string> allowedValueProcessor;
@@ -63,23 +64,22 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         return this;
     }
 
-
     #region Internal Methods
 
-    internal bool IsAllowedValuesEnabled()
-    {
-        return allowedValueProcessor != null && allowedValueProcessor.IsEnabled;
-    }
+    //internal bool IsAllowedValuesEnabled()
+    //{
+    //    return allowedValueProcessor != null && allowedValueProcessor.IsEnabled;
+    //}
 
-    internal bool AllowedValuesCheckRequired()
-    {
-        return IsAllowedValuesEnabled() && allowedValueProcessor.Values.Count > 0;
-    }
+    //internal bool AllowedValuesCheckRequired()
+    //{
+    //    return IsAllowedValuesEnabled() && allowedValueProcessor.Values.Count > 0;
+    //}
 
-    internal bool IsAllowedValue(string value)
-    {
-        return allowedValueProcessor.IsAllowedValue(value);
-    }
+    //internal bool IsAllowedValue(string value)
+    //{
+    //    return allowedValueProcessor.IsAllowedValue(value);
+    //}
 
     #endregion
 

@@ -16,6 +16,9 @@ public class Constants
         public const char YesUpper = 'Y';
         public const char NoLower = 'n';
         public const char NoUpper = 'N';
+        public const char Space = ' ';
+        public const char Tab = '\t';
+        public const char NoChar = '\0';
 
         internal const char Backspace = '\b';
         internal const string DoubleBackspace = "\b \b";

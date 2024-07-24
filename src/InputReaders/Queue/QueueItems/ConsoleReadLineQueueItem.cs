@@ -4,7 +4,14 @@ namespace InputReader.InputReaders.Queue.QueueItems;
 
 public sealed class ConsoleReadLineQueueItem(IInputReaderBase inputReader) : IQueueItem
 {
+    private IInputReaderBase inputReader = inputReader;
+
     public int Order => 2;
+
+    internal void SetInputReader(IInputReaderBase inputReader)
+    {
+        this.inputReader = inputReader;
+    }
 
     public QueueItemResult Execute(QueueItemResult previousItemResult)
     {

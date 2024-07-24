@@ -1,4 +1,5 @@
-﻿using InputReader;
+﻿using FluentAssertions;
+using InputReader;
 
 namespace InputReaderUnitTest.InputValues;
 internal class IntInputValueTests
@@ -11,7 +12,7 @@ internal class IntInputValueTests
         var intInputValue = new IntInputValue(expectedInt);
 
         // Assert
-        Assert.That(intInputValue.Value, Is.EqualTo(expectedInt));
+        intInputValue.Value.Should().Be(expectedInt);
     }
 
     [Test]
@@ -22,7 +23,7 @@ internal class IntInputValueTests
         var intInputValue = new IntInputValue(expectedInt);
 
         // Assert
-        Assert.That(intInputValue.IsValid, Is.False);
+        intInputValue.IsValid.Should().BeFalse();
     }
 
     [Test]
@@ -36,7 +37,7 @@ internal class IntInputValueTests
         int? intValue = intInputValue;
 
         // Assert
-        Assert.That(intValue, Is.EqualTo(expectedInt));
+        intValue.Should().Be(expectedInt);
     }
 
     [Test]
@@ -50,7 +51,7 @@ internal class IntInputValueTests
         var result = intInputValue.Is(expectedInt);
 
         // Assert
-        Assert.That(result, Is.True);
+        result.Should().BeTrue();
     }
 
     [Test]
@@ -64,7 +65,7 @@ internal class IntInputValueTests
         var result = intInputValue.Is(321);
 
         // Assert
-        Assert.That(result, Is.False);
+        result.Should().BeFalse();
     }
 
     [Test]
@@ -77,7 +78,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsZero();
 
         // Assert
-        Assert.That(result, Is.True);
+        result.Should().BeTrue();
     }
 
     [Test]
@@ -90,7 +91,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsZero();
 
         // Assert
-        Assert.That(result, Is.False);
+        result.Should().BeFalse();
     }
 
     [Test]
@@ -103,7 +104,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsOne();
 
         // Assert
-        Assert.That(result, Is.True);
+        result.Should().BeTrue();
     }
 
     [Test]
@@ -116,7 +117,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsOne();
 
         // Assert
-        Assert.That(result, Is.False);
+        result.Should().BeFalse();
     }
 
     [Test]
@@ -129,7 +130,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsTwo();
 
         // Assert
-        Assert.That(result, Is.True);
+        result.Should().BeTrue();
     }
 
     [Test]
@@ -142,7 +143,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsTwo();
 
         // Assert
-        Assert.That(result, Is.False);
+        result.Should().BeFalse();
     }
 
     [Test]
@@ -155,7 +156,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsThree();
 
         // Assert
-        Assert.That(result, Is.True);
+        result.Should().BeTrue();
     }
 
     [Test]
@@ -168,7 +169,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsThree();
 
         // Assert
-        Assert.That(result, Is.False);
+        result.Should().BeFalse();
     }
 
     [Test]
@@ -181,7 +182,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsFour();
 
         // Assert
-        Assert.That(result, Is.True);
+        result.Should().BeTrue();
     }
 
     [Test]
@@ -194,7 +195,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsFour();
 
         // Assert
-        Assert.That(result, Is.False);
+        result.Should().BeFalse();
     }
 
     [Test]
@@ -207,7 +208,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsFive();
 
         // Assert
-        Assert.That(result, Is.True);
+        result.Should().BeTrue();
     }
 
     [Test]
@@ -220,7 +221,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsFive();
 
         // Assert
-        Assert.That(result, Is.False);
+        result.Should().BeFalse();
     }
 
     [Test]
@@ -233,7 +234,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsGreaterThan(4);
 
         // Assert
-        Assert.That(result, Is.True);
+        result.Should().BeTrue();
     }
 
     [Test]
@@ -246,7 +247,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsGreaterThan(5);
 
         // Assert
-        Assert.That(result, Is.False);
+        result.Should().BeFalse();
     }
 
     [Test]
@@ -259,7 +260,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsGreaterThan(6);
 
         // Assert
-        Assert.That(result, Is.False);
+        result.Should().BeFalse();
     }
 
     [Test]
@@ -272,7 +273,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsLessThan(6);
 
         // Assert
-        Assert.That(result, Is.True);
+        result.Should().BeTrue();
     }
 
     [Test]
@@ -285,7 +286,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsLessThan(5);
 
         // Assert
-        Assert.That(result, Is.False);
+        result.Should().BeFalse();
     }
 
     [Test]
@@ -298,7 +299,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsLessThan(4);
 
         // Assert
-        Assert.That(result, Is.False);
+        result.Should().BeFalse();
     }
 
     [Test]
@@ -311,7 +312,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsGreaterThanOrEqualTo(4);
 
         // Assert
-        Assert.That(result, Is.True);
+        result.Should().BeTrue();
     }
 
     [Test]
@@ -324,7 +325,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsGreaterThanOrEqualTo(5);
 
         // Assert
-        Assert.That(result, Is.True);
+        result.Should().BeTrue();
     }
 
     [Test]
@@ -337,7 +338,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsGreaterThanOrEqualTo(6);
 
         // Assert
-        Assert.That(result, Is.False);
+        result.Should().BeFalse();
     }
 
     [Test]
@@ -350,7 +351,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsLessThanOrEqualTo(6);
 
         // Assert
-        Assert.That(result, Is.True);
+        result.Should().BeTrue();
     }
 
     [Test]
@@ -363,7 +364,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsLessThanOrEqualTo(5);
 
         // Assert
-        Assert.That(result, Is.True);
+        result.Should().BeTrue();
     }
 
     [Test]
@@ -376,7 +377,7 @@ internal class IntInputValueTests
         var result = intInputValue.IsLessThanOrEqualTo(4);
 
         // Assert
-        Assert.That(result, Is.False);
+        result.Should().BeFalse();
     }
 
     [Test]
@@ -389,6 +390,21 @@ internal class IntInputValueTests
         var result = intInputValue.IsLessThanOrEqualTo(4);
 
         // Assert
-        Assert.That(result, Is.False);
+        result.Should().BeFalse();
+    }
+
+    [Test]
+    public void ToString_WithValidValue_ShouldReturnValue()
+    {
+        // Arrange
+        var value = 10;
+        var expected = "10";
+        var intInputValue = new IntInputValue(value);
+
+        // Act
+        var intValue = intInputValue.ToString();
+
+        // Assert
+        intValue.ToString().Should().Be(expected);
     }
 }

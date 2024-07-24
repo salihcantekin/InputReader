@@ -20,6 +20,9 @@ public sealed class DateOnlyInputReader : BaseInputReader<CustomDateOnly?, DateO
 
     public IInputReader<CustomDateOnly?, DateOnlyInputValue> WithDateOnlyValueConverter(string format = Constants.Format.DateFormat)
     {
-        return WithValueConverter(new DateOnlyValueConverter(format));
+        return this.With(builder =>
+        {
+            builder.WithCustomConverter(new DateOnlyValueConverter(format));
+        });
     }
 }

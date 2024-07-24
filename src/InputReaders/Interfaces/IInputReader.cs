@@ -6,8 +6,7 @@ using System.Collections.Generic;
 namespace InputReader.InputReaders.Interfaces;
 
 public interface IInputReader<TInputType, TInputValueType> : IInputReaderBase<TInputType, TInputValueType>,
-                                                                   IInputReadUntil<TInputType, TInputValueType>,
-                                                                   IPreValidatable<TInputType, TInputValueType>
+                                                                   IInputReadUntil<TInputType, TInputValueType>
     where TInputValueType : InputValue<TInputType>
 {
     IInputReader<TInputType, TInputValueType> WithMessage(string message);
@@ -17,10 +16,10 @@ public interface IInputReader<TInputType, TInputValueType> : IInputReaderBase<TI
         bool caseInsensitive = true);
 
 
-    IInputReader<TInputType, TInputValueType> WithValueConverter(Func<string, TInputType> convertFunc);
+    //IInputReader<TInputType, TInputValueType> WithValueConverter(Func<string, TInputType> convertFunc);
 
-    IInputReader<TInputType, TInputValueType> WithValueConverter(
-        IValueConverter<TInputType> converter);
+    //IInputReader<TInputType, TInputValueType> WithValueConverter(
+    //    IValueConverter<TInputType> converter);
 
     IInputReader<TInputType, TInputValueType> WithIteration(
         Action<TInputValueType, IPrintProcessor> action);

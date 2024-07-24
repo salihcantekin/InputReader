@@ -11,8 +11,6 @@ public sealed class YesNoInputReader : BaseInputReader<char?, YesNoInputValue>
         WithAllowedValues(caseInsensitive: true, Constants.Chars.YesLower, Constants.Chars.NoLower);
     }
 
-    public YesNoInputReader() : this(null)
-    {
-    }
+    public YesNoInputReader() : this(null) { }
 
 }
