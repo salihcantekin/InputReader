@@ -1,8 +1,13 @@
 ﻿namespace InputReader;
 
-public record InputValue<T>(T Value)
+public record InputValue<T>
 {
-    public T Value { get; protected set; } = Value;
+    internal InputValue(T Value)
+    {
+        this.Value = Value;
+    }
+
+    public T Value { get; protected set; }
 
     public bool IsValid { get; set; }
 

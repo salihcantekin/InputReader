@@ -1,4 +1,5 @@
 ﻿namespace InputReader.InputValues;
-public record PasswordInputValue(string Value) : InputValue<string>(Value)
+public record PasswordInputValue : InputValue<string>
 {
+    internal PasswordInputValue(string Value) : base(Value) { }
 }

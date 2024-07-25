@@ -1,7 +1,12 @@
-﻿namespace InputReader;
+﻿using InputReader.Converters.CustomConverters;
 
-public record IntInputValue(int? Value) : InputValue<int?>(Value)
+namespace InputReader;
+
+public record IntInputValue : InputValue<int?>
 {
+    // public constructor if it has additional methods, to test the methods
+    public IntInputValue(int? Value) : base(Value) { }
+
     public bool Is(int value) => value == Value;
     public bool IsZero() => Is(0);
     public bool IsOne() => Is(1);
