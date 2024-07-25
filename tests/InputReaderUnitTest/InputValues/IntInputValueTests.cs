@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace InputReaderUnitTest.InputValues;
+
 internal class IntInputValueTests
 {
     [Test]
@@ -385,13 +386,371 @@ internal class IntInputValueTests
     }
 
     [Test]
+    public void Is_WithNegativeInt_ShouldReturnTrue()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(-1);
+
+        // Assert
+        Assert.That(intInputValue.Is(-1), Is.True);
+    }
+
+    [Test]
+    public void Is_WithNegativeInt_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(-1);
+
+        // Assert
+        Assert.That(intInputValue.Is(-2), Is.False);
+    }
+
+    [Test]
+    public void Is_WithNullValue_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(null);
+
+        // Act
+        var result = intInputValue.Is(0);
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsZero_WithNullValue_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(null);
+
+        // Act
+        var result = intInputValue.IsZero();
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsOne_WithNullValue_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(null);
+
+        // Act
+        var result = intInputValue.IsOne();
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsTwo_WithNullValue_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(null);
+
+        // Act
+        var result = intInputValue.IsTwo();
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsThree_WithNullValue_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(null);
+
+        // Act
+        var result = intInputValue.IsThree();
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsFour_WithNullValue_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(null);
+
+        // Act
+        var result = intInputValue.IsFour();
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsFive_WithNullValue_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(null);
+
+        // Act
+        var result = intInputValue.IsFive();
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsGreaterThan_WithNullValue_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(null);
+
+        // Act
+        var result = intInputValue.IsGreaterThan(0);
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsLessThan_WithNullValue_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(null);
+
+        // Act
+        var result = intInputValue.IsLessThan(0);
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsGreaterThanOrEqualTo_WithNullValue_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(null);
+
+        // Act
+        var result = intInputValue.IsGreaterThanOrEqualTo(0);
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
     public void IsLessThanOrEqualTo_WithNullValue_ShouldReturnFalse()
     {
         // Arrange
         var intInputValue = new IntInputValue(null);
 
         // Act
-        var result = intInputValue.IsLessThanOrEqualTo(4);
+        var result = intInputValue.IsLessThanOrEqualTo(0);
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void Is_WithLargeInt_ShouldReturnTrue()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(int.MaxValue);
+
+        // Act
+        var result = intInputValue.Is(int.MaxValue);
+
+        // Assert
+        Assert.That(result, Is.True);
+    }
+
+    [Test]
+    public void Is_WithLargeInt_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(int.MaxValue);
+
+        // Act
+        var result = intInputValue.Is(int.MaxValue - 1);
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void Is_WithSmallInt_ShouldReturnTrue()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(int.MinValue);
+
+        // Act
+        var result = intInputValue.Is(int.MinValue);
+
+        // Assert
+        Assert.That(result, Is.True);
+    }
+
+    [Test]
+    public void Is_WithSmallInt_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(int.MinValue);
+
+        // Act
+        var result = intInputValue.Is(int.MinValue + 1);
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsZero_WithLargeInt_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(int.MaxValue);
+
+        // Act
+        var result = intInputValue.IsZero();
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsOne_WithLargeInt_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(int.MaxValue);
+
+        // Act
+        var result = intInputValue.IsOne();
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsTwo_WithLargeInt_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(int.MaxValue);
+
+        // Act
+        var result = intInputValue.IsTwo();
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsThree_WithLargeInt_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(int.MaxValue);
+
+        // Act
+        var result = intInputValue.IsThree();
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsFour_WithLargeInt_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(int.MaxValue);
+
+        // Act
+        var result = intInputValue.IsFour();
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsFive_WithLargeInt_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(int.MaxValue);
+
+        // Act
+        var result = intInputValue.IsFive();
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsGreaterThan_WithLargeInt_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(int.MaxValue);
+
+        // Act
+        var result = intInputValue.IsGreaterThan(int.MaxValue);
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsLessThan_WithLargeInt_ShouldReturnTrue()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(int.MaxValue);
+
+        // Act
+        var result = intInputValue.IsLessThan(int.MaxValue);
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void IsGreaterThanOrEqualTo_WithLargeInt_ShouldReturnTrue()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(int.MaxValue);
+
+        // Act
+        var result = intInputValue.IsGreaterThanOrEqualTo(int.MaxValue);
+
+        // Assert
+        Assert.That(result, Is.True);
+    }
+
+    [Test]
+    public void IsLessThanOrEqualTo_WithLargeInt_ShouldReturnTrue()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(int.MaxValue);
+
+        // Act
+        var result = intInputValue.IsLessThanOrEqualTo(int.MaxValue);
+
+        // Assert
+        Assert.That(result, Is.True);
+    }
+
+    [Test]
+    public void Is_WithCombination_ShouldReturnTrue()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(5);
+
+        // Act
+        var result = intInputValue.Is(5) && intInputValue.IsGreaterThan(4) && intInputValue.IsLessThan(6);
+
+        // Assert
+        Assert.That(result, Is.True);
+    }
+
+    [Test]
+    public void Is_WithCombination_ShouldReturnFalse()
+    {
+        // Arrange
+        var intInputValue = new IntInputValue(5);
+
+        // Act
+        var result = intInputValue.Is(5) && intInputValue.IsGreaterThan(6) && intInputValue.IsLessThan(4);
 
         // Assert
         Assert.That(result, Is.False);
