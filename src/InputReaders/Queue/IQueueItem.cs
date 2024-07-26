@@ -6,3 +6,8 @@ public interface IQueueItem
 
     QueueItemResult Execute(QueueItemResult previousItemResult);
 }
+
+public interface IHasFailReason
+{
+    FailReason FailReason { get; }
+}

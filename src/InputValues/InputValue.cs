@@ -1,5 +1,14 @@
 ﻿namespace InputReader;
 
+public enum FailReason
+{
+    UnKnown,
+    PreValidation,
+    PostValidation,
+    ValueConversion,
+    AllowedValues
+}
+
 public record InputValue<T>
 {
     internal InputValue(T Value)
@@ -10,6 +19,8 @@ public record InputValue<T>
     public T Value { get; protected set; }
 
     public bool IsValid { get; set; }
+
+    public FailReason FailReason { get; internal set; }
 
     protected internal virtual string DefaultErrorMessage => "Invalid value. Please try again.";
 

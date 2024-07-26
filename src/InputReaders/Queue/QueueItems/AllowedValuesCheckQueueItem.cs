@@ -3,9 +3,12 @@ using InputReader.PrintProcessor;
 
 namespace InputReader.InputReaders.Queue.QueueItems;
 
-internal class AllowedValuesCheckQueueItem(IAllowedValueProcessor<string> allowedValueProcessor) : IQueueItem
+internal class AllowedValuesCheckQueueItem(IAllowedValueProcessor<string> allowedValueProcessor) 
+    : IQueueItem, IHasFailReason
 {
     public int Order => 4;
+
+    public FailReason FailReason => FailReason.AllowedValues;
 
     public QueueItemResult Execute(QueueItemResult previousItemResult)
     {

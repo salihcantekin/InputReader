@@ -1,6 +1,5 @@
 ﻿namespace InputReader;
 
-public record CharInputValue : InputValue<char?>
+public record CharInputValue(char? Value) : InputValue<char?>(Value)
 {
-    internal CharInputValue(char? Value) : base(Value) { }
 }

@@ -3,7 +3,7 @@ using InputReader.InputReaders.Interfaces;
 
 namespace InputReader.InputReaders.Queue.QueueItems;
 
-public sealed class ValueConverterQueueItem<TInputType> : IQueueItem
+public sealed class ValueConverterQueueItem<TInputType> : IQueueItem, IHasFailReason
 {
     private IValueConverter<TInputType> valueConverter;
 
@@ -18,6 +18,8 @@ public sealed class ValueConverterQueueItem<TInputType> : IQueueItem
     }
 
     public int Order => 5;
+
+    public FailReason FailReason => FailReason.ValueConversion;
 
     public QueueItemResult Execute(QueueItemResult previousItemResult)
     {

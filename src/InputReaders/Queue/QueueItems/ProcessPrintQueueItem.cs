@@ -4,8 +4,8 @@ using InputReader.PrintProcessor;
 namespace InputReader.InputReaders.Queue.QueueItems;
 
 public sealed class ProcessPrintQueueItem(IPrintProcessor printProcessor,
-                             IAllowedValueProcessor<string> allowedValueProcessor,
-                             string message) : IQueueItem
+                                          IAllowedValueProcessor<string> allowedValueProcessor,
+                                          string message) : IQueueItem
 {
     public int Order => 1;
 

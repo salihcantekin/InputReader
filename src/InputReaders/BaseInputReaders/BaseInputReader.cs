@@ -47,13 +47,16 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
          */
 
         QueueItemResult previousItemResult = null;
+        IQueueItem item = null;
         for (int i = 0; i < queueItems.Count; i++)
         {
-            var item = queueItems.Values[i];
+            item = queueItems.Values[i];
             previousItemResult = item.Execute(previousItemResult);
 
             if (previousItemResult?.IsFailed == true)
+            {
                 break;
+            }
         }
 
         // intance of TInputValueType NOT created yet (CreateInstanceQueueItem didn't worked)
@@ -64,6 +67,9 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         }
 
         inputValue.IsValid = !previousItemResult.IsFailed;
+        inputValue.FailReason = item is IHasFailReason failReason 
+                                 ? failReason.FailReason 
+                                 : FailReason.UnKnown;
 
         iteractionDelegate?.Invoke(inputValue, PrintProcessor);
 

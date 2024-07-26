@@ -3,9 +3,11 @@ using System.Collections.Generic;
 
 namespace InputReader.InputReaders.Queue.QueueItems;
 
-public sealed class PreValidatorQueueItem(HashSet<IPreValidator> validators) : IQueueItem
+public sealed class PreValidatorQueueItem(HashSet<IPreValidator> validators) : IQueueItem, IHasFailReason
 {
     public int Order => 3;
+
+    public FailReason FailReason => FailReason.PreValidation;
 
     public QueueItemResult Execute(QueueItemResult previousItemResult)
     {

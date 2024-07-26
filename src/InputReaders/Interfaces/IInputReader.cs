@@ -10,17 +10,24 @@ public interface IInputReader<TInputType, TInputValueType> : IInputReaderBase<TI
     where TInputValueType : InputValue<TInputType>
 {
     IInputReader<TInputType, TInputValueType> WithMessage(string message);
+
+    IInputReader<TInputType, TInputValueType> WithErrorMessage();
+    IInputReader<TInputType, TInputValueType> WithErrorMessage(string message);
+
+    IInputReader<TInputType, TInputValueType> ClearAllowedValues();
+
     IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<string> allowedValues);
 
     IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<string> allowedValues,
         bool caseInsensitive = true);
 
+    IInputReader<TInputType, TInputValueType> WithAllowedValues(bool caseInsensitive = true, params TInputType[] allowedValues);
 
-    //IInputReader<TInputType, TInputValueType> WithValueConverter(Func<string, TInputType> convertFunc);
+    IInputReader<TInputType, TInputValueType> WithAllowedValues(params TInputType[] allowedValues);
 
-    //IInputReader<TInputType, TInputValueType> WithValueConverter(
-    //    IValueConverter<TInputType> converter);
+    IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<TInputType> allowedValues,
+        bool caseInsensitive = true);
 
-    IInputReader<TInputType, TInputValueType> WithIteration(
-        Action<TInputValueType, IPrintProcessor> action);
+
+    IInputReader<TInputType, TInputValueType> WithIteration(Action<TInputValueType, IPrintProcessor> action);
 }

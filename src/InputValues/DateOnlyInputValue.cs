@@ -2,7 +2,6 @@
 
 namespace InputReader;
 
-public record DateOnlyInputValue: InputValue<CustomDateOnly?>
+public record DateOnlyInputValue(CustomDateOnly? Value) : InputValue<CustomDateOnly?>(Value)
 {
-    internal DateOnlyInputValue(CustomDateOnly? Value) : base(Value) { }
 }

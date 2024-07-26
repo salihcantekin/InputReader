@@ -7,27 +7,37 @@ using InputReader.InputReaders.Extensions;
 //                                      toDate: "31.12.2021",
 //                                      "dd.MM.yyyy");
 
-var passResult = Input.Password("Enter your password: ", Constants.Chars.NoChar).Read();
+//var passResult = Input.Password("Enter your password: ", Constants.Chars.NoChar).Read();
 
-Console.WriteLine("IsValid: " + passResult.IsValid);
-Console.WriteLine("Value: " + passResult.Value);
+//Console.WriteLine("IsValid: " + passResult.IsValid);
+//Console.WriteLine("Value: " + passResult.Value);
+
+Input.DateOnly("Enter Date [dd.MM.yyyy]: ", format: "dd.MM.yyyy")
+    .WithIteration((value, printProcessor) =>
+    {
+        if (!value.IsValid)
+        {
+            Console.WriteLine("Failed with reason: {0}", value.FailReason);
+        }
+    })
+    .ReadUntilValid();
 
 var ynResult = Input.Int("\nNumber: ")
-                .WithErrorMessage("Please enter value greater than 100")
-                //.WithIteration((value, printProcessor) =>
-                //{
-                //    if (value.IsLessThan(100))
-                //    {
-                //        printProcessor.Print("Please enter value greater than 100");
-                //    }
-                //})
+                //.WithAllowedValues(1..100)
+                .WithIteration((value, printProcessor) =>
+                {
+                    if (!value.IsValid)
+                    {
+                        Console.WriteLine("Failed with reason: {0}", value.FailReason);
+                    }
+                })
                 .With(opt =>
                 {
-                    //opt.WithPreValidator(i =>
-                    //{
-                    //    var number = int.Parse(i);
-                    //    return number > 100;
-                    //});
+                    opt.WithPreValidator(i =>
+                    {
+                        var success = int.TryParse(i, out var number);
+                        return success && number > 10;
+                    });
 
                     opt.WithCustomConverter(message =>
                     {
