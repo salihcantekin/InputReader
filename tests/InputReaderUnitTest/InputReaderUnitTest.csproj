@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="QueueItems\" />
     <Folder Include="With\" />
     <Folder Include="WithDefaultMessageTests\" />
   </ItemGroup>
