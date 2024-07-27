@@ -23,7 +23,7 @@ internal class InputReadersTests
         var converterItem = new ValueConverterQueueItem<int>(defaultConverter);
 
         var previousResult = QueueItemResult.FromResult(1, null);
-        previousResult.AddOutputParam("line", expectedValue);
+        previousResult.AddOutputParam("Line", expectedValue);
 
         // Action
         var result = converterItem.Execute(previousResult);
@@ -42,7 +42,7 @@ internal class InputReadersTests
         var converterItem = new ValueConverterQueueItem<int>(defaultConverter);
 
         var previousResult = QueueItemResult.FromResult(1, null);
-        previousResult.AddOutputParam("line", "Invalid");
+        previousResult.AddOutputParam("Line", "Invalid");
 
         // Action
         var result = converterItem.Execute(previousResult);
@@ -64,7 +64,7 @@ internal class InputReadersTests
         var converterItem = new ValueConverterQueueItem<string>(defaultConverter);
 
         var previousResult = QueueItemResult.FromResult(1, null);
-        previousResult.AddOutputParam("line", expectedValue);
+        previousResult.AddOutputParam("Line", expectedValue);
 
         // Action
         var result = converterItem.Execute(previousResult);

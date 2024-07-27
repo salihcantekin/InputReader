@@ -13,12 +13,12 @@ public static class DateOnlyExtensions
         DateOnlyValueConverter converter = new(format);
         if (!converter.TryConvertFromString(fromDate, out CustomDateOnly? fromDateValue))
         {
-            throw new ArgumentException("Invalid fromDate value");
+            throw new ArgumentException(Constants.Message.InvalidValueFormat.Format(nameof(fromDate)));
         }
 
         if (!converter.TryConvertFromString(toDate, out CustomDateOnly? toDateValue))
         {
-            throw new ArgumentException("Invalid toDate value");
+            throw new ArgumentException(Constants.Message.InvalidValueFormat.Format(nameof(toDate)));
         }
 
         return reader.ReadUntil(input =>

@@ -60,9 +60,9 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         }
 
         // intance of TInputValueType NOT created yet (CreateInstanceQueueItem didn't worked)
-        if (previousItemResult.GetOutputParam("InputValue") is not TInputValueType inputValue)
+        if (previousItemResult.GetOutputParam(Constants.Queue.Params.InputValue) is not TInputValueType inputValue)
         {
-            object value = previousItemResult.GetOutputParam("converted_value");
+            object value = previousItemResult.GetOutputParam(Constants.Queue.Params.ConvertedValue);
             inputValue = Activator.CreateInstance(typeof(TInputValueType), value) as TInputValueType;
         }
 

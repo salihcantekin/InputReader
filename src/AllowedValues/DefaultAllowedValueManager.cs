@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
+using System.Linq;
 
 namespace InputReader.AllowedValues;
 
@@ -21,7 +21,7 @@ internal class DefaultAllowedValueManager<T> : IAllowedValueProcessor<T>
         allowedValuesHashSet.Clear();
     }
 
-    public IImmutableList<T> Values => allowedValuesHashSet.ToImmutableList();
+    public IEnumerable<T> Values => allowedValuesHashSet.AsEnumerable();
 
     public bool IsEnabled => allowedValuesHashSet?.Count > 0;
 

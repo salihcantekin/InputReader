@@ -15,12 +15,12 @@ public static class TimeOnlyExtensions
         TimeOnlyValueConverter converter = new(format);
         if (!converter.TryConvertFromString(fromTime, out CustomTimeOnly? fromTimeValue))
         {
-            throw new ArgumentException("Invalid fromTime value");
+            throw new ArgumentException(Constants.Message.InvalidValueFormat.Format(nameof(fromTime)));
         }
 
         if (!converter.TryConvertFromString(toTime, out CustomTimeOnly? toTimeValue))
         {
-            throw new ArgumentException("Invalid toTime value");
+            throw new ArgumentException(Constants.Message.InvalidValueFormat.Format(nameof(toTime)));
         }
 
         return reader.ReadUntil(input =>

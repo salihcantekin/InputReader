@@ -22,7 +22,7 @@ public record InputValue<T>
 
     public FailReason FailReason { get; internal set; }
 
-    protected internal virtual string DefaultErrorMessage => "Invalid value. Please try again.";
+    protected internal virtual string DefaultErrorMessage => Constants.Message.DefaultErrorMessage;
 
     public sealed override string ToString() => Value?.ToString();
 

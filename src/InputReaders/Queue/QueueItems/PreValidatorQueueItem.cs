@@ -16,7 +16,7 @@ public sealed class PreValidatorQueueItem(HashSet<IPreValidator> validators) : I
         if (validationRequired == false)
             return QueueItemResult.FromResult(null, previousItemResult);
 
-        var message = previousItemResult.GetOutputParam("line").ToString();
+        var message = previousItemResult.GetOutputParam(Constants.Queue.Params.Line).ToString();
 
         foreach (var validator in validators)
         {

@@ -17,7 +17,7 @@ public sealed class ConsoleReadLineQueueItem(IInputReaderBase inputReader) : IQu
     {
         var line = inputReader.ReadLine();
         var queueItem = QueueItemResult.FromResult(line, previousItemResult);
-        queueItem.AddOutputParam("line", line); // so it can be used in any
+        queueItem.AddOutputParam(Constants.Queue.Params.Line, line); // so it can be used in any
 
         return queueItem;
     }

@@ -8,7 +8,7 @@ public record QueueItemResult
 
     public bool IsFailed { get; set; }
 
-    internal QueueItemResult PreviousItemResult { get; private set; }
+    public QueueItemResult PreviousItemResult { get; private set; }
 
     private Dictionary<string, object> OutputParams { get; set; } = new();
 

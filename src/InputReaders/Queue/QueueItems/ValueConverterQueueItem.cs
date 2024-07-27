@@ -23,12 +23,12 @@ public sealed class ValueConverterQueueItem<TInputType> : IQueueItem, IHasFailRe
 
     public QueueItemResult Execute(QueueItemResult previousItemResult)
     {
-        var message = previousItemResult.GetOutputParam("line").ToString();
+        var message = previousItemResult.GetOutputParam(Constants.Queue.Params.Line).ToString();
 
         var success = valueConverter.TryConvertFromString(message, out var value);
 
         if (success)
-            previousItemResult.AddOutputParam("converted_value", value);
+            previousItemResult.AddOutputParam(Constants.Queue.Params.ConvertedValue, value);
 
         return success
             ? QueueItemResult.FromResult(value, previousItemResult)

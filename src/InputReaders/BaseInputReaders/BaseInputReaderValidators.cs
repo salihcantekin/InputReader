@@ -2,7 +2,6 @@
 using InputReader.InputReaders.Queue.QueueItems;
 using InputReader.Validators;
 using System;
-using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,10 +12,6 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
     where TInputValueType : InputValue<TInputType>
 {
     private HashSet<IPreValidator> preValidators;
-    //private readonly HashSet<IPostValidator<TInputType>> postValidators;
-
-    public FrozenSet<IPreValidator> PreValidators => preValidators.ToFrozenSet();
-    //public FrozenSet<IPostValidator<TInputType>> PostValidators => postValidators.ToFrozenSet();
 
     internal IInputReader<TInputType, TInputValueType> SetPreValidator<TPreValidator>(TPreValidator validator)
         where TPreValidator : IPreValidator

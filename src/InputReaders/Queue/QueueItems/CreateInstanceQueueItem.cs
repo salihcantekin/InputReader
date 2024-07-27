@@ -8,9 +8,17 @@ public class CreateInstanceQueueItem(Type inputValueType) : IQueueItem
 
     public QueueItemResult Execute(QueueItemResult previousItemResult)
     {
-        var result = Activator.CreateInstance(inputValueType, previousItemResult.Result);
-        previousItemResult.AddOutputParam("InputValue", result);
+		try
+		{
+            var result = Activator.CreateInstance(inputValueType, previousItemResult.Result);
+            previousItemResult.AddOutputParam(Constants.Queue.Params.InputValue, result);
 
-        return QueueItemResult.FromResult(result, previousItemResult);
+            return QueueItemResult.FromResult(result, previousItemResult);
+        }
+		catch
+		{
+            return QueueItemResult.Failed();
+
+        }
     }
 }
