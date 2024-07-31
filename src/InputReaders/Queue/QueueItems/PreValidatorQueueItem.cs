@@ -5,7 +5,7 @@ namespace InputReader.InputReaders.Queue.QueueItems;
 
 public sealed class PreValidatorQueueItem(HashSet<IPreValidator> validators) : IQueueItem, IHasFailReason
 {
-    public int Order => 3;
+    public int Order => QueueItemsOrder.PreValidatorQueueItem;
 
     public FailReason FailReason => FailReason.PreValidation;
 
@@ -16,7 +16,7 @@ public sealed class PreValidatorQueueItem(HashSet<IPreValidator> validators) : I
         if (validationRequired == false)
             return QueueItemResult.FromResult(null, previousItemResult);
 
-        var message = previousItemResult.GetOutputParam(Constants.Queue.Params.Line).ToString();
+        var message = previousItemResult.GetOutputParam<string>(Constants.Queue.Params.Line);
 
         foreach (var validator in validators)
         {

@@ -41,7 +41,7 @@ internal class YesNoReaderAllowedValuesTests
     {
         // Arrange
         ConfigureMockReader(input);
-        var reader = BuildYesNoReader().WithAllowedValues(caseInsensitive: caseInSensitive, 'y','n');
+        var reader = BuildYesNoReader().WithAllowedValues(caseInsensitive: caseInSensitive, null, 'y','n');
 
         // Action
         var value = reader.Read();

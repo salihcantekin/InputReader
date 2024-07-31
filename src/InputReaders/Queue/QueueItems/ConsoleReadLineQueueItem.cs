@@ -6,7 +6,7 @@ public sealed class ConsoleReadLineQueueItem(IInputReaderBase inputReader) : IQu
 {
     private IInputReaderBase inputReader = inputReader;
 
-    public int Order => 2;
+    public int Order => QueueItemsOrder.ConsoleReadLineQueueItem;
 
     internal void SetInputReader(IInputReaderBase inputReader)
     {
@@ -17,7 +17,7 @@ public sealed class ConsoleReadLineQueueItem(IInputReaderBase inputReader) : IQu
     {
         var line = inputReader.ReadLine();
         var queueItem = QueueItemResult.FromResult(line, previousItemResult);
-        queueItem.AddOutputParam(Constants.Queue.Params.Line, line); // so it can be used in any
+        queueItem.AddOutputParam(Constants.Queue.Params.Line, line); // so it can be used in any queue item
 
         return queueItem;
     }

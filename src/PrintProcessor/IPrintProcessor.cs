@@ -12,5 +12,5 @@ public interface IPrintProcessor
 
     void PrintError(string message);
 
-    void PrintAllowedValues(IEnumerable<string> allowedValues, bool isCaseInSensitive);
+    void PrintAllowedValues<TInputType>(IEnumerable<string> allowedValues, IEnumerable<(TInputType From, TInputType To)> inRangeAllowedValues, bool? isCaseInSensitive);
 }

@@ -1,6 +1,15 @@
 ﻿using InputReader;
 using InputReader.InputReaders.Extensions;
+using InputReader.Converters.CustomConverters;
 
+//var i = Input.DateOnly("Date: ").WithAllowedValues(from: CustomDateOnly.From(2024,01,01), to: CustomDateOnly.From(2024, 06, 30)).ReadUntilValid();
+
+//var i = Input.Int("Number: ").WithErrorMessage().ReadUntilValid();
+
+Input.Int("Number: ")
+    .WithAllowedValues(from: 1, to: 5)
+    .WithAllowedValues(from: 7, to: 10)
+    .ReadUntilValid();
 
 //var dateInput = Input.DateOnly("Enter Date [dd.MM.yyyy]: ", format: DateFormat)
 //                    .ReadUntilInRange(fromDate: "01.01.2021",

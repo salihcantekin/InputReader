@@ -7,6 +7,8 @@ public interface IAllowedValueProcessor<T>
     bool IsEnabled { get; }
     bool IsCaseInSensitive { get; }
 
+    string ErrorMessage { get; }
+
     IEnumerable<T> Values { get; }
 
     void SetEqualityComparer(IEqualityComparer<T> comparer);
@@ -17,4 +19,6 @@ public interface IAllowedValueProcessor<T>
 
     bool AddAllowedValue(T value);
     void AddAllowedValues(IEnumerable<T> values);
+
+    void SetErrorMessage(string message);
 }

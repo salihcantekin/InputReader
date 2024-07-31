@@ -4,15 +4,16 @@ using System.Linq;
 
 namespace InputReader.AllowedValues;
 
-internal class DefaultAllowedValueManager<T> : IAllowedValueProcessor<T>
+internal class DefaultAllowedValueManager<TInputType> : IAllowedValueProcessor<TInputType>
 {
-    private HashSet<T> allowedValuesHashSet;
-    private IEqualityComparer<T> allowedValuesComparer;
+    private HashSet<TInputType> allowedValuesHashSet;
+    private IEqualityComparer<TInputType> allowedValuesComparer;
     private bool isCaseInSensitive;
+    private string errorMessage;
 
-    public DefaultAllowedValueManager(IEqualityComparer<T> comparer = null)
+    public DefaultAllowedValueManager(IEqualityComparer<TInputType> comparer = null)
     {
-        SetEqualityComparer(comparer ?? EqualityComparer<T>.Default);
+        SetEqualityComparer(comparer ?? EqualityComparer<TInputType>.Default);
         allowedValuesHashSet ??= new(allowedValuesComparer);
     }
 
@@ -21,13 +22,15 @@ internal class DefaultAllowedValueManager<T> : IAllowedValueProcessor<T>
         allowedValuesHashSet.Clear();
     }
 
-    public IEnumerable<T> Values => allowedValuesHashSet.AsEnumerable();
+    public IEnumerable<TInputType> Values => allowedValuesHashSet.AsEnumerable();
 
     public bool IsEnabled => allowedValuesHashSet?.Count > 0;
 
     public bool IsCaseInSensitive => isCaseInSensitive;
 
-    public void SetEqualityComparer(IEqualityComparer<T> comparer)
+    public string ErrorMessage => errorMessage;
+
+    public void SetEqualityComparer(IEqualityComparer<TInputType> comparer)
     {
         allowedValuesComparer = comparer;
 
@@ -39,7 +42,12 @@ internal class DefaultAllowedValueManager<T> : IAllowedValueProcessor<T>
             allowedValuesHashSet = new(allowedValuesHashSet, allowedValuesComparer);
     }
 
-    public bool IsAllowedValue(T value)
+    public void SetErrorMessage(string message)
+    {
+        errorMessage = message;
+    }
+
+    public virtual bool IsAllowedValue(TInputType value)
     {
         // No need to check the value
         if (allowedValuesHashSet.Count == 0)
@@ -48,12 +56,12 @@ internal class DefaultAllowedValueManager<T> : IAllowedValueProcessor<T>
         return allowedValuesHashSet.Contains(value);
     }
 
-    public bool AddAllowedValue(T value)
+    public bool AddAllowedValue(TInputType value)
     {
         return allowedValuesHashSet.Add(value);
     }
 
-    public void AddAllowedValues(IEnumerable<T> values)
+    public void AddAllowedValues(IEnumerable<TInputType> values)
     {
         foreach (var value in values)
         {

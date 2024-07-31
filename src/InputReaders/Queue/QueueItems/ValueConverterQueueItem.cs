@@ -17,13 +17,13 @@ public sealed class ValueConverterQueueItem<TInputType> : IQueueItem, IHasFailRe
         this.valueConverter = valueConverter;
     }
 
-    public int Order => 5;
+    public int Order => QueueItemsOrder.ValueConverterQueueItem;
 
     public FailReason FailReason => FailReason.ValueConversion;
 
     public QueueItemResult Execute(QueueItemResult previousItemResult)
     {
-        var message = previousItemResult.GetOutputParam(Constants.Queue.Params.Line).ToString();
+        var message = previousItemResult.GetOutputParam<string>(Constants.Queue.Params.Line);
 
         var success = valueConverter.TryConvertFromString(message, out var value);
 

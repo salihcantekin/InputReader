@@ -4,7 +4,8 @@ using System.Globalization;
 
 namespace InputReader.Converters.CustomConverters;
 
-public readonly struct CustomDateOnly(int year, int month, int day) : IComparable<CustomDateOnly>, IEquatable<CustomDateOnly>, IInRangeCompatible<CustomDateOnly>
+public readonly struct CustomDateOnly(int year, int month, int day) : IComparable<CustomDateOnly>, 
+                                                                      IEquatable<CustomDateOnly>
 {
     internal readonly DateTime DateTime { get; } = new DateTime(year, month, day);
 
@@ -31,11 +32,6 @@ public readonly struct CustomDateOnly(int year, int month, int day) : IComparabl
 
         result = default;
         return false;
-    }
-
-    public bool IsInRange(CustomDateOnly fromValue, CustomDateOnly toValue)
-    {
-        return this >= fromValue && this <= toValue;
     }
 
     public int CompareTo(CustomDateOnly other) => DateTime.CompareTo(other.DateTime);

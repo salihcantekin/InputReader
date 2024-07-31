@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace InputReader.PrintProcessor;
 
@@ -30,11 +31,13 @@ public class DefaultPrintProcessor : IPrintProcessor
         Console.Error.WriteLine(message);
     }
 
-    public void PrintAllowedValues(IEnumerable<string> allowedValues, bool isCaseInSensitive)
+    public void PrintAllowedValues<TInputType>(IEnumerable<string> allowedValues, IEnumerable<(TInputType From, TInputType To)> inRangeAllowedValues, bool? isCaseInSensitive)
     {
-        var allowedMessage = $"({string.Join(',', allowedValues)}{(isCaseInSensitive ? '°' : '\0')}) ";
+        var ranges = inRangeAllowedValues.Select(i => $"[{i.From}..{i.To}]");
+        allowedValues = allowedValues?.Concat(ranges) ?? ranges;
+
+        var allowedMessage = $"({string.Join(',', allowedValues)}{(isCaseInSensitive == true ? '°' : '\0')}) ";
+
         Print(allowedMessage);
     }
-
-
 }

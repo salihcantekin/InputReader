@@ -16,17 +16,17 @@ public interface IInputReader<TInputType, TInputValueType> : IInputReaderBase<TI
 
     IInputReader<TInputType, TInputValueType> ClearAllowedValues();
 
-    IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<string> allowedValues);
+    IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<string> allowedValues, string errorMessage = null);
 
     IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<string> allowedValues,
-        bool caseInsensitive = true);
+        bool caseInsensitive = true, string errorMessage = null);
 
-    IInputReader<TInputType, TInputValueType> WithAllowedValues(bool caseInsensitive = true, params TInputType[] allowedValues);
+    IInputReader<TInputType, TInputValueType> WithAllowedValues(bool caseInsensitive = true, string errorMessage = null, params TInputType[] allowedValues);
 
     IInputReader<TInputType, TInputValueType> WithAllowedValues(params TInputType[] allowedValues);
 
     IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<TInputType> allowedValues,
-        bool caseInsensitive = true);
+        bool caseInsensitive = true, string errorMessage = null);
 
 
     IInputReader<TInputType, TInputValueType> WithIteration(Action<TInputValueType, IPrintProcessor> action);

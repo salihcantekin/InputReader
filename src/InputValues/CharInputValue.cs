@@ -1,5 +1,8 @@
-﻿namespace InputReader;
+﻿using InputReader.InputReaders.Interfaces;
 
-public record CharInputValue(char? Value) : InputValue<char?>(Value)
+namespace InputReader;
+
+public record CharInputValue(char? Value) : InputValue<char?>(Value), IInRangeCompatible<char?>
 {
+    public bool Is(char chr) => Value == chr;
 }

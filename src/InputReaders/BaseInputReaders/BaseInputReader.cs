@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using static InputReader.Constants;
 
 namespace InputReader.InputReaders.BaseInputReaders;
 
@@ -35,19 +36,9 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
 
     public virtual TInputValueType Read()
     {
-        /* ############## STEPS #############
-
-          - Write Message (Opt)             -> (PrintProcessor)
-          - Read RawValue                   -> (IInputReaderBase)
-          - PreValidators
-
-          - AllowedValue Check (Opt) (rawValue)
-          - Use ValueConverter.Convert (ValueConverter)
-          - AllowedValue Check (Opt) (Converted Type) (OPT)
-         */
-
         QueueItemResult previousItemResult = null;
         IQueueItem item = null;
+
         for (int i = 0; i < queueItems.Count; i++)
         {
             item = queueItems.Values[i];
@@ -59,7 +50,7 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
             }
         }
 
-        // intance of TInputValueType NOT created yet (CreateInstanceQueueItem didn't worked)
+        // in case of intance of TInputValueType NOT created yet (CreateInstanceQueueItem didn't worked)
         if (previousItemResult.GetOutputParam(Constants.Queue.Params.InputValue) is not TInputValueType inputValue)
         {
             object value = previousItemResult.GetOutputParam(Constants.Queue.Params.ConvertedValue);
@@ -77,10 +68,7 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
     }
 
 
-    internal void AddItemToQueue(IQueueItem item)
-    {
-        queueItems[item.Order] = item;
-    }
+    
 
     internal IInputReader<TInputType, TInputValueType> SetConsoleReader(IInputReaderBase reader)
     {
@@ -101,6 +89,18 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
     }
 
 
+    internal void AddItemToQueue(IQueueItem item)
+    {
+        queueItems[item.Order] = item;
+    }
+
+    private T TryGetQueueItem<T>() where T : IQueueItem
+    {
+        T queueItem = (T)queueItems.Values.FirstOrDefault(queueItem => queueItem is T);
+
+        return queueItem;
+    }
+
     private T GetOrCreateQueueItem<T>(Func<T> action) where T : IQueueItem
     {
         var queueItem = queueItems.FirstOrDefault(queueItems => queueItems.Value is T);
@@ -108,8 +108,8 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         if (queueItems.ContainsKey(queueItem.Key)) // instance of T already created
             return (T)queueItem.Value;
 
-        var item = action();
-        queueItems[queueItem.Key] = item;
+        var item = action(); 
+        queueItems[item.Order] = item;
 
         return item;
     }

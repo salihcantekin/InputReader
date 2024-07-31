@@ -40,7 +40,7 @@ internal class StringReaderAllowedValuesTests
     {
         // Arrange
         ConfigureMockReader(input);
-        var reader = BuildStringReader().WithAllowedValues(caseInsensitive: caseInSensitive, "tech", "techbuddy");
+        var reader = BuildStringReader().WithAllowedValues(caseInsensitive: caseInSensitive, null, "tech", "techbuddy");
 
         // Action
         var value = reader.Read();

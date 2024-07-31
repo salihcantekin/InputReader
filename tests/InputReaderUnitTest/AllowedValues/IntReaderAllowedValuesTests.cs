@@ -58,7 +58,7 @@ internal class IntReaderAllowedValuesTests
         // Arrange
         ConfigureMockReader(input);
         IEnumerable<string> enumerableValues = ["1", "2"];
-        var reader = BuildIntReader().WithAllowedValues(enumerableValues);
+        var reader = BuildIntReader().WithAllowedValues(enumerableValues, null);
 
         // Action
         var value = reader.Read();

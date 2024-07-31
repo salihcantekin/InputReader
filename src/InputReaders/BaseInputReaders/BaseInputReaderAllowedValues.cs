@@ -13,6 +13,22 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
     where TInputValueType : InputValue<TInputType>
 {
     private IAllowedValueProcessor<string> allowedValueProcessor;
+    private IInRangeAllowedValueProcessor<TInputType> inRangeAllowedValueManager;
+
+    #region In Range AllowedValues
+
+    internal IInputReader<TInputType, TInputValueType> WithInRangeAllowedValues(TInputType from, TInputType to)
+    {
+        inRangeAllowedValueManager ??= new DefaultInRangeAllowedValueManager<TInputType>();
+
+        inRangeAllowedValueManager.AddAllowedValue(from, to);
+
+        SetInRangeAllowedValueManager(inRangeAllowedValueManager);
+
+        return this;
+    }
+
+    #endregion
 
     #region WithAllowedValues Methods
 
@@ -22,7 +38,8 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         return this;
     }
 
-    public IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<string> allowedValues)
+    public IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<string> allowedValues,
+        string errorMessage = null)
     {
         if (allowedValues is null)
             throw new ArgumentNullException(nameof(allowedValues));
@@ -31,32 +48,39 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
 
         allowedValueProcessor.AddAllowedValues(allowedValues);
 
-        AddItemToQueue(new AllowedValuesCheckQueueItem(allowedValueProcessor));
+        if (!string.IsNullOrWhiteSpace(errorMessage))
+            allowedValueProcessor.SetErrorMessage(errorMessage);
+
+        AddItemToQueue(new AllowedValuesCheckQueueItem(allowedValueProcessor, PrintProcessor));
+
+        var printQueueItem = TryGetQueueItem<ProcessPrintQueueItem<TInputType>>();
+        
+        printQueueItem?.SetAllowedValueProcessor(allowedValueProcessor);
 
         return this;
     }
 
 
-    public IInputReader<TInputType, TInputValueType> WithAllowedValues(bool caseInsensitive = true, params TInputType[] allowedValues)
+    public IInputReader<TInputType, TInputValueType> WithAllowedValues(bool caseInsensitive = true, string errorMessage = null, params TInputType[] allowedValues)
     {
-        return WithAllowedValues(allowedValues.Select(i => i.ToString()), caseInsensitive);
+        return WithAllowedValues(allowedValues.Select(i => i.ToString()), caseInsensitive, errorMessage);
     }
 
     public IInputReader<TInputType, TInputValueType> WithAllowedValues(params TInputType[] allowedValues)
     {
-        return WithAllowedValues(allowedValues.Select(i => i.ToString()), false);
+        return WithAllowedValues(allowedValues.Select(i => i.ToString()), false, null);
     }
 
     public IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<TInputType> allowedValues,
-        bool caseInsensitive = true)
+        bool caseInsensitive = true, string errorMessage = null)
     {
-        return WithAllowedValues(allowedValues.Select(i => i.ToString()), caseInsensitive);
+        return WithAllowedValues(allowedValues.Select(i => i.ToString()), caseInsensitive, errorMessage);
     }
 
     public IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<string> allowedValues,
-        bool caseInsensitive = true)
+        bool caseInsensitive = true, string errorMessage = null)
     {
-        WithAllowedValues(allowedValues);
+        WithAllowedValues(allowedValues, errorMessage);
 
         if (caseInsensitive)
             allowedValueProcessor.SetEqualityComparer(StringComparer.OrdinalIgnoreCase);
@@ -64,24 +88,24 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         return this;
     }
 
-    #region Internal Methods
-
-    //internal bool IsAllowedValuesEnabled()
-    //{
-    //    return allowedValueProcessor != null && allowedValueProcessor.IsEnabled;
-    //}
-
-    //internal bool AllowedValuesCheckRequired()
-    //{
-    //    return IsAllowedValuesEnabled() && allowedValueProcessor.Values.Count > 0;
-    //}
-
-    //internal bool IsAllowedValue(string value)
-    //{
-    //    return allowedValueProcessor.IsAllowedValue(value);
-    //}
-
     #endregion
 
-    #endregion
+    internal IInputReader<TInputType, TInputValueType> SetInRangeAllowedValueManager(IInRangeAllowedValueProcessor<TInputType> inRangeAllowedValueManager)
+    {
+        var queueItem = GetOrCreateQueueItem(() =>
+        {
+            // first time
+            var item = new InRangeAllowedValuesQeueItem<TInputType>();
+            item.SetManager(inRangeAllowedValueManager);
+            return item;
+        });
+
+        queueItem.SetManager(inRangeAllowedValueManager);
+
+        var printQueueItem = TryGetQueueItem<ProcessPrintQueueItem<TInputType>>();
+
+        printQueueItem?.SetInRangeAllowedValueProcessor(inRangeAllowedValueManager);
+
+        return this;
+    }
 }

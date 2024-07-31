@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace InputReader.InputReaders.Queue;
 
@@ -10,20 +11,27 @@ public record QueueItemResult
 
     public QueueItemResult PreviousItemResult { get; private set; }
 
-    private Dictionary<string, object> OutputParams { get; set; } = new();
+    private Dictionary<string, object> outputParams { get; set; } = new();
+
+    public IEnumerable<KeyValuePair<string, object>> OutputParams => outputParams.AsEnumerable();
 
     public object Result { get; internal set; }
 
     public void AddOutputParam(string key, object value)
     {
-        OutputParams ??= [];
+        outputParams ??= [];
 
-        OutputParams[key] = value;
+        outputParams[key] = value;
     }
 
     public object GetOutputParam(string key)
     {
-        return OutputParams.TryGetValue(key, out var value) ? value : null;
+        return outputParams.TryGetValue(key, out var value) ? value : null;
+    }
+
+    public T GetOutputParam<T>(string key)
+    {
+        return (T)GetOutputParam(key);
     }
 
 
@@ -33,7 +41,7 @@ public record QueueItemResult
         {
             Result = result,
             PreviousItemResult = previousItemResult,
-            OutputParams = previousItemResult?.OutputParams
+            outputParams = previousItemResult?.outputParams
         };
     }
 

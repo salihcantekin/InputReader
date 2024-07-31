@@ -1,21 +1,34 @@
 ﻿using InputReader.AllowedValues;
 using InputReader.PrintProcessor;
+using System.Text;
 
 namespace InputReader.InputReaders.Queue.QueueItems;
 
-public sealed class ProcessPrintQueueItem(IPrintProcessor printProcessor,
-                                          IAllowedValueProcessor<string> allowedValueProcessor,
+public sealed class ProcessPrintQueueItem<TInputType>(IPrintProcessor printProcessor,
                                           string message) : IQueueItem
 {
-    public int Order => 1;
+    private IAllowedValueProcessor<string> allowedValueProcessor;
+    private IInRangeAllowedValueProcessor<TInputType> inRangeAllowedValueManager;
+
+    public int Order => QueueItemsOrder.ProcessPrintQueueItem;
+
+
+    public void SetAllowedValueProcessor(IAllowedValueProcessor<string> allowedValueProcessor)
+    {
+        this.allowedValueProcessor = allowedValueProcessor;
+    }
+
+    internal void SetInRangeAllowedValueProcessor(IInRangeAllowedValueProcessor<TInputType> inRangeAllowedValueManager)
+    {
+        this.inRangeAllowedValueManager = inRangeAllowedValueManager;
+    }
 
     public QueueItemResult Execute(QueueItemResult previousItemResult)
     {
-        var processor = allowedValueProcessor;
         printProcessor.Print(message);
 
-        if (allowedValueProcessor != null && allowedValueProcessor.IsEnabled)
-            printProcessor.PrintAllowedValues(processor.Values, processor.IsCaseInSensitive);
+        if (allowedValueProcessor is not null || inRangeAllowedValueManager is not null)
+            printProcessor.PrintAllowedValues(allowedValueProcessor?.Values, inRangeAllowedValueManager?.Values, allowedValueProcessor?.IsCaseInSensitive);
 
         return previousItemResult;
     }

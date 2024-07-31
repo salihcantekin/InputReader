@@ -4,13 +4,14 @@ namespace InputReader.InputReaders.Queue.QueueItems;
 
 public class CreateInstanceQueueItem(Type inputValueType) : IQueueItem
 {
-    public int Order => 8;
+    public int Order => QueueItemsOrder.CreateInstanceQueueItem; // has to be the last item in the queue for the time being
 
     public QueueItemResult Execute(QueueItemResult previousItemResult)
     {
 		try
 		{
-            var result = Activator.CreateInstance(inputValueType, previousItemResult.Result);
+            var convertedValue = previousItemResult.GetOutputParam(Constants.Queue.Params.ConvertedValue);
+            var result = Activator.CreateInstance(inputValueType, convertedValue);
             previousItemResult.AddOutputParam(Constants.Queue.Params.InputValue, result);
 
             return QueueItemResult.FromResult(result, previousItemResult);
@@ -18,7 +19,6 @@ public class CreateInstanceQueueItem(Type inputValueType) : IQueueItem
 		catch
 		{
             return QueueItemResult.Failed();
-
         }
     }
 }

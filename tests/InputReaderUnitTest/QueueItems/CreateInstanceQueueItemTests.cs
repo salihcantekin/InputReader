@@ -91,7 +91,15 @@ internal class CreateInstanceQueueItemTests
         queueItem = new CreateInstanceQueueItem(instanceType);
     }
 
-    private QueueItemResult GetDummyQueueItemResult(object? value = null, QueueItemResult previousResult = null) => QueueItemResult.FromResult(value, previousResult);
+    private QueueItemResult GetDummyQueueItemResult(object? value = null, QueueItemResult previousResult = null)
+    {
+        if (previousResult is null)
+            previousResult = QueueItemResult.FromResult(value, null);
+
+        previousResult.AddOutputParam("ConvertedValue", value);
+
+        return QueueItemResult.FromResult(value, previousResult);
+    }
 
     #endregion
 }
