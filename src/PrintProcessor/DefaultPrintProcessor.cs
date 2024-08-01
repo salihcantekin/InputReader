@@ -33,8 +33,14 @@ public class DefaultPrintProcessor : IPrintProcessor
 
     public void PrintAllowedValues<TInputType>(IEnumerable<string> allowedValues, IEnumerable<(TInputType From, TInputType To)> inRangeAllowedValues, bool? isCaseInSensitive)
     {
-        var ranges = inRangeAllowedValues.Select(i => $"[{i.From}..{i.To}]");
-        allowedValues = allowedValues?.Concat(ranges) ?? ranges;
+        if (allowedValues is not null && inRangeAllowedValues is not null)
+        {
+            var ranges = inRangeAllowedValues?.Select(i => $"[{i.From}..{i.To}]");
+            allowedValues = allowedValues.Concat(ranges);
+        }
+
+        if (allowedValues is null)
+            return;
 
         var allowedMessage = $"({string.Join(',', allowedValues)}{(isCaseInSensitive == true ? '°' : '\0')}) ";
 

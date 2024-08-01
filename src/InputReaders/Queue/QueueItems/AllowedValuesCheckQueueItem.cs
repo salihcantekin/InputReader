@@ -21,7 +21,7 @@ internal class AllowedValuesCheckQueueItem(IAllowedValueProcessor<string> allowe
 
         var isAllowed = allowedValueProcessor.IsAllowedValue(previousItemResult.Result.ToString());
 
-        if (string.IsNullOrEmpty(allowedValueProcessor.ErrorMessage))
+        if (!string.IsNullOrEmpty(allowedValueProcessor.ErrorMessage))
             printProcessor.PrintError(allowedValueProcessor.ErrorMessage);
 
         return isAllowed
