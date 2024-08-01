@@ -12,18 +12,15 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
     : IInputReader<TInputType, TInputValueType>
     where TInputValueType : InputValue<TInputType>
 {
-    private IAllowedValueProcessor<string> allowedValueProcessor;
-    private IInRangeAllowedValueProcessor<TInputType> inRangeAllowedValueManager;
+    private IAllowedValueProcessor<string, TInputType> allowedValueProcessor;
 
     #region In Range AllowedValues
 
     internal IInputReader<TInputType, TInputValueType> WithInRangeAllowedValues(TInputType from, TInputType to)
     {
-        inRangeAllowedValueManager ??= new DefaultInRangeAllowedValueManager<TInputType>();
+        allowedValueProcessor.AddAllowedValue(from, to);
 
-        inRangeAllowedValueManager.AddAllowedValue(from, to);
-
-        SetInRangeAllowedValueManager(inRangeAllowedValueManager);
+        SetInRangeAllowedValueManager(allowedValueProcessor);
 
         return this;
     }
@@ -34,7 +31,7 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
 
     public IInputReader<TInputType, TInputValueType> ClearAllowedValues()
     {
-        allowedValueProcessor?.ClearAllowedValues();
+        allowedValueProcessor?.ResetAllAllowedValues();
         return this;
     }
 
@@ -44,14 +41,14 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         if (allowedValues is null)
             throw new ArgumentNullException(nameof(allowedValues));
 
-        allowedValueProcessor ??= new DefaultAllowedValueManager<string>();
+        allowedValueProcessor ??= new DefaultAllowedValueManager<string, TInputType>();
 
         allowedValueProcessor.AddAllowedValues(allowedValues);
 
         if (!string.IsNullOrWhiteSpace(errorMessage))
             allowedValueProcessor.SetErrorMessage(errorMessage);
 
-        AddItemToQueue(new AllowedValuesCheckQueueItem(allowedValueProcessor, PrintProcessor));
+        AddItemToQueue(new AllowedValuesCheckQueueItem<TInputType>(allowedValueProcessor, PrintProcessor));
 
         var printQueueItem = TryGetQueueItem<ProcessPrintQueueItem<TInputType>>();
         
@@ -96,15 +93,15 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         {
             // first time
             var item = new InRangeAllowedValuesQeueItem<TInputType>();
-            item.SetManager(inRangeAllowedValueManager);
+            item.SetManager(allowedValueProcessor);
             return item;
         });
 
-        queueItem.SetManager(inRangeAllowedValueManager);
+        queueItem.SetManager(allowedValueProcessor);
 
         var printQueueItem = TryGetQueueItem<ProcessPrintQueueItem<TInputType>>();
-
-        printQueueItem?.SetInRangeAllowedValueProcessor(inRangeAllowedValueManager);
+        
+        printQueueItem?.SetAllowedValueProcessor(allowedValueProcessor);
 
         return this;
     }

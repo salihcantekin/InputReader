@@ -2,9 +2,9 @@
 
 namespace InputReader.AllowedValues;
 
-internal interface IInRangeAllowedValueProcessor<TInputType>
+public interface IInRangeAllowedValueProcessor<TInputType>
 {
-    IEnumerable<(TInputType from, TInputType to)> Values { get; }
+    IEnumerable<(TInputType from, TInputType to)> InRangeValues { get; }
 
     bool AddAllowedValue(TInputType from, TInputType to);
     bool IsInRange(TInputType inputValueType);

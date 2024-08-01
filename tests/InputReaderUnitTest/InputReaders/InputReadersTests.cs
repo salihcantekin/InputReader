@@ -23,7 +23,7 @@ internal class InputReadersTests
         var converterItem = new ValueConverterQueueItem<int>(defaultConverter);
 
         var previousResult = QueueItemResult.FromResult(1, null);
-        previousResult.AddOutputParam("Line", expectedValue);
+        previousResult.AddOutputParam("Line", expectedValue.ToString());
 
         // Action
         var result = converterItem.Execute(previousResult);

@@ -3,23 +3,27 @@ using InputReader.PrintProcessor;
 
 namespace InputReader.InputReaders.Queue.QueueItems;
 
-internal class AllowedValuesCheckQueueItem(IAllowedValueProcessor<string> allowedValueProcessor, IPrintProcessor printProcessor)
+internal class AllowedValuesCheckQueueItem<TInputType>(IAllowedValueProcessor<string, TInputType> allowedValueProcessor, IPrintProcessor printProcessor)
     : IQueueItem, IHasFailReason
 {
-    //public const int Order = PreValidatorQueueItem.Order + 1;
-
     public FailReason FailReason => FailReason.AllowedValues;
 
     public int Order => QueueItemsOrder.AllowedValuesCheckQueueItem;
 
     public QueueItemResult Execute(QueueItemResult previousItemResult)
     {
-        var checkRequired = allowedValueProcessor?.IsEnabled;
+        var checkRequired = allowedValueProcessor?.IsAllowedEnabled;
 
         if (checkRequired == false)
             return QueueItemResult.FromResult(null, previousItemResult);
 
-        var isAllowed = allowedValueProcessor.IsAllowedValue(previousItemResult.Result.ToString());
+        var rawValue = previousItemResult.GetOutputParam<string>(Constants.Queue.Params.Line);
+
+        var isAllowed = allowedValueProcessor.IsAllowedValue(rawValue);
+
+        // if not allowed, also check if InRangeAllowedValueManager is set. If so, it might be in range
+        if (!isAllowed && allowedValueProcessor.IsInRangeEnabled)
+            isAllowed = true;
 
         if (!string.IsNullOrEmpty(allowedValueProcessor.ErrorMessage))
             printProcessor.PrintError(allowedValueProcessor.ErrorMessage);

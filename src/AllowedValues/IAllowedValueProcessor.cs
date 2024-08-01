@@ -2,23 +2,24 @@
 
 namespace InputReader.AllowedValues;
 
-public interface IAllowedValueProcessor<T>
+internal interface IAllowedValueProcessor<TRawValueType, TInRangeInputType> : IInRangeAllowedValueProcessor<TInRangeInputType>
 {
-    bool IsEnabled { get; }
+    bool IsAllowedEnabled { get; }
+    bool IsInRangeEnabled { get; }
     bool IsCaseInSensitive { get; }
 
     string ErrorMessage { get; }
 
-    IEnumerable<T> Values { get; }
+    IEnumerable<TRawValueType> AllowedValues { get; }
 
-    void SetEqualityComparer(IEqualityComparer<T> comparer);
+    void SetEqualityComparer(IEqualityComparer<TRawValueType> comparer);
 
-    bool IsAllowedValue(T value);
+    bool IsAllowedValue(TRawValueType value);
 
-    void ClearAllowedValues();
+    void ResetAllAllowedValues();
 
-    bool AddAllowedValue(T value);
-    void AddAllowedValues(IEnumerable<T> values);
+    bool AddAllowedValue(TRawValueType value);
+    void AddAllowedValues(IEnumerable<TRawValueType> values);
 
     void SetErrorMessage(string message);
 }
