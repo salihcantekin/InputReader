@@ -36,28 +36,28 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
 
     public virtual TInputValueType Read()
     {
-        QueueItemResult previousItemResult = null;
+        QueueItemResult itemResult = null;
         IQueueItem item = null;
 
         for (int i = 0; i < queueItems.Count; i++)
         {
             item = queueItems.Values[i];
-            previousItemResult = item.Execute(previousItemResult);
+            itemResult = item.Execute(itemResult);
 
-            if (previousItemResult?.IsFailed == true)
+            if (itemResult?.IsFailed == true)
             {
                 break;
             }
         }
 
         // in case of intance of TInputValueType NOT created yet (CreateInstanceQueueItem didn't worked)
-        if (previousItemResult.GetOutputParam(Constants.Queue.Params.InputValue) is not TInputValueType inputValue)
+        if (itemResult.GetOutputParam(Constants.Queue.Params.InputValue) is not TInputValueType inputValue)
         {
-            object value = previousItemResult.GetOutputParam(Constants.Queue.Params.ConvertedValue);
+            object value = itemResult.GetOutputParam(Constants.Queue.Params.ConvertedValue);
             inputValue = Activator.CreateInstance(typeof(TInputValueType), value) as TInputValueType;
         }
 
-        inputValue.IsValid = !previousItemResult.IsFailed;
+        inputValue.IsValid = !itemResult.IsFailed;
         inputValue.FailReason = item is IHasFailReason failReason 
                                  ? failReason.FailReason 
                                  : FailReason.UnKnown;

@@ -2,6 +2,7 @@
 using InputReader;
 using InputReader.InputReaders;
 using InputReader.InputReaders.Interfaces;
+using InputReader.InputReaders.Extensions;
 using Moq;
 using System;
 
@@ -87,24 +88,25 @@ internal class IntReaderAllowedValuesTests
     }
 
     [Test]
-    [TestCase("1", 1, 10, ExpectedResult = 1)]
-    [TestCase("5", 1, 10, ExpectedResult = 5)]
-    [TestCase("10", 1, 10, ExpectedResult = 10)]
-    [TestCase("1", 5, 10, ExpectedResult = null)]
-    public int? Read_WithRangeAllowedValue_ShouldReturnExpectedValue(string input, int rangeStart, int rangeEnd)
+    [TestCase(1, 1, 10, ExpectedResult = true)]
+    [TestCase(5, 1, 10, ExpectedResult = true)]
+    [TestCase(10, 1, 10, ExpectedResult = true)]
+    [TestCase(1, 5, 10, ExpectedResult = false)]
+    [TestCase(-41, 5, 50, ExpectedResult = false)]
+    public bool Read_WithRangeAllowedValue_ShouldReturnIsValid(int input, int fromInt, int toInt)
     {
         // Arrange
-        ConfigureMockReader(input);
-        var range = new System.Range(rangeStart, rangeEnd);
-        var reader = BuildIntReader().WithAllowedValues(range);
+        ConfigureMockReader(input.ToString());
+        
+        var reader = BuildIntReader().WithAllowedValues(from: fromInt, to: toInt);
 
         // Action
         var value = reader.Read();
 
         // return
-        return value.Value;
+        return value.IsValid;
     }
-
+   
     #region Private Methods
 
     private IntInputReader BuildIntReader()

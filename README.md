@@ -1,4 +1,10 @@
-#### TestConsoleApp - InputReader Usage Sample
+### Nuget
+
+[![](https://img.shields.io/nuget/dt/ConsoleInputReader?style=for-the-badge)](https://img.shields.io/nuget/dt/ConsoleInputReader)
+[![](https://img.shields.io/nuget/v/ConsoleInputReader?style=for-the-badge)](https://img.shields.io/nuget/v/ConsoleInputReader)
+[![](https://img.shields.io/nuget/vpre/ConsoleInputReader?style=for-the-badge)](https://img.shields.io/nuget/vpre/ConsoleInputReader)
+
+### TestConsoleApp - InputReader Usage Sample
 
 This document provides an overview and usage samples of the `InputReader` library, which is designed to simplify reading various types of inputs in console applications.
 
@@ -12,7 +18,7 @@ The `InputReader` library offers a range of features to make input handling more
 - **ReadDateOnly**: Parses a date input with a specific format from the console.
 - **ReadTimeOnly**: Parses a time input with a specific format from the console.
 - **ReadYesNo**: Reads yes or no input from the console.
-- (Add more features as per your library)
+- ReadPassword: Reads a password input from the console.
 
 This readers also have extension methods to read until a valid input is provided. The validation can be customized by passing a predicate to the extension method as well as its type. For instance, you can read the input until it's a valid integer.
 
@@ -48,6 +54,7 @@ var yesNoResult = Input
 var oneDigitIntegerResult = Input
                             .Int("Input a number that is one digit only")
                             .WithPreValidator(input => input?.Length == 1)
+                            //.WithAllowedValues(from: 0, to: 9) // In Range
                             .ReadUntilValid();
 
 // Read a date input with a provided format with a specific format

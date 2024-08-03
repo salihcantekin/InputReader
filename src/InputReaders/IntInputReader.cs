@@ -17,10 +17,4 @@ public sealed class IntInputReader : BaseInputReader<int?, IntInputValue>
     {
         SetPreValidator(ValidatorBuilder.BuildIntInputPreValidator());
     }
-
-    public IInputReader<int?, IntInputValue> WithAllowedValues(Range range)
-    {
-        var numbers = Enumerable.Range(range.Start.Value, range.End.Value);
-        return WithAllowedValues(numbers.Select(i => i.ToString()), false);
-    }
 }

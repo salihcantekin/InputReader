@@ -18,6 +18,8 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
 
     internal IInputReader<TInputType, TInputValueType> WithInRangeAllowedValues(TInputType from, TInputType to)
     {
+        EnsureAllowedValueProcessor();
+
         allowedValueProcessor.AddAllowedValue(from, to);
 
         SetInRangeAllowedValueManager(allowedValueProcessor);
@@ -41,7 +43,7 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         if (allowedValues is null)
             throw new ArgumentNullException(nameof(allowedValues));
 
-        allowedValueProcessor ??= new DefaultAllowedValueManager<string, TInputType>();
+        EnsureAllowedValueProcessor();
 
         allowedValueProcessor.AddAllowedValues(allowedValues);
 
@@ -104,5 +106,10 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         printQueueItem?.SetAllowedValueProcessor(allowedValueProcessor);
 
         return this;
+    }
+
+    private void EnsureAllowedValueProcessor()
+    {
+        allowedValueProcessor ??= new DefaultAllowedValueManager<string, TInputType>();
     }
 }

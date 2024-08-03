@@ -80,7 +80,7 @@ internal class DefaultAllowedValueManager<TInputType, TInRangeInputValue> : IAll
 
     public bool AddAllowedValue(TInRangeInputValue from, TInRangeInputValue to)
     {
-        ranges ??= new(capacity: 100);
+        ranges ??= new(capacity: 5);
 
         ranges.Add((from, to));
 

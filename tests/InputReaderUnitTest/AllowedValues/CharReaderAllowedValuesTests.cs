@@ -1,6 +1,7 @@
 using InputReader;
 using InputReader.InputReaders;
 using InputReader.InputReaders.Interfaces;
+using InputReader.InputReaders.Extensions;
 using Moq;
 
 namespace InputReaderUnitTest.AllowedValues;
@@ -67,6 +68,46 @@ internal class CharReaderAllowedValuesTests
 
         // return
         return value.Value;
+    }
+
+    [Test]
+    [TestCase('a', 'z', 'g', ExpectedResult = true)]
+    [TestCase('a', 'z', 'a', ExpectedResult = true)]
+    [TestCase('a', 'z', 'z', ExpectedResult = true)]
+    [TestCase('a', 'z', 'T', ExpectedResult = false)]
+    [TestCase('a', 'z', '-', ExpectedResult = false)]
+    [TestCase('a', 'z', '5', ExpectedResult = false)]
+    public bool Read_WithInRangeLowerCharAllowedValues_ShouldReturnIsValid(char fromChar, char toChar, char input)
+    {
+        // Arrange
+        ConfigureMockReader(input);
+        var reader = BuildCharReader().WithAllowedValues(from: fromChar, to: toChar);
+        
+        // Action
+        var value = reader.Read();
+
+        // return
+        return value.IsValid;
+    }
+
+    [Test]
+    [TestCase('A', 'Z', 'G', ExpectedResult = true)]
+    [TestCase('A', 'Z', 'A', ExpectedResult = true)]
+    [TestCase('A', 'Z', 'Z', ExpectedResult = true)]
+    [TestCase('A', 'Z', 't', ExpectedResult = false)]
+    [TestCase('A', 'Z', '-', ExpectedResult = false)]
+    [TestCase('A', 'Z', '5', ExpectedResult = false)]
+    public bool Read_WithInRangeUpperCharAllowedValues_ShouldReturnIsValid(char fromChar, char toChar, char input)
+    {
+        // Arrange
+        ConfigureMockReader(input);
+        var reader = BuildCharReader().WithAllowedValues(from: fromChar, to: toChar);
+
+        // Action
+        var value = reader.Read();
+
+        // return
+        return value.IsValid;
     }
 
     #region Private Methods
