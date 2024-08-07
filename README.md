@@ -1,8 +1,8 @@
 ### Nuget
 
-[![](https://img.shields.io/nuget/dt/ConsoleInputReader?style=for-the-badge)](https://img.shields.io/nuget/dt/ConsoleInputReader)
-[![](https://img.shields.io/nuget/v/ConsoleInputReader?style=for-the-badge)](https://img.shields.io/nuget/v/ConsoleInputReader)
-[![](https://img.shields.io/nuget/vpre/ConsoleInputReader?style=for-the-badge)](https://img.shields.io/nuget/vpre/ConsoleInputReader)
+[![](https://img.shields.io/nuget/dt/ConsoleInputReader?style=for-the-badge)](https://www.nuget.org/packages/ConsoleInputReader/)
+[![](https://img.shields.io/nuget/v/ConsoleInputReader?style=for-the-badge)](https://www.nuget.org/packages/ConsoleInputReader/)
+[![](https://img.shields.io/nuget/vpre/ConsoleInputReader?style=for-the-badge)](https://www.nuget.org/packages/ConsoleInputReader/)
 
 ### TestConsoleApp - InputReader Usage Sample
 
@@ -84,6 +84,14 @@ var passWordResult = Input
                       //.PassWord("Enter your password: ", Constants.Chars.Asterisk) // Asterisk will be shown")  
                         .Read();
 
+var keyResult = Input
+                    .Key("Press any key: ")
+                    //.ReadUntil(input => input.Is(ConsoleKey.R))
+                    //.ReadUntil(input => 
+                    //{
+                    //    return input.Value.Modifiers.HasFlag(ConsoleModifiers.Control) && input.Is(ConsoleKey.R);
+                    //})
+                    .ReadUntil(input => input.IsKeyChar('R'));
 
 ```
 
