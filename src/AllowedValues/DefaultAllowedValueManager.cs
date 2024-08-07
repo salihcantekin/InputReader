@@ -1,17 +1,16 @@
-﻿using InputReader.InputReaders.Interfaces;
-using System;
+﻿using InputReader.InputValues.Comparers;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace InputReader.AllowedValues;
 
-internal class DefaultAllowedValueManager<TInputType, TInRangeInputValue> : IAllowedValueProcessor<TInputType, TInRangeInputValue>
+internal class DefaultAllowedValueManager<TInputType> : IAllowedValueProcessor<TInputType>
 {
     private HashSet<TInputType> allowedValuesHashSet;
     private IEqualityComparer<TInputType> allowedValuesComparer;
     private bool isCaseInSensitive;
     private string errorMessage;
-    private List<(TInRangeInputValue, TInRangeInputValue)> ranges;
+    private List<(TInputType, TInputType)> ranges;
 
     public DefaultAllowedValueManager(IEqualityComparer<TInputType> comparer = null)
     {
@@ -26,7 +25,7 @@ internal class DefaultAllowedValueManager<TInputType, TInRangeInputValue> : IAll
     }
 
     public IEnumerable<TInputType> AllowedValues => allowedValuesHashSet.AsEnumerable();
-    public IEnumerable<(TInRangeInputValue from, TInRangeInputValue to)> InRangeValues => ranges?.AsEnumerable() ?? [];
+    public IEnumerable<(TInputType from, TInputType to)> InRangeValues => ranges?.AsEnumerable() ?? [];
 
     public bool IsAllowedEnabled => allowedValuesHashSet?.Count > 0;
     public bool IsInRangeEnabled => ranges?.Count > 0;
@@ -41,12 +40,11 @@ internal class DefaultAllowedValueManager<TInputType, TInRangeInputValue> : IAll
     {
         allowedValuesComparer = comparer;
 
-        isCaseInSensitive = comparer == StringComparer.OrdinalIgnoreCase
-                         || comparer == StringComparer.InvariantCultureIgnoreCase;
+        isCaseInSensitive = comparer is ICaseInsensitiveComparer<TInputType>;
 
         // To be able to change the comparer
         if (allowedValuesHashSet is not null)
-            allowedValuesHashSet = new(allowedValuesHashSet, allowedValuesComparer);
+            allowedValuesHashSet = new(allowedValuesHashSet, comparer);
     }
 
     public void SetErrorMessage(string message)
@@ -54,11 +52,11 @@ internal class DefaultAllowedValueManager<TInputType, TInRangeInputValue> : IAll
         errorMessage = message;
     }
 
-    public virtual bool IsAllowedValue(TInputType value)
+    public virtual bool? IsAllowedValue(TInputType value)
     {
         // No need to check the value
-        if (allowedValuesHashSet.Count == 0)
-            return true;
+        if (allowedValuesHashSet is null || allowedValuesHashSet.Count == 0)
+            return null;
 
         return allowedValuesHashSet.Contains(value);
     }
@@ -78,7 +76,7 @@ internal class DefaultAllowedValueManager<TInputType, TInRangeInputValue> : IAll
 
     #region InRange Allowed Values Methods
 
-    public bool AddAllowedValue(TInRangeInputValue from, TInRangeInputValue to)
+    public bool AddAllowedValue(TInputType from, TInputType to)
     {
         ranges ??= new(capacity: 5);
 
@@ -87,23 +85,23 @@ internal class DefaultAllowedValueManager<TInputType, TInRangeInputValue> : IAll
         return true;
     }
 
-    public bool IsInRange(TInRangeInputValue inputValueType)
+    public bool? IsInRange(TInputType inputValueType)
     {
-        if (ranges?.Count == 0)
-            return true;
-
-        var result = false;
-
-        foreach ((TInRangeInputValue from, TInRangeInputValue to) in ranges)
+        if (ranges is not { Count: > 0 })
         {
-            bool inRange = IInRangeCompatible<TInRangeInputValue>.IsInRange(inputValueType, from, to);
-            if (inRange)
-            {
-                return true;
-            }
+            return null; // When ranges null or empty
         }
 
-        return result;
+        foreach ((TInputType from, TInputType to) in ranges)
+        {
+            int comparisonFrom = Comparer<TInputType>.Default.Compare(inputValueType, from);
+            int comparisonTo = Comparer<TInputType>.Default.Compare(inputValueType, to);
+
+            if (comparisonFrom >= 0 && comparisonTo <= 0)
+                return true;
+        }
+
+        return false;
     }
 
     #endregion

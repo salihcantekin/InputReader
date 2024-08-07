@@ -17,7 +17,7 @@ public record QueueItemResult
 
     public object Result { get; internal set; }
 
-    public void AddOutputParam(string key, object value)
+    public void SetOutputParam(string key, object value)
     {
         outputParams ??= [];
 
@@ -31,7 +31,8 @@ public record QueueItemResult
 
     public T GetOutputParam<T>(string key)
     {
-        return (T)GetOutputParam(key);
+        var val = GetOutputParam(key);
+        return val is null ? default : (T)val;
     }
 
 

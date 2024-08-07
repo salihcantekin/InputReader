@@ -4,8 +4,8 @@ namespace InputReader.Converters;
 
 public class TimeOnlyValueConverter(string format = Constants.Format.TimeFormat) : IValueConverter<CustomTimeOnly?>
 {
-    public bool TryConvertFromString(string consoleInput, out CustomTimeOnly? value)
+    public bool TryConvert(object consoleInput, out CustomTimeOnly? value)
     {
-        return CustomTimeOnly.TryParseExact(consoleInput, format, out value);
+        return CustomTimeOnly.TryParseExact(consoleInput.ToString(), format, out value);
     }
 }

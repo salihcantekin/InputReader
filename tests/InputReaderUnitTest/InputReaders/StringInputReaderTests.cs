@@ -28,7 +28,7 @@ internal class StringInputReaderTests
         var stringValue = BuildStringReader().Read();
 
         // Assert
-        mockReader.Verify(i => i.ReadLine(), Times.Once);
+        mockReader.Verify(i => i.Read(), Times.Once);
     }
 
     [Test]
@@ -100,7 +100,7 @@ internal class StringInputReaderTests
         var stringValue = BuildStringReader().Read();
 
         // Assert
-        string? value = stringValue;
+        string value = stringValue;
         value.Should().Be(expected);
     }
 
@@ -109,7 +109,7 @@ internal class StringInputReaderTests
     {
         // Arrange
         var readLine = "";
-        var expected = (string?)null;
+        var expected = (string)null;
         ConfigureMockReader(readLine);
 
         // Act
@@ -122,14 +122,14 @@ internal class StringInputReaderTests
 
     #region Private Methods
 
-    private IInputReader<string?, StringInputValue> BuildStringReader()
+    private IInputReader<string, StringInputValue> BuildStringReader()
     {
         return new StringInputReader().With(builder => builder.WithConsoleReader(mockReader.Object));
     }
 
     private void ConfigureMockReader(string readLine)
     {
-        mockReader.Setup(i => i.ReadLine()).Returns(readLine);
+        mockReader.Setup(i => i.Read()).Returns(readLine);
     }
 
     #endregion

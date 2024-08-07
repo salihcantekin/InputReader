@@ -1,7 +1,7 @@
 ﻿using InputReader.Converters;
 using InputReader.Converters.CustomConverters;
 
-namespace InputReaderUnitTest.Converter;
+namespace InputReaderUnitTest.Converters;
 internal class CustomTimeOnlyValueConverter
 {
     private TimeOnlyValueConverter converter;
@@ -20,7 +20,7 @@ internal class CustomTimeOnlyValueConverter
         var expectedTimeOnly = new CustomTimeOnly(23, 59, 59);
 
         // Act
-        var success = converter.TryConvertFromString(timeOnlyString, out var result);
+        var success = converter.TryConvert(timeOnlyString, out var result);
 
         // Assert
         Assert.That(success, Is.True);
@@ -35,7 +35,7 @@ internal class CustomTimeOnlyValueConverter
         var timeOnlyString = "24:00:00";
 
         // Act
-        var success = converter.TryConvertFromString(timeOnlyString, out var result);
+        var success = converter.TryConvert(timeOnlyString, out var result);
 
         // Assert
         Assert.That(success, Is.False);
@@ -49,7 +49,7 @@ internal class CustomTimeOnlyValueConverter
         var timeOnlyString = "23:59:59.9999999";
 
         // Act
-        var success = converter.TryConvertFromString(timeOnlyString, out var result);
+        var success = converter.TryConvert(timeOnlyString, out var result);
 
         // Assert
         Assert.That(success, Is.False);

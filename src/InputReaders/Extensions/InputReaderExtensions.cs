@@ -1,7 +1,7 @@
-﻿using InputReader.Converters;
+﻿using InputReader.InputReaders;
 using InputReader.InputReaders.BaseInputReaders;
 using InputReader.InputReaders.Interfaces;
-using InputReader.Validators;
+using InputReader.InputReaders.With;
 using System;
 
 namespace InputReader;
@@ -23,6 +23,26 @@ public static partial class InputReaderExtensions
         return result;
     }
 
+    public static TInputValueType ReadUntilValid<TInputType, TInputValueType>(
+        this IInputReader<TInputType, TInputValueType> reader, int maxTry)
+        where TInputValueType : InputValue<TInputType>
+    {
+        TInputValueType result;
+
+        if (maxTry <= 0)
+        {
+            throw new ArgumentException("maxTry must be greater than 0");
+        }
+
+        do
+        {
+            result = reader.Read();
+
+        } while (!result.IsValid && maxTry-- > 0);
+
+        return result;
+    }
+
     public static TInputValueType ReadUntil<TInputType, TInputValueType>(
         this IInputReader<TInputType, TInputValueType> reader, Func<TInputValueType, bool> valuePredicate)
         where TInputValueType : InputValue<TInputType>
@@ -39,9 +59,23 @@ public static partial class InputReaderExtensions
         } while (true);
     }
 
-    public static TInputValueType ReadUntilValidEmail<TInputType, TInputValueType>(
-        this IInputReader<TInputType, TInputValueType> reader)
+    public static TInputValueType ReadUntil<TInputType, TInputValueType>(
+        this IInputReader<TInputType, TInputValueType> reader, TInputValueType value)
         where TInputValueType : InputValue<TInputType>
+    {
+        do
+        {
+            var input = reader.Read();
+
+            if (input.Equals(value))
+            {
+                return input;
+            }
+
+        } while (true);
+    }
+
+    public static StringInputValue ReadUntilValidEmail(this StringInputReader reader)
     {
         return reader.ReadUntil(input =>
         {
@@ -59,63 +93,13 @@ public static partial class InputReaderExtensions
     }
 
 
-
-
-
-
-
     public static IInputReader<TInputType, TInputValueType> With<TInputType, TInputValueType>(
-        this IInputReader<TInputType, TInputValueType> reader, Action<InternalSetterBuilder<TInputType, TInputValueType>> builderAction)
+        this IInputReader<TInputType, TInputValueType> reader, Action<IInternalSetterBuilder<TInputType, TInputValueType>> builderAction)
         where TInputValueType : InputValue<TInputType>
     {
         var builder = new InternalSetterBuilder<TInputType, TInputValueType>(reader as BaseInputReader<TInputType, TInputValueType>);
         builderAction(builder);
 
         return reader;
-    }
-}
-
-public interface IInternalSetterBuilder<TInputType, TInputValueType>
-    where TInputValueType : InputValue<TInputType>
-{
-    IInternalSetterBuilder<TInputType, TInputValueType> WithConsoleReader(IInputReaderBase consoleReader);
-    IInternalSetterBuilder<TInputType, TInputValueType> WithCustomConverter(IValueConverter<TInputType> converter);
-}
-
-public class InternalSetterBuilder<TInputType, TInputValueType>(BaseInputReader<TInputType, TInputValueType> reader) 
-    : IInternalSetterBuilder<TInputType, TInputValueType>
-        where TInputValueType : InputValue<TInputType>
-{
-    public IInternalSetterBuilder<TInputType, TInputValueType> WithConsoleReader(IInputReaderBase consoleReader)
-    {
-        reader.SetConsoleReader(consoleReader);
-        return this;
-    }
-
-
-    public IInternalSetterBuilder<TInputType, TInputValueType> WithCustomConverter(IValueConverter<TInputType> converter)
-    {
-        reader.SetValueConverter(converter);
-        return this;
-    }
-
-    public IInternalSetterBuilder<TInputType, TInputValueType> WithCustomConverter(Func<string, TInputType> action)
-    {
-        var internalConverter = new DefaultValueConverter<TInputType>(action);
-
-        reader.SetValueConverter(internalConverter);
-        return this;
-    }
-
-    public IInternalSetterBuilder<TInputType, TInputValueType> WithPreValidator(IPreValidator preValidator)
-    {
-        reader.SetPreValidator(preValidator);
-        return this;
-    }
-
-    public IInternalSetterBuilder<TInputType, TInputValueType> WithPreValidator(Func<string, bool> validatorFunc)
-    {
-        reader.SetPreValidator(validatorFunc);
-        return this;
     }
 }

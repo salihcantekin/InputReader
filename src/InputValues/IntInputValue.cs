@@ -1,6 +1,4 @@
-﻿using InputReader.Converters.CustomConverters;
-using InputReader.InputReaders.Interfaces;
-using System;
+﻿using InputReader.InputReaders.Interfaces;
 
 namespace InputReader;
 
@@ -17,5 +15,5 @@ public record IntInputValue(int? Value) : InputValue<int?>(Value), IInRangeCompa
     public bool IsGreaterThan(int value) => Value > value;
     public bool IsLessThan(int value) => Value < value;
     public bool IsGreaterThanOrEqualTo(int value) => Value >= value;
-    public bool IsLessThanOrEqualTo(int value) => Value <= value;    
+    public bool IsLessThanOrEqualTo(int value) => Value <= value;
 }

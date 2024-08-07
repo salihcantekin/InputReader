@@ -28,7 +28,7 @@ internal class CharInputReaderTests
         var charValue = BuildCharReader().Read();
 
         // Assert
-        mockReader.Verify(i => i.ReadLine(), Times.Once);
+        mockReader.Verify(i => i.Read(), Times.Once);
     }
 
     [Test]
@@ -129,7 +129,7 @@ internal class CharInputReaderTests
 
     private void ConfigureMockReader(string readLine)
     {
-        mockReader.Setup(i => i.ReadLine()).Returns(readLine);
+        mockReader.Setup(i => i.Read()).Returns(readLine);
     }
 
     #endregion

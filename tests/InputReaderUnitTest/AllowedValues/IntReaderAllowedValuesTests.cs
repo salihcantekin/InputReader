@@ -1,10 +1,8 @@
-﻿using FluentAssertions;
-using InputReader;
+﻿using InputReader;
 using InputReader.InputReaders;
-using InputReader.InputReaders.Interfaces;
 using InputReader.InputReaders.Extensions;
+using InputReader.InputReaders.Interfaces;
 using Moq;
-using System;
 
 namespace InputReaderUnitTest.AllowedValues;
 internal class IntReaderAllowedValuesTests
@@ -54,25 +52,6 @@ internal class IntReaderAllowedValuesTests
     [TestCase("1", ExpectedResult = 1)]
     [TestCase("2", ExpectedResult = 2)]
     [TestCase("3", ExpectedResult = null)]
-    public int? Read_WithStringEnumerableAllowedValue_ShouldReturnExpectedValue(string input)
-    {
-        // Arrange
-        ConfigureMockReader(input);
-        IEnumerable<string> enumerableValues = ["1", "2"];
-        var reader = BuildIntReader().WithAllowedValues(enumerableValues, null);
-
-        // Action
-        var value = reader.Read();
-
-        // return
-        return value.Value;
-    }
-
-
-    [Test]
-    [TestCase("1", ExpectedResult = 1)]
-    [TestCase("2", ExpectedResult = 2)]
-    [TestCase("3", ExpectedResult = null)]
     public int? Read_WithIntEnumerableAllowedValue_ShouldReturnExpectedValue(string input)
     {
         // Arrange
@@ -97,7 +76,7 @@ internal class IntReaderAllowedValuesTests
     {
         // Arrange
         ConfigureMockReader(input.ToString());
-        
+
         var reader = BuildIntReader().WithAllowedValues(from: fromInt, to: toInt);
 
         // Action
@@ -106,7 +85,7 @@ internal class IntReaderAllowedValuesTests
         // return
         return value.IsValid;
     }
-   
+
     #region Private Methods
 
     private IntInputReader BuildIntReader()
@@ -116,7 +95,7 @@ internal class IntReaderAllowedValuesTests
 
     private void ConfigureMockReader(string readLine)
     {
-        mockReader.Setup(i => i.ReadLine()).Returns(readLine);
+        mockReader.Setup(i => i.Read()).Returns(readLine);
     }
 
     #endregion

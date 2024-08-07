@@ -1,9 +1,7 @@
-using System.Collections.Generic;
 using FluentAssertions;
-using NUnit.Framework;
 using InputReader.InputReaders.Queue;
 
-namespace InputReader.Tests.InputReaders.Queue;
+namespace InputReaderUnitTest.QueueItems;
 
 public class QueueItemResultTests
 {
@@ -42,7 +40,7 @@ public class QueueItemResultTests
         var value = new object();
 
         // Act
-        queueItemResult.AddOutputParam(key, value);
+        queueItemResult.SetOutputParam(key, value);
 
         // Assert
         queueItemResult.GetOutputParam(key).Should().Be(value);
@@ -55,7 +53,7 @@ public class QueueItemResultTests
         var queueItemResult = QueueItemResult.FromResult(new object(), null);
         var key = "testKey";
         var value = new object();
-        queueItemResult.AddOutputParam(key, value);
+        queueItemResult.SetOutputParam(key, value);
 
         // Act
         var result = queueItemResult.GetOutputParam(key);
@@ -71,7 +69,7 @@ public class QueueItemResultTests
         var queueItemResult = QueueItemResult.FromResult(new object(), null);
         var key = "testKey";
         var value = "testValue";
-        queueItemResult.AddOutputParam(key, value);
+        queueItemResult.SetOutputParam(key, value);
 
         // Act
         var result = queueItemResult.GetOutputParam<string>(key);

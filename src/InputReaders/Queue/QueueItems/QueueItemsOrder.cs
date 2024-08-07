@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace InputReader.InputReaders.Queue.QueueItems;
+﻿namespace InputReader.InputReaders.Queue.QueueItems;
 internal class QueueItemsOrder
 {
     /* ############## STEPS #############
@@ -15,7 +11,7 @@ internal class QueueItemsOrder
           - Use ValueConverter.Convert (ValueConverter)
           - InRange AllowedValue Check (Opt) (Converted Type) (OPT)
     */
-    
+
     public const int ProcessPrintQueueItem = 1;
     public const int ConsoleReadLineQueueItem = 2;
     public const int PreValidatorQueueItem = 3;

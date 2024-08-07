@@ -3,27 +3,19 @@ using InputReader.PrintProcessor;
 
 namespace InputReader.InputReaders.Queue.QueueItems;
 
-internal class AllowedValuesCheckQueueItem<TInputType>(IAllowedValueProcessor<string, TInputType> allowedValueProcessor, IPrintProcessor printProcessor)
+internal class AllowedValuesCheckQueueItem<TInputType>(IAllowedValueProcessor<TInputType> allowedValueProcessor, IPrintProcessor printProcessor)
     : IQueueItem, IHasFailReason
 {
     public FailReason FailReason => FailReason.AllowedValues;
 
-    public int Order => QueueItemsOrder.AllowedValuesCheckQueueItem;
+    public int Order => QueueItemsOrder.InRangeAllowedValueQueueItem;
 
     public QueueItemResult Execute(QueueItemResult previousItemResult)
     {
-        var checkRequired = allowedValueProcessor?.IsAllowedEnabled;
+        var convertedValue = previousItemResult.GetOutputParam<TInputType>(Constants.Queue.Params.ConvertedValue);
 
-        if (checkRequired == false)
-            return QueueItemResult.FromResult(null, previousItemResult);
-
-        var rawValue = previousItemResult.GetOutputParam<string>(Constants.Queue.Params.Line);
-
-        var isAllowed = allowedValueProcessor.IsAllowedValue(rawValue);
-
-        // if not allowed, also check if InRangeAllowedValueManager is set. If so, it might be in range
-        if (!isAllowed && allowedValueProcessor.IsInRangeEnabled)
-            isAllowed = true;
+        var isAllowed = allowedValueProcessor.IsAllowedValue(convertedValue) == true
+                     || allowedValueProcessor.IsInRange(convertedValue) == true;
 
         if (!string.IsNullOrEmpty(allowedValueProcessor.ErrorMessage))
             printProcessor.PrintError(allowedValueProcessor.ErrorMessage);

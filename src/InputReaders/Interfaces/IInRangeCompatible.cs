@@ -1,8 +1,6 @@
-﻿using System;
+﻿namespace InputReader.InputReaders.Interfaces;
 
-namespace InputReader.InputReaders.Interfaces;
-
-public interface IInRangeCompatible<TInputType> 
+public interface IInRangeCompatible<TInputType>
 {
     public static bool IsInRange(TInputType value, TInputType fromValue, TInputType toValue)
     {

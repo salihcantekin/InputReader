@@ -1,5 +1,4 @@
-﻿using InputReader.Converters;
-using InputReader.PrintProcessor;
+﻿using InputReader.PrintProcessor;
 using System;
 using System.Collections.Generic;
 
@@ -16,18 +15,16 @@ public interface IInputReader<TInputType, TInputValueType> : IInputReaderBase<TI
 
     IInputReader<TInputType, TInputValueType> ClearAllowedValues();
 
-    IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<string> allowedValues, string errorMessage = null);
-
-    IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<string> allowedValues,
-        bool caseInsensitive = true, string errorMessage = null);
-
     IInputReader<TInputType, TInputValueType> WithAllowedValues(bool caseInsensitive = true, string errorMessage = null, params TInputType[] allowedValues);
 
     IInputReader<TInputType, TInputValueType> WithAllowedValues(params TInputType[] allowedValues);
 
     IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<TInputType> allowedValues,
-        bool caseInsensitive = true, string errorMessage = null);
+        bool caseInsensitive, string errorMessage);
+
+    IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<TInputType> allowedValues, bool caseInsensitive);
 
 
+    IInputReader<TInputType, TInputValueType> WithIteration(Action<TInputValueType> action);
     IInputReader<TInputType, TInputValueType> WithIteration(Action<TInputValueType, IPrintProcessor> action);
 }

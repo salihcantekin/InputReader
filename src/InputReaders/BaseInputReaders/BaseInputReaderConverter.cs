@@ -1,7 +1,6 @@
 ﻿using InputReader.Converters;
 using InputReader.InputReaders.Interfaces;
 using InputReader.InputReaders.Queue.QueueItems;
-using System;
 
 namespace InputReader.InputReaders.BaseInputReaders;
 public abstract partial class BaseInputReader<TInputType, TInputValueType>

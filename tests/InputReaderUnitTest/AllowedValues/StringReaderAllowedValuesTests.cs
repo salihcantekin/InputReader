@@ -78,7 +78,7 @@ internal class StringReaderAllowedValuesTests
 
     private void ConfigureMockReader(string readLine)
     {
-        mockReader.Setup(i => i.ReadLine()).Returns(readLine);
+        mockReader.Setup(i => i.Read()).Returns(readLine);
     }
 
     #endregion

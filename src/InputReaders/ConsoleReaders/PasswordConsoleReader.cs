@@ -1,20 +1,20 @@
-﻿using InputReader.PrintProcessor;
+﻿using InputReader.InputReaders.Interfaces;
+using InputReader.PrintProcessor;
 using System;
-using System.Security;
 using System.Text;
 
 namespace InputReader.InputReaders.ConsoleReaders;
 
-internal sealed class PasswordConsoleReader(char passwordChar, IPrintProcessor printProcessor) : DefaultConsoleReader
+internal sealed class PasswordConsoleReader(char passwordChar, IPrintProcessor printProcessor) : BaseConsoleReader, IInputReaderBase
 {
-    public override string ReadLine()
+    public object Read()
     {
         var password = new StringBuilder();
         ConsoleKeyInfo key;
 
         do
         {
-            key = ReadKey(true);
+            key = (ConsoleKeyInfo)InternalRead(readKey: true);
 
             if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
             {
@@ -33,7 +33,7 @@ internal sealed class PasswordConsoleReader(char passwordChar, IPrintProcessor p
         } while (key.Key != ConsoleKey.Enter);
 
         printProcessor.PrintLine(string.Empty);
-        
+
         return password.ToString();
     }
 }

@@ -1,7 +1,7 @@
 using InputReader;
 using InputReader.InputReaders;
-using InputReader.InputReaders.Interfaces;
 using InputReader.InputReaders.Extensions;
+using InputReader.InputReaders.Interfaces;
 using Moq;
 
 namespace InputReaderUnitTest.AllowedValues;
@@ -82,7 +82,7 @@ internal class CharReaderAllowedValuesTests
         // Arrange
         ConfigureMockReader(input);
         var reader = BuildCharReader().WithAllowedValues(from: fromChar, to: toChar);
-        
+
         // Action
         var value = reader.Read();
 
@@ -119,7 +119,7 @@ internal class CharReaderAllowedValuesTests
 
     private void ConfigureMockReader(char readLine)
     {
-        mockReader.Setup(i => i.ReadLine()).Returns(readLine.ToString());
+        mockReader.Setup(i => i.Read()).Returns(readLine.ToString());
     }
 
     #endregion

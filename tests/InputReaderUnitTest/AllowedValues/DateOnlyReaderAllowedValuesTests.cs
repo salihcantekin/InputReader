@@ -81,7 +81,7 @@ internal class DateOnlyReaderAllowedValuesTests
         // Arrange
         ConfigureMockReader(input);
         IEnumerable<CustomDateOnly?> enumerableValues = [new CustomDateOnly(2023, 10, 01)];
-        var reader = BuildDateOnlyReader().WithAllowedValues(enumerableValues);
+        var reader = BuildDateOnlyReader().WithAllowedValues(allowedValues: enumerableValues);
 
         // Action
         var value = reader.Read();
@@ -119,7 +119,7 @@ internal class DateOnlyReaderAllowedValuesTests
 
     private void ConfigureMockReader(string readLine)
     {
-        mockReader.Setup(i => i.ReadLine()).Returns(readLine);
+        mockReader.Setup(i => i.Read()).Returns(readLine);
     }
 
     #endregion

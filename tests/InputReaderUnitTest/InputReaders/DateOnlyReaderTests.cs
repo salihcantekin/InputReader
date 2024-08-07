@@ -1,15 +1,9 @@
-﻿using InputReader.InputReaders;
+﻿using FluentAssertions;
 using InputReader;
+using InputReader.Converters.CustomConverters;
+using InputReader.InputReaders;
 using InputReader.InputReaders.Interfaces;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InputReader.Converters.CustomConverters;
-using FluentAssertions;
-using InputReader.Converters;
 
 namespace InputReaderUnitTest.InputReaders;
 internal class DateOnlyReaderTests
@@ -33,7 +27,7 @@ internal class DateOnlyReaderTests
         var dateValue = BuildDateOnlyReader().Read();
 
         // Assert
-        mockReader.Verify(i => i.ReadLine(), Times.Once);
+        mockReader.Verify(i => i.Read(), Times.Once);
     }
 
     [Test]
@@ -203,7 +197,7 @@ internal class DateOnlyReaderTests
         var readLine = "1990-05-20";
         var expected = new CustomDateOnly(1990, 5, 20);
         ConfigureMockReader(readLine);
-        
+
         // Act
         var dateValue = BuildDateOnlyReader(format).Read();
 
@@ -223,7 +217,7 @@ internal class DateOnlyReaderTests
 
     private void ConfigureMockReader(string readLine)
     {
-        mockReader.Setup(i => i.ReadLine()).Returns(readLine);
+        mockReader.Setup(i => i.Read()).Returns(readLine);
     }
 
     #endregion

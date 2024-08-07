@@ -1,10 +1,9 @@
-﻿using InputReader.InputReaders.Interfaces;
-using System;
+﻿using System;
 using System.Globalization;
 
 namespace InputReader.Converters.CustomConverters;
 
-public readonly struct CustomDateOnly(int year, int month, int day) : IComparable<CustomDateOnly>, 
+public readonly struct CustomDateOnly(int year, int month, int day) : IComparable<CustomDateOnly>,
                                                                       IEquatable<CustomDateOnly>
 {
     internal readonly DateTime DateTime { get; } = new DateTime(year, month, day);

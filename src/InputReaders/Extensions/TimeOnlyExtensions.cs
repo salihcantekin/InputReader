@@ -13,12 +13,12 @@ public static class TimeOnlyExtensions
                                                       string format = Constants.Format.TimeFormat)
     {
         TimeOnlyValueConverter converter = new(format);
-        if (!converter.TryConvertFromString(fromTime, out CustomTimeOnly? fromTimeValue))
+        if (!converter.TryConvert(fromTime, out CustomTimeOnly? fromTimeValue))
         {
             throw new ArgumentException(Constants.Message.InvalidValueFormat.Format(nameof(fromTime)));
         }
 
-        if (!converter.TryConvertFromString(toTime, out CustomTimeOnly? toTimeValue))
+        if (!converter.TryConvert(toTime, out CustomTimeOnly? toTimeValue))
         {
             throw new ArgumentException(Constants.Message.InvalidValueFormat.Format(nameof(toTime)));
         }

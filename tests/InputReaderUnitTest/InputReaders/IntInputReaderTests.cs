@@ -28,7 +28,7 @@ internal class IntInputReaderWithConsoleReaderTests
         var intValue = BuildIntReader().Read();
 
         // Assert
-        mockReader.Verify(i => i.ReadLine(), Times.Once);
+        mockReader.Verify(i => i.Read(), Times.Once);
     }
 
     [Test]
@@ -130,7 +130,7 @@ internal class IntInputReaderWithConsoleReaderTests
 
     private void ConfigureMockReader(string readLine)
     {
-        mockReader.Setup(i => i.ReadLine()).Returns(readLine);
+        mockReader.Setup(i => i.Read()).Returns(readLine);
     }
 
     #endregion

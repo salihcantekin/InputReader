@@ -2,5 +2,5 @@
 
 public interface IValueConverter<TInputValueType>
 {
-    bool TryConvertFromString(string consoleInput, out TInputValueType value);
+    bool TryConvert(object consoleInput, out TInputValueType value);
 }

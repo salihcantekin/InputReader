@@ -1,10 +1,9 @@
 ﻿using InputReader.AllowedValues;
-using InputReader.Converters;
 using InputReader.InputReaders.Interfaces;
 using InputReader.InputReaders.Queue.QueueItems;
+using InputReader.InputValues.Comparers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace InputReader.InputReaders.BaseInputReaders;
 
@@ -12,7 +11,7 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
     : IInputReader<TInputType, TInputValueType>
     where TInputValueType : InputValue<TInputType>
 {
-    private IAllowedValueProcessor<string, TInputType> allowedValueProcessor;
+    private IAllowedValueProcessor<TInputType> allowedValueProcessor;
 
     #region In Range AllowedValues
 
@@ -22,7 +21,7 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
 
         allowedValueProcessor.AddAllowedValue(from, to);
 
-        SetInRangeAllowedValueManager(allowedValueProcessor);
+        UpdateProcessor();
 
         return this;
     }
@@ -37,79 +36,78 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         return this;
     }
 
-    public IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<string> allowedValues,
-        string errorMessage = null)
+    public IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<TInputType> allowedValues, string errorMessage = null)
     {
-        if (allowedValues is null)
-            throw new ArgumentNullException(nameof(allowedValues));
-
-        EnsureAllowedValueProcessor();
-
-        allowedValueProcessor.AddAllowedValues(allowedValues);
-
-        if (!string.IsNullOrWhiteSpace(errorMessage))
-            allowedValueProcessor.SetErrorMessage(errorMessage);
-
-        AddItemToQueue(new AllowedValuesCheckQueueItem<TInputType>(allowedValueProcessor, PrintProcessor));
-
-        var printQueueItem = TryGetQueueItem<ProcessPrintQueueItem<TInputType>>();
-        
-        printQueueItem?.SetAllowedValueProcessor(allowedValueProcessor);
-
-        return this;
+        return WithAllowedValues(allowedValues, caseInsensitive: false, errorMessage);
     }
 
+    public IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<TInputType> allowedValues, bool caseInsensitive)
+    {
+        return WithAllowedValues(allowedValues, caseInsensitive: caseInsensitive, null);
+    }
 
     public IInputReader<TInputType, TInputValueType> WithAllowedValues(bool caseInsensitive = true, string errorMessage = null, params TInputType[] allowedValues)
     {
-        return WithAllowedValues(allowedValues.Select(i => i.ToString()), caseInsensitive, errorMessage);
+        return WithAllowedValues(allowedValues, caseInsensitive, errorMessage);
     }
 
     public IInputReader<TInputType, TInputValueType> WithAllowedValues(params TInputType[] allowedValues)
     {
-        return WithAllowedValues(allowedValues.Select(i => i.ToString()), false, null);
+        return WithAllowedValues(allowedValues, false, null);
     }
 
     public IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<TInputType> allowedValues,
-        bool caseInsensitive = true, string errorMessage = null)
+        bool caseInsensitive, string errorMessage)
     {
-        return WithAllowedValues(allowedValues.Select(i => i.ToString()), caseInsensitive, errorMessage);
-    }
+        _ = allowedValues ?? throw new ArgumentNullException(nameof(allowedValues)); // Compact null check
+        EnsureAllowedValueProcessor();
 
-    public IInputReader<TInputType, TInputValueType> WithAllowedValues(IEnumerable<string> allowedValues,
-        bool caseInsensitive = true, string errorMessage = null)
-    {
-        WithAllowedValues(allowedValues, errorMessage);
+        if (caseInsensitive) // Conditionally set the comparer
+        {
+            allowedValueProcessor.SetEqualityComparer(GetComparer());
+        }
 
-        if (caseInsensitive)
-            allowedValueProcessor.SetEqualityComparer(StringComparer.OrdinalIgnoreCase);
+        allowedValueProcessor.AddAllowedValues(allowedValues);
+
+        if (errorMessage is not null) // Set error message only if provided
+        {
+            allowedValueProcessor.SetErrorMessage(errorMessage);
+        }
+
+        UpdateProcessor();
 
         return this;
     }
+
+    private IEqualityComparer<TInputType> GetComparer()
+    {
+        //Case - insensitive karşılaştırmaları destekleyen tipler
+        var underlyingType = Nullable.GetUnderlyingType(typeof(TInputType));
+
+        if (underlyingType == typeof(string) || typeof(TInputType) == typeof(string) || underlyingType == typeof(char))
+            return new CaseInSensitiveComparer<TInputType>();
+
+        return EqualityComparer<TInputType>.Default;
+    }
+
 
     #endregion
 
-    internal IInputReader<TInputType, TInputValueType> SetInRangeAllowedValueManager(IInRangeAllowedValueProcessor<TInputType> inRangeAllowedValueManager)
-    {
-        var queueItem = GetOrCreateQueueItem(() =>
-        {
-            // first time
-            var item = new InRangeAllowedValuesQeueItem<TInputType>();
-            item.SetManager(allowedValueProcessor);
-            return item;
-        });
+    #region Private Methods
 
-        queueItem.SetManager(allowedValueProcessor);
+    private void UpdateProcessor()
+    {
+        AddItemToQueue(new AllowedValuesCheckQueueItem<TInputType>(allowedValueProcessor, PrintProcessor));
 
         var printQueueItem = TryGetQueueItem<ProcessPrintQueueItem<TInputType>>();
-        
-        printQueueItem?.SetAllowedValueProcessor(allowedValueProcessor);
 
-        return this;
+        printQueueItem?.SetAllowedValueProcessor(allowedValueProcessor);
     }
 
     private void EnsureAllowedValueProcessor()
     {
-        allowedValueProcessor ??= new DefaultAllowedValueManager<string, TInputType>();
+        allowedValueProcessor ??= new DefaultAllowedValueManager<TInputType>();
     }
+
+    #endregion
 }

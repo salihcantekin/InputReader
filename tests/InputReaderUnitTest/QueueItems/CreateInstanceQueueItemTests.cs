@@ -1,16 +1,11 @@
-﻿using InputReader.InputReaders;
+﻿using FluentAssertions;
 using InputReader;
+using InputReader.InputReaders;
+using InputReader.InputReaders.BaseInputReaders;
 using InputReader.InputReaders.Interfaces;
 using InputReader.InputReaders.Queue;
 using InputReader.InputReaders.Queue.QueueItems;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
-using InputReader.InputReaders.BaseInputReaders;
 
 namespace InputReaderUnitTest.QueueItems;
 internal class CreateInstanceQueueItemTests
@@ -29,7 +24,7 @@ internal class CreateInstanceQueueItemTests
     {
         // Arrange
         var queueResult = GetDummyQueueItemResult(value: 10);
-        Type instanceType  = typeof(IntInputValue);
+        Type instanceType = typeof(IntInputValue);
         ConfigureQueueItem(instanceType);
 
         // Action
@@ -96,7 +91,7 @@ internal class CreateInstanceQueueItemTests
         if (previousResult is null)
             previousResult = QueueItemResult.FromResult(value, null);
 
-        previousResult.AddOutputParam("ConvertedValue", value);
+        previousResult.SetOutputParam("ConvertedValue", value);
 
         return QueueItemResult.FromResult(value, previousResult);
     }

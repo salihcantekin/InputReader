@@ -2,7 +2,7 @@
 
 namespace InputReader.InputReaders.Queue.QueueItems;
 
-public sealed class ConsoleReadLineQueueItem(IInputReaderBase inputReader) : IQueueItem
+public class ConsoleReadQueueItem(IInputReaderBase inputReader) : IQueueItem
 {
     private IInputReaderBase inputReader = inputReader;
 
@@ -13,11 +13,11 @@ public sealed class ConsoleReadLineQueueItem(IInputReaderBase inputReader) : IQu
         this.inputReader = inputReader;
     }
 
-    public QueueItemResult Execute(QueueItemResult previousItemResult)
+    public virtual QueueItemResult Execute(QueueItemResult previousItemResult)
     {
-        var line = inputReader.ReadLine();
+        var line = inputReader.Read();
         var queueItem = QueueItemResult.FromResult(line, previousItemResult);
-        queueItem.AddOutputParam(Constants.Queue.Params.Line, line); // so it can be used in any queue item
+        queueItem.SetOutputParam(Constants.Queue.Params.Line, line); // so it can be used in any queue item
 
         return queueItem;
     }

@@ -1,5 +1,4 @@
 ﻿using InputReader.Converters;
-using InputReader.InputReaders.Interfaces;
 
 namespace InputReader.InputReaders.Queue.QueueItems;
 
@@ -23,12 +22,12 @@ public sealed class ValueConverterQueueItem<TInputType> : IQueueItem, IHasFailRe
 
     public QueueItemResult Execute(QueueItemResult previousItemResult)
     {
-        var message = previousItemResult.GetOutputParam<string>(Constants.Queue.Params.Line);
+        var message = previousItemResult.GetOutputParam(Constants.Queue.Params.Line);
 
-        var success = valueConverter.TryConvertFromString(message, out var value);
+        var success = valueConverter.TryConvert(message, out var value);
 
         if (success)
-            previousItemResult.AddOutputParam(Constants.Queue.Params.ConvertedValue, value);
+            previousItemResult.SetOutputParam(Constants.Queue.Params.ConvertedValue, value);
 
         return success
             ? QueueItemResult.FromResult(value, previousItemResult)

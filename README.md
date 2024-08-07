@@ -18,7 +18,8 @@ The `InputReader` library offers a range of features to make input handling more
 - **ReadDateOnly**: Parses a date input with a specific format from the console.
 - **ReadTimeOnly**: Parses a time input with a specific format from the console.
 - **ReadYesNo**: Reads yes or no input from the console.
-- ReadPassword: Reads a password input from the console.
+- **ReadPassword**: Reads a password input from the console.
+- **ReadKey**: Reads a key input from the console.
 
 This readers also have extension methods to read until a valid input is provided. The validation can be customized by passing a predicate to the extension method as well as its type. For instance, you can read the input until it's a valid integer.
 

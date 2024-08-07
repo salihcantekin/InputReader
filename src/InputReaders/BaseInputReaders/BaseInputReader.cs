@@ -7,8 +7,6 @@ using InputReader.PrintProcessor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using static InputReader.Constants;
 
 namespace InputReader.InputReaders.BaseInputReaders;
 
@@ -29,7 +27,7 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
 
         queueItems = [];
 
-        AddItemToQueue(new ConsoleReadLineQueueItem(consoleReader));
+        AddItemToQueue(new ConsoleReadQueueItem(consoleReader));
         AddItemToQueue(new ValueConverterQueueItem<TInputType>(valueConverter));
         AddItemToQueue(new CreateInstanceQueueItem(typeof(TInputValueType)));
     }
@@ -58,25 +56,20 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         }
 
         inputValue.IsValid = !itemResult.IsFailed;
-        inputValue.FailReason = item is IHasFailReason failReason 
-                                 ? failReason.FailReason 
-                                 : FailReason.UnKnown;
+        inputValue.FailReason = (item as IHasFailReason)?.FailReason ?? FailReason.UnKnown;
 
         iteractionDelegate?.Invoke(inputValue, PrintProcessor);
 
         return inputValue;
     }
 
-
-    
-
     internal IInputReader<TInputType, TInputValueType> SetConsoleReader(IInputReaderBase reader)
     {
         consoleReader = reader;
 
-        var queueItem = GetOrCreateQueueItem(() => new ConsoleReadLineQueueItem(consoleReader));
+        var queueItem = TryGetQueueItem<ConsoleReadQueueItem>();
 
-        queueItem.SetInputReader(reader);
+        queueItem?.SetInputReader(reader);
 
         return this;
     }
@@ -84,9 +77,13 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
     internal IInputReader<TInputType, TInputValueType> SetPrintProcessor(IPrintProcessor printProcessor)
     {
         PrintProcessor = printProcessor;
+        var queueItem = TryGetQueueItem<ProcessPrintQueueItem<TInputType>>();
+
+        queueItem?.SetPrintProcessor(printProcessor);
 
         return this;
     }
+
 
 
     internal void AddItemToQueue(IQueueItem item)
@@ -108,7 +105,7 @@ public abstract partial class BaseInputReader<TInputType, TInputValueType>
         if (queueItems.ContainsKey(queueItem.Key)) // instance of T already created
             return (T)queueItem.Value;
 
-        var item = action(); 
+        var item = action();
         queueItems[item.Order] = item;
 
         return item;

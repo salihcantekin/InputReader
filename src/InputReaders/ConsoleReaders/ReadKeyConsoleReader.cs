@@ -2,10 +2,10 @@
 
 namespace InputReader.InputReaders.ConsoleReaders;
 
-internal class DefaultConsoleReader : BaseConsoleReader, IInputReaderBase
+internal class ReadKeyConsoleReader : BaseConsoleReader, IInputReaderBase
 {
     public object Read()
     {
-        return InternalRead(readLine: true, false);
+        return InternalRead(readLine: false, readKey: true);
     }
 }

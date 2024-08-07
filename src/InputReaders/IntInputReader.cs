@@ -1,9 +1,5 @@
 ﻿using InputReader.InputReaders.BaseInputReaders;
-using InputReader.InputReaders.Interfaces;
 using InputReader.Validators;
-using System;
-using System.Collections;
-using System.Linq;
 
 namespace InputReader.InputReaders;
 

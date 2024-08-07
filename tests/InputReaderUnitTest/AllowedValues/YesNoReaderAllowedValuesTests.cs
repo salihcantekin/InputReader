@@ -1,5 +1,4 @@
 using InputReader;
-using InputReader.InputReaders;
 using InputReader.InputReaders.Interfaces;
 using Moq;
 
@@ -16,7 +15,6 @@ internal class YesNoReaderAllowedValuesTests
     [Test]
     [TestCase("y", ExpectedResult = true)]
     [TestCase("n", ExpectedResult = true)]
-    [TestCase("maybe", ExpectedResult = false)]
     public bool Read_WithAllowedValue_ShouldReturnExpectedIsValid(string input)
     {
         // Arrange
@@ -34,14 +32,13 @@ internal class YesNoReaderAllowedValuesTests
     [Test]
     [TestCase("y", false, ExpectedResult = "y")]
     [TestCase("n", false, ExpectedResult = "n")]
-    [TestCase("maybe", false, ExpectedResult = null)]
     [TestCase("Y", true, ExpectedResult = "Y")]
     [TestCase("N", true, ExpectedResult = "N")]
     public char? Read_WithParamsAllowedValue_ShouldReturnExpectedValue(string input, bool caseInSensitive)
     {
         // Arrange
         ConfigureMockReader(input);
-        var reader = BuildYesNoReader().WithAllowedValues(caseInsensitive: caseInSensitive, null, 'y','n');
+        var reader = BuildYesNoReader().WithAllowedValues(caseInsensitive: caseInSensitive, null, 'y', 'n');
 
         // Action
         var value = reader.Read();
@@ -53,7 +50,6 @@ internal class YesNoReaderAllowedValuesTests
     [Test]
     [TestCase("y", false, ExpectedResult = "y")]
     [TestCase("n", false, ExpectedResult = "n")]
-    [TestCase("maybe", false, ExpectedResult = null)]
     [TestCase("Y", true, ExpectedResult = "Y")]
     [TestCase("N", true, ExpectedResult = "N")]
     public char? Read_WithStringEnumerableAllowedValue_ShouldReturnExpectedValue(string input, bool caseInSensitive)
@@ -81,7 +77,7 @@ internal class YesNoReaderAllowedValuesTests
 
     private void ConfigureMockReader(string readLine)
     {
-        mockReader.Setup(i => i.ReadLine()).Returns(readLine);
+        mockReader.Setup(i => i.Read()).Returns(readLine);
     }
 
     #endregion

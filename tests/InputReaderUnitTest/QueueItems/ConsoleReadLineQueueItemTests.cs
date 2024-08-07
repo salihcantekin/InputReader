@@ -1,15 +1,15 @@
-﻿using InputReader.InputReaders;
+﻿using FluentAssertions;
+using InputReader;
+using InputReader.InputReaders;
 using InputReader.InputReaders.Interfaces;
+using InputReader.InputReaders.Queue;
 using InputReader.InputReaders.Queue.QueueItems;
 using Moq;
-using InputReader;
-using InputReader.InputReaders.Queue;
-using FluentAssertions;
 
 namespace InputReaderUnitTest.QueueItems;
 internal class ConsoleReadLineQueueItemTests
 {
-    private ConsoleReadLineQueueItem queueItem;
+    private ConsoleReadQueueItem queueItem;
     private readonly Mock<IInputReaderBase> mockReader;
 
     public ConsoleReadLineQueueItemTests()
@@ -29,7 +29,7 @@ internal class ConsoleReadLineQueueItemTests
         queueItem.Execute(queueResult);
 
         // Assert
-        mockReader.Verify(i => i.ReadLine(), Times.Once);
+        mockReader.Verify(i => i.Read(), Times.Once);
     }
 
     [Test]
@@ -93,15 +93,15 @@ internal class ConsoleReadLineQueueItemTests
 
     private void ConfigureMockReader(string readLine = "")
     {
-        mockReader.Setup(i => i.ReadLine()).Returns(readLine);
+        mockReader.Setup(i => i.Read()).Returns(readLine);
     }
 
     private void ConfigureQueueItem()
     {
-        queueItem = new ConsoleReadLineQueueItem(mockReader.Object);
+        queueItem = new ConsoleReadQueueItem(mockReader.Object);
     }
 
-    private QueueItemResult GetDummyQueueItemResult(object? value = null, QueueItemResult previousResult = null) => QueueItemResult.FromResult(value, previousResult);
+    private QueueItemResult GetDummyQueueItemResult(object value = null, QueueItemResult previousResult = null) => QueueItemResult.FromResult(value, previousResult);
 
     #endregion
 }

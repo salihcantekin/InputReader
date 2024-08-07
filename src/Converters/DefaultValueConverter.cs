@@ -28,11 +28,11 @@ public class DefaultValueConverter<TInputType> : IValueConverter<TInputType>
         };
     }
 
-    public bool TryConvertFromString(string consoleInput, out TInputType value)
+    public bool TryConvert(object consoleInput, out TInputType value)
     {
         if (typeof(TInputType) == typeof(string))
         {
-            value = (TInputType)(object)consoleInput; // Cast to object first
+            value = (TInputType)consoleInput; // Cast to object first
             return true;
         }
 
@@ -40,7 +40,7 @@ public class DefaultValueConverter<TInputType> : IValueConverter<TInputType>
 
         try
         {
-            value = InternalFunc(consoleInput);
+            value = InternalFunc(consoleInput.ToString());
             return true;
         }
         catch (ArgumentException)

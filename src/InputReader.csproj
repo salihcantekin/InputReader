@@ -28,7 +28,7 @@
 		<PackageProjectUrl>https://github.com/salihcantekin/InputReader</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/salihcantekin/InputReader</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<Version>2.2.2-preview</Version>
+		<Version>2.3.3-preview</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -46,5 +46,9 @@
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="System.Text.Json" Version="8.0.4" />
 	</ItemGroup>
 </Project>
