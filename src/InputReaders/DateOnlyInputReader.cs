@@ -11,18 +11,13 @@ public sealed class DateOnlyInputReader : BaseInputReader<CustomDateOnly?, DateO
 
     public DateOnlyInputReader(string message, string format = Constants.Format.DateFormat) : base(message)
     {
-        WithDateOnlyValueConverter(format);
+        this.With(builder =>
+        {
+            builder.WithCustomConverter(new DateOnlyValueConverter(format));
+        });
     }
 
     public DateOnlyInputReader() : this(null)
     {
-    }
-
-    public IInputReader<CustomDateOnly?, DateOnlyInputValue> WithDateOnlyValueConverter(string format = Constants.Format.DateFormat)
-    {
-        return this.With(builder =>
-        {
-            builder.WithCustomConverter(new DateOnlyValueConverter(format));
-        });
     }
 }
