@@ -11,18 +11,13 @@ public sealed class TimeOnlyInputReader : BaseInputReader<CustomTimeOnly?, TimeO
 
     public TimeOnlyInputReader(string message, string format = Constants.Format.TimeFormat) : base(message)
     {
-        WithTimeOnlyValueConverter(format);
+        this.With(builder =>
+        {
+            builder.WithCustomConverter(new TimeOnlyValueConverter(format));
+        });
     }
 
     public TimeOnlyInputReader() : this(null)
     {
-    }
-
-    public IInputReader<CustomTimeOnly?, TimeOnlyInputValue> WithTimeOnlyValueConverter(string format = Constants.Format.TimeFormat)
-    {
-        return this.With(builder =>
-        {
-            builder.WithCustomConverter(new TimeOnlyValueConverter(format));
-        });
     }
 }
