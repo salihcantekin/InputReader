@@ -4,14 +4,19 @@ using InputReader.InputReaders;
 using InputReader.InputReaders.Interfaces;
 using InputReader.PrintProcessor;
 using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace InputReaderUnitTest.MultipleConditions;
-internal class MultipleConditions
+internal class YesNoReaderMultipleConditions
 {
     private readonly Mock<IInputReaderBase> mockInputReader;
     private readonly Mock<IPrintProcessor> mockPrintProcessor;
 
-    public MultipleConditions()
+    public YesNoReaderMultipleConditions()
     {
         mockInputReader = new();
         mockPrintProcessor = new();
@@ -22,20 +27,21 @@ internal class MultipleConditions
     public void Read_Case1()
     {
         // Arrange
-        var line = "1";
+        var expected = 'y';
+        var line = "y";
+        var errorMessage = "Invalid input. Please try again";
         ConfigureMockReader(line);
         ConfigureMockPrintProcessor();
-        var reader = BuildIntReader();
+        var reader = BuildReader();
 
         // Action
         var value = reader
-                        .WithAllowedValues(1, 2, 3)
-                        .WithErrorMessage("Invalid input. Please try again")
+                        .WithErrorMessage(errorMessage)
                         .Read();
 
         // Assert
         value.IsValid.Should().BeTrue();
-        value.Value.Should().Be(1);
+        value.Value.Should().Be(expected);
         VerifyPrintErrorProcessor(Times.Never());
     }
 
@@ -44,61 +50,29 @@ internal class MultipleConditions
     {
         // Arrange
         var line = "1";
-        var inputMessage = "Enter a number: ";
         var errorMessage = "Invalid input. Please try again";
         ConfigureMockReader(line);
         ConfigureMockPrintProcessor();
-        var reader = BuildIntReader(inputMessage);
+        var reader = BuildReader();
 
         // Action
         var value = reader
-                        .WithAllowedValues([2, 3])
                         .WithErrorMessage(errorMessage)
                         .Read();
 
         // Assert
         value.IsValid.Should().BeFalse();
-        value.FailReason.Should().Be(FailReason.AllowedValues);
+        value.Value.Should().BeNull();
         VerifyPrintErrorProcessor(Times.Once(), errorMessage);
-        VerifyPrintProcessor(Times.Once(), inputMessage);
-    }
-
-
-    [Test]
-    public void Read_Case3()
-    {
-        // Arrange
-        var line = "A1";
-        var inputMessage = "Enter a number: ";
-        var errorMessage = "Invalid input. Please try again";
-        int maxTry = 3;
-        int expectedErrorCount = maxTry + 1;
-
-        ConfigureMockReader(line);
-        ConfigureMockPrintProcessor();
-        var reader = BuildIntReader(inputMessage);
-
-        // Action
-        var value = reader
-                        .WithIteration((result, printProcessor) =>
-                        {
-                            printProcessor.PrintError(errorMessage);
-                        })
-                        .ReadUntilValid(maxTry);
-
-        // Assert
-        value.IsValid.Should().BeFalse();
-        value.FailReason.Should().Be(FailReason.PreValidation);
-        VerifyPrintErrorProcessor(Times.AtLeast(expectedErrorCount), errorMessage);
     }
 
 
 
-    #region Private Methods
+    #region Private methods
 
-    private IntInputReader BuildIntReader(string message = null)
+    private YesNoInputReader BuildReader(string message = null)
     {
-        return (IntInputReader)new IntInputReader(message)
+        return (YesNoInputReader)new YesNoInputReader(message)
                     .With(builder =>
                     {
                         builder.WithConsoleReader(mockInputReader.Object);
@@ -127,6 +101,4 @@ internal class MultipleConditions
     }
 
     #endregion
-
-
 }
