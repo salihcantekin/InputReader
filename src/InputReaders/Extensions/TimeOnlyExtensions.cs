@@ -10,17 +10,17 @@ public static class TimeOnlyExtensions
     public static TimeOnlyInputValue ReadUntilInRange(this IInputReader<CustomTimeOnly?, TimeOnlyInputValue> reader,
                                                       string fromTime,
                                                       string toTime,
-                                                      string format = "HH:mm:ss")
+                                                      string format = Constants.Format.TimeFormat)
     {
         TimeOnlyValueConverter converter = new(format);
-        if (!converter.TryConvertFromString(fromTime, out CustomTimeOnly? fromTimeValue))
+        if (!converter.TryConvert(fromTime, out CustomTimeOnly? fromTimeValue))
         {
-            throw new ArgumentException("Invalid fromTime value");
+            throw new ArgumentException(Constants.Message.InvalidValueFormat.Format(nameof(fromTime)));
         }
 
-        if (!converter.TryConvertFromString(toTime, out CustomTimeOnly? toTimeValue))
+        if (!converter.TryConvert(toTime, out CustomTimeOnly? toTimeValue))
         {
-            throw new ArgumentException("Invalid toTime value");
+            throw new ArgumentException(Constants.Message.InvalidValueFormat.Format(nameof(toTime)));
         }
 
         return reader.ReadUntil(input =>

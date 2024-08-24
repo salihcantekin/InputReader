@@ -1,6 +1,6 @@
 ﻿using InputReader.InputReaders.BaseInputReaders;
 
-namespace InputReader;
+namespace InputReader.InputReaders;
 
 public sealed class StringInputReader : BaseInputReader<string, StringInputValue>
 {
@@ -8,9 +8,15 @@ public sealed class StringInputReader : BaseInputReader<string, StringInputValue
 
     public StringInputReader(string message) : base(message)
     {
+        this.With(builder =>
+        {
+            builder.WithPreValidator((result) =>
+            {
+                // to avoid null or empty string
+                return result?.Length > 0 && !string.IsNullOrWhiteSpace(result);
+            });
+        });
     }
 
-    public StringInputReader() : base()
-    {
-    }
+    public StringInputReader() : this(null) { }
 }

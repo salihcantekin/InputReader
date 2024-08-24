@@ -1,4 +1,5 @@
-﻿using InputReader;
+﻿using FluentAssertions;
+using InputReader;
 
 namespace InputReaderUnitTest.InputValues;
 internal class YesNotInputValueTests
@@ -11,7 +12,7 @@ internal class YesNotInputValueTests
         var charInputValue = new YesNoInputValue(expected);
 
         // Assert
-        Assert.That(charInputValue.Value, Is.EqualTo(expected));
+        charInputValue.Value.Should().Be(expected);
     }
 
     [Test]
@@ -21,21 +22,21 @@ internal class YesNotInputValueTests
         var yesNoInputValue = new YesNoInputValue('s');
 
         // Assert
-        Assert.That(yesNoInputValue.IsValid, Is.False);
+        yesNoInputValue.IsValid.Should().BeFalse();
     }
 
     [Test]
     public void CharInput_ShouldBeImplicitlyNullableChar()
     {
         // Arrange
-        var expectedInt = 's';
-        var yesNoInputValue = new YesNoInputValue(expectedInt);
+        var expectedChar = 's';
+        var yesNoInputValue = new YesNoInputValue(expectedChar);
 
         // Act
         char? charValue = yesNoInputValue;
 
         // Assert
-        Assert.That(charValue, Is.EqualTo(expectedInt));
+        charValue.Should().Be(expectedChar);
     }
 
     [Test]
@@ -48,7 +49,7 @@ internal class YesNotInputValueTests
         bool isYes = yesNoInputValue.IsYes();
 
         // Assert
-        Assert.That(isYes, Is.True);
+        isYes.Should().BeTrue();
     }
 
     [Test]
@@ -61,7 +62,7 @@ internal class YesNotInputValueTests
         bool isYes = yesNoInputValue.IsYes();
 
         // Assert
-        Assert.That(isYes, Is.True);
+        isYes.Should().BeTrue();
     }
 
     [Test]
@@ -74,7 +75,7 @@ internal class YesNotInputValueTests
         bool isYes = yesNoInputValue.IsYes();
 
         // Assert
-        Assert.That(isYes, Is.False);
+        isYes.Should().BeFalse();
     }
 
     [Test]
@@ -87,7 +88,7 @@ internal class YesNotInputValueTests
         bool isYes = yesNoInputValue.IsYes();
 
         // Assert
-        Assert.That(isYes, Is.False);
+        isYes.Should().BeFalse();
     }
 
     [Test]
@@ -100,7 +101,7 @@ internal class YesNotInputValueTests
         bool isYes = yesNoInputValue.IsNo();
 
         // Assert
-        Assert.That(isYes, Is.False);
+        isYes.Should().BeFalse();
     }
 
     [Test]
@@ -113,7 +114,7 @@ internal class YesNotInputValueTests
         bool isYes = yesNoInputValue.IsNo();
 
         // Assert
-        Assert.That(isYes, Is.False);
+        isYes.Should().BeFalse();
     }
 
     [Test]
@@ -126,7 +127,7 @@ internal class YesNotInputValueTests
         bool isYes = yesNoInputValue.IsNo();
 
         // Assert
-        Assert.That(isYes, Is.True);
+        isYes.Should().BeTrue();
     }
 
     [Test]
@@ -139,7 +140,6 @@ internal class YesNotInputValueTests
         bool isYes = yesNoInputValue.IsNo();
 
         // Assert
-        Assert.That(isYes, Is.True);
+        isYes.Should().BeTrue();
     }
-
 }

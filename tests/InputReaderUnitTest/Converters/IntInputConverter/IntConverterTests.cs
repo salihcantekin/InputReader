@@ -1,6 +1,6 @@
 ﻿using InputReader.Converters;
 
-namespace InputReaderUnitTest.Converter.IntInputConverter;
+namespace InputReaderUnitTest.Converters.IntInputConverter;
 internal class IntConverterTests
 {
     private DefaultValueConverter<int> converter;
@@ -19,7 +19,7 @@ internal class IntConverterTests
         var expectedDefaultValue = 10;
 
         // Act
-        var success = converter.TryConvertFromString(defaultValueString, out var result);
+        var success = converter.TryConvert(defaultValueString, out var result);
 
         Assert.Multiple(() =>
         {
@@ -37,7 +37,7 @@ internal class IntConverterTests
         var defaultValueString = "10.5";
 
         // Act
-        var success = converter.TryConvertFromString(defaultValueString, out var result);
+        var success = converter.TryConvert(defaultValueString, out var result);
 
         Assert.Multiple(() =>
         {
@@ -55,7 +55,7 @@ internal class IntConverterTests
         var defaultValueString = "ten";
 
         // Act
-        var success = converter.TryConvertFromString(defaultValueString, out var result);
+        var success = converter.TryConvert(defaultValueString, out var result);
 
         Assert.Multiple(() =>
         {

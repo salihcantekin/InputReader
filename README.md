@@ -1,4 +1,10 @@
-#### TestConsoleApp - InputReader Usage Sample
+### Nuget
+
+[![](https://img.shields.io/nuget/dt/ConsoleInputReader?style=for-the-badge)](https://www.nuget.org/packages/ConsoleInputReader/)
+[![](https://img.shields.io/nuget/v/ConsoleInputReader?style=for-the-badge)](https://www.nuget.org/packages/ConsoleInputReader/)
+[![](https://img.shields.io/nuget/vpre/ConsoleInputReader?style=for-the-badge)](https://www.nuget.org/packages/ConsoleInputReader/)
+
+### TestConsoleApp - InputReader Usage Sample
 
 This document provides an overview and usage samples of the `InputReader` library, which is designed to simplify reading various types of inputs in console applications.
 
@@ -12,7 +18,8 @@ The `InputReader` library offers a range of features to make input handling more
 - **ReadDateOnly**: Parses a date input with a specific format from the console.
 - **ReadTimeOnly**: Parses a time input with a specific format from the console.
 - **ReadYesNo**: Reads yes or no input from the console.
-- (Add more features as per your library)
+- **ReadPassword**: Reads a password input from the console.
+- **ReadKey**: Reads a key input from the console.
 
 This readers also have extension methods to read until a valid input is provided. The validation can be customized by passing a predicate to the extension method as well as its type. For instance, you can read the input until it's a valid integer.
 
@@ -40,6 +47,7 @@ var oneOrTwoResult = Input.Int("Do you agree? ").WithAllowedValues(1, 2).Read();
 var yesNoResult = Input
                     .YesNo()
                     .WithMessage("Are you sure? ")
+                    .WithErrorMessage("Please enter either 'y' or 'n' ")
                     .WithAllowedValues(["y", "n"], caseInsensitive: true)
                     .Read();
 
@@ -47,6 +55,7 @@ var yesNoResult = Input
 var oneDigitIntegerResult = Input
                             .Int("Input a number that is one digit only")
                             .WithPreValidator(input => input?.Length == 1)
+                            //.WithAllowedValues(from: 0, to: 9) // In Range
                             .ReadUntilValid();
 
 // Read a date input with a provided format with a specific format
@@ -70,6 +79,20 @@ var timeResult_2_ = Input
                     .TimeOnly("Enter a time (HH:mm:ss): ", "HH:mm:ss")
                     .ReadUntilInRange(CustomTimeOnly.From(hour: 10), CustomTimeOnly.From(hour: 18));
 
+var passWordResult = Input
+                        .Password("Enter your password: ", Constants.Chars.NoChar) // No char will be shown
+                      //.PassWord("Enter your password: ", Constants.Chars.Asterisk) // Asterisk will be shown")  
+                        .Read();
+
+var keyResult = Input
+                    .Key("Press any key: ")
+                    //.ReadUntil(input => input.Is(ConsoleKey.R))
+                    //.ReadUntil(input => 
+                    //{
+                    //    return input.Value.Modifiers.HasFlag(ConsoleModifiers.Control) && input.Is(ConsoleKey.R);
+                    //})
+                    .ReadUntil(input => input.IsKeyChar('R'));
+
 ```
 
 All the readers, return a result object that's derived from `InputValue` class. This object contains the input value and a boolean property `IsValid` that indicates if the input is valid or not.
@@ -82,7 +105,9 @@ public record InputValue<T>(T Value)
 
     public bool IsValid { get; set; }
 
-    public override string ToString() => Value?.ToString();
+    protected internal virtual string DefaultErrorMessage => "Invalid value. Please try again.";
+
+    public sealed override string ToString() => Value?.ToString();
 
     public static implicit operator T(InputValue<T> wrapper)
     {

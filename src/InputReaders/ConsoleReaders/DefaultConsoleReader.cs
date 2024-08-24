@@ -1,24 +1,11 @@
 ﻿using InputReader.InputReaders.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace InputReader.InputReaders.ConsoleReaders;
 
-internal class DefaultConsoleReader : IInputReaderBase
+internal class DefaultConsoleReader : BaseConsoleReader, IInputReaderBase
 {
-    public virtual ConsoleKeyInfo ReadKey()
+    public object Read()
     {
-        return Console.ReadKey();
-    }
-
-    public virtual ConsoleKeyInfo ReadKey(bool intercept = false)
-    {
-        return Console.ReadKey(intercept);
-    }
-
-    public virtual string ReadLine()
-    {
-        return Console.ReadLine();
+        return InternalRead(readLine: true, false);
     }
 }

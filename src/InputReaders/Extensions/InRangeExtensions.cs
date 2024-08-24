@@ -4,10 +4,9 @@ namespace InputReader.InputReaders.Extensions;
 
 public static class InRangeExtensions
 {
-    public static TInputValueType ReadUntilInRange<TInputType, TInputValueType>(
-        this IInputReader<TInputType?, TInputValueType> reader,
-        TInputType? from,
-        TInputType? to)
+    public static TInputValueType ReadUntilInRange<TInputType, TInputValueType>(this IInputReader<TInputType?, TInputValueType> reader,
+                                                                                TInputType? from,
+                                                                                TInputType? to)
         where TInputType : struct, IInRangeCompatible<TInputType>
         where TInputValueType : InputValue<TInputType?>
     {
@@ -16,9 +15,9 @@ public static class InRangeExtensions
             // Ensure both input and range values are not null before calling IsInRange
             if (input.Value.HasValue && from.HasValue && to.HasValue)
             {
-                return input.Value.Value.IsInRange(from.Value, to.Value);
+                return IInRangeCompatible<TInputType>.IsInRange(input.Value.Value, from.Value, to.Value);
             }
-            
+
             // Handle cases where input or range values are null
             // Adjust this logic based on your requirements
             return false;

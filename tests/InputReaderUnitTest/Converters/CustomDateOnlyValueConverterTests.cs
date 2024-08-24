@@ -1,12 +1,7 @@
 ﻿using InputReader.Converters;
 using InputReader.Converters.CustomConverters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace InputReaderUnitTest.Converter;
+namespace InputReaderUnitTest.Converters;
 internal class CustomDateOnlyValueConverterTests
 {
     private DateOnlyValueConverter converter;
@@ -25,7 +20,7 @@ internal class CustomDateOnlyValueConverterTests
         var expectedDateOnly = new CustomDateOnly(2021, 12, 31);
 
         // Act
-        var success = converter.TryConvertFromString(dateOnlyString, out var result);
+        var success = converter.TryConvert(dateOnlyString, out var result);
 
         // Assert
         Assert.That(success, Is.True);
@@ -40,7 +35,7 @@ internal class CustomDateOnlyValueConverterTests
         var dateOnlyString = "2021-12-32";
 
         // Act
-        var success = converter.TryConvertFromString(dateOnlyString, out var result);
+        var success = converter.TryConvert(dateOnlyString, out var result);
 
         // Assert
         Assert.That(success, Is.False);
@@ -54,7 +49,7 @@ internal class CustomDateOnlyValueConverterTests
         var dateOnlyString = "2021-12-31T00:00:00";
 
         // Act
-        var success = converter.TryConvertFromString(dateOnlyString, out var result);
+        var success = converter.TryConvert(dateOnlyString, out var result);
 
         // Assert
         Assert.That(success, Is.False);

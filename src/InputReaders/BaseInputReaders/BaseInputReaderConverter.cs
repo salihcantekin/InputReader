@@ -1,28 +1,24 @@
 ﻿using InputReader.Converters;
 using InputReader.InputReaders.Interfaces;
-using System;
+using InputReader.InputReaders.Queue.QueueItems;
 
 namespace InputReader.InputReaders.BaseInputReaders;
 public abstract partial class BaseInputReader<TInputType, TInputValueType>
-    : IInputReader<TInputType, TInputValueType>, IPreValidatable<TInputType, TInputValueType>
+    : IInputReader<TInputType, TInputValueType>
     where TInputValueType : InputValue<TInputType>
 {
     private IValueConverter<TInputType> valueConverter;
 
     #region Converter Methods
 
-    public IInputReader<TInputType, TInputValueType> WithValueConverter(
+    internal IInputReader<TInputType, TInputValueType> SetValueConverter(
         IValueConverter<TInputType> converter)
     {
         valueConverter = converter;
 
-        return this;
-    }
+        var queueItem = GetOrCreateQueueItem(() => new ValueConverterQueueItem<TInputType>(valueConverter));
 
-    public IInputReader<TInputType, TInputValueType> WithValueConverter(
-        Func<string, TInputType> convertFunc)
-    {
-        (valueConverter as DefaultValueConverter<TInputType>).InternalFunc = convertFunc;
+        queueItem.SetInputReader(converter);
 
         return this;
     }

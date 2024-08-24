@@ -8,17 +8,17 @@ namespace InputReader.InputReaders.Extensions;
 public static class DateOnlyExtensions
 {
     public static DateOnlyInputValue ReadUntilInRange(
-        this IInputReader<CustomDateOnly?, DateOnlyInputValue> reader, string fromDate, string toDate, string format = "yyyy-MM-dd")
+        this IInputReader<CustomDateOnly?, DateOnlyInputValue> reader, string fromDate, string toDate, string format = Constants.Format.DateFormat)
     {
         DateOnlyValueConverter converter = new(format);
-        if (!converter.TryConvertFromString(fromDate, out CustomDateOnly? fromDateValue))
+        if (!converter.TryConvert(fromDate, out CustomDateOnly? fromDateValue))
         {
-            throw new ArgumentException("Invalid fromDate value");
+            throw new ArgumentException(Constants.Message.InvalidValueFormat.Format(nameof(fromDate)));
         }
 
-        if (!converter.TryConvertFromString(toDate, out CustomDateOnly? toDateValue))
+        if (!converter.TryConvert(toDate, out CustomDateOnly? toDateValue))
         {
-            throw new ArgumentException("Invalid toDate value");
+            throw new ArgumentException(Constants.Message.InvalidValueFormat.Format(nameof(toDate)));
         }
 
         return reader.ReadUntil(input =>

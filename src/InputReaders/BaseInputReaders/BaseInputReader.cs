@@ -1,142 +1,113 @@
-﻿using InputReader.AllowedValues;
-using InputReader.Converters;
+﻿using InputReader.Converters;
 using InputReader.InputReaders.ConsoleReaders;
 using InputReader.InputReaders.Interfaces;
+using InputReader.InputReaders.Queue;
+using InputReader.InputReaders.Queue.QueueItems;
 using InputReader.PrintProcessor;
-using InputReader.Validators;
 using System;
-using System.Collections.Frozen;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 
 namespace InputReader.InputReaders.BaseInputReaders;
 
-
-
-
-
-
-
 public abstract partial class BaseInputReader<TInputType, TInputValueType>
-: IInputReader<TInputType, TInputValueType>, IPreValidatable<TInputType, TInputValueType>
-where TInputValueType : InputValue<TInputType>
+: IInputReader<TInputType, TInputValueType>
+    where TInputValueType : InputValue<TInputType>
 {
     private IInputReaderBase consoleReader;
+    protected IPrintProcessor PrintProcessor;
 
-    internal readonly IPrintProcessor PrintProcessor;
-
-    private Action<TInputValueType, IPrintProcessor> iterationAction;
-
-
+    internal SortedList<int, IQueueItem> queueItems;
 
     public BaseInputReader()
     {
-        WithValueConverter(new DefaultValueConverter<TInputType>());
+        valueConverter = new DefaultValueConverter<TInputType>();
         PrintProcessor = new DefaultPrintProcessor();
         consoleReader = new DefaultConsoleReader();
+
+        queueItems = [];
+
+        AddItemToQueue(new ConsoleReadQueueItem(consoleReader));
+        AddItemToQueue(new ValueConverterQueueItem<TInputType>(valueConverter));
+        AddItemToQueue(new CreateInstanceQueueItem(typeof(TInputValueType)));
     }
 
-    internal void SetConsoleReader(IInputReaderBase reader)
-    {
-        consoleReader = reader;
-    }
-
-    #region Read Methods
-
-    // TODO: Refactor this method
-    // UNDONE
-    // MY_NEW_TODO
     public virtual TInputValueType Read()
     {
-        /* ############## STEPS #############
+        QueueItemResult itemResult = null;
+        IQueueItem item = null;
 
-          - Write Message (Opt)             -> (PrintProcessor)
-          - Read RawValue                   -> (IInputReaderBase)
-          - PreValidators
-
-          - AllowedValue Check (Opt) (rawValue)
-          - Use ValueConverter.Convert (ValueConverter)
-          - AllowedValue Check (Opt) (Converted Type) (OPT)
-
-          - PostValidators
-         */
-
-        var (success, value) = ReadGeneric();
-
-        var result = Activator.CreateInstance(typeof(TInputValueType), success ? value : null) as TInputValueType;
-
-        if (result is not null)
-            result.IsValid = success;
-
-        iterationAction?.Invoke(result, PrintProcessor);
-
-        return result;
-    }
-
-    protected (bool success, TInputType result) ReadGeneric()
-    {
-        try
+        for (int i = 0; i < queueItems.Count; i++)
         {
-            ProcessPrint();
+            item = queueItems.Values[i];
+            itemResult = item.Execute(itemResult);
 
-            var m = consoleReader.ReadLine();
-
-            // preValidators
-            if (AnyPreValidatorFailed(m))
-                return default;
-
-            // allowed values check
-            if (AllowedValuesCheckRequired() && !IsAllowedValue(m))
-                return default;
-
-            var success = valueConverter.TryConvertFromString(m, out var value);
-
-            if (!success)
-                return default;
-
-            // postValidators
-            if (AnyPostValidatorFailed(value))
-                return default;
-
-            return (true, value);
+            if (itemResult?.IsFailed == true)
+            {
+                break;
+            }
         }
-        catch (ArgumentException)
+
+        // in case of intance of TInputValueType NOT created yet (CreateInstanceQueueItem didn't worked)
+        if (itemResult.GetOutputParam(Constants.Queue.Params.InputValue) is not TInputValueType inputValue)
         {
-            return (false, default);
+            object value = itemResult.GetOutputParam(Constants.Queue.Params.ConvertedValue);
+            inputValue = Activator.CreateInstance(typeof(TInputValueType), value) as TInputValueType;
         }
+
+        inputValue.IsValid = !itemResult.IsFailed;
+        inputValue.FailReason = (item as IHasFailReason)?.FailReason ?? FailReason.UnKnown;
+
+        iteractionDelegate?.Invoke(inputValue, PrintProcessor);
+
+        return inputValue;
     }
 
-    public IInputReader<TInputType, TInputValueType> WithIteration(Action<TInputValueType, IPrintProcessor> action)
+    internal IInputReader<TInputType, TInputValueType> SetConsoleReader(IInputReaderBase reader)
     {
-        iterationAction = action;
-        return this;
-    }
+        consoleReader = reader;
 
-    #endregion
+        var queueItem = TryGetQueueItem<ConsoleReadQueueItem>();
 
-    #region Pre-Build Methods
-
-    #endregion
-
-
-
-
-
-
-
-    public virtual IInputReader<TInputType, TInputValueType> WithDefaultValue(TInputType defaultValue)
-    {
+        queueItem?.SetInputReader(reader);
 
         return this;
     }
 
-    private void ProcessPrint()
+    internal IInputReader<TInputType, TInputValueType> SetPrintProcessor(IPrintProcessor printProcessor)
     {
-        PrintProcessor.Print(generatedMessage);
+        PrintProcessor = printProcessor;
+        var queueItem = TryGetQueueItem<ProcessPrintQueueItem<TInputType>>();
 
-        if (IsAllowedValuesEnabled())
-            PrintProcessor.PrintAllowedValues(AllowedValueProcessor.Values, AllowedValueProcessor.IsCaseInSensitive);
+        queueItem?.SetPrintProcessor(printProcessor);
+
+        return this;
     }
 
+
+
+    internal void AddItemToQueue(IQueueItem item)
+    {
+        queueItems[item.Order] = item;
+    }
+
+    private T TryGetQueueItem<T>() where T : IQueueItem
+    {
+        T queueItem = (T)queueItems.Values.FirstOrDefault(queueItem => queueItem is T);
+
+        return queueItem;
+    }
+
+    private T GetOrCreateQueueItem<T>(Func<T> action) where T : IQueueItem
+    {
+        var queueItem = queueItems.FirstOrDefault(queueItems => queueItems.Value is T);
+
+        if (queueItems.ContainsKey(queueItem.Key)) // instance of T already created
+            return (T)queueItem.Value;
+
+        var item = action();
+        queueItems[item.Order] = item;
+
+        return item;
+    }
 }

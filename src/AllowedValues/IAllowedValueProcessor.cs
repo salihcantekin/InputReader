@@ -1,21 +1,32 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 
 namespace InputReader.AllowedValues;
 
-public interface IAllowedValueProcessor<T>
+internal interface IAllowedValueProcessor<TInputType>
 {
-    bool IsEnabled { get; }
+    bool IsAllowedEnabled { get; }
+    bool IsInRangeEnabled { get; }
     bool IsCaseInSensitive { get; }
 
-    IImmutableList<T> Values { get; }
+    string ErrorMessage { get; }
 
-    void SetEqualityComparer(IEqualityComparer<T> comparer);
+    IEnumerable<TInputType> AllowedValues { get; }
 
-    bool IsAllowedValue(T value);
+    void SetEqualityComparer(IEqualityComparer<TInputType> comparer);
 
-    void ClearAllowedValues();
+    bool? IsAllowedValue(TInputType value);
 
-    bool AddAllowedValue(T value);
-    void AddAllowedValues(IEnumerable<T> values);
+    bool? IsInRange(TInputType inputValueType);
+
+    void ResetAllAllowedValues();
+
+    bool AddAllowedValue(TInputType value);
+    void AddAllowedValues(IEnumerable<TInputType> values);
+
+    void SetErrorMessage(string message);
+
+    IEnumerable<(TInputType from, TInputType to)> InRangeValues { get; }
+
+    bool AddAllowedValue(TInputType from, TInputType to);
+
 }

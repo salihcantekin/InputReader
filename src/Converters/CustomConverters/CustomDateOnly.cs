@@ -1,10 +1,10 @@
-﻿using InputReader.InputReaders.Interfaces;
-using System;
+﻿using System;
 using System.Globalization;
 
 namespace InputReader.Converters.CustomConverters;
 
-public readonly struct CustomDateOnly(int year, int month, int day) : IComparable<CustomDateOnly>, IEquatable<CustomDateOnly>, IInRangeCompatible<CustomDateOnly>
+public readonly struct CustomDateOnly(int year, int month, int day) : IComparable<CustomDateOnly>,
+                                                                      IEquatable<CustomDateOnly>
 {
     internal readonly DateTime DateTime { get; } = new DateTime(year, month, day);
 
@@ -33,18 +33,13 @@ public readonly struct CustomDateOnly(int year, int month, int day) : IComparabl
         return false;
     }
 
-    public bool IsInRange(CustomDateOnly fromValue, CustomDateOnly toValue)
-    {
-        return this >= fromValue && this <= toValue;
-    }
-
     public int CompareTo(CustomDateOnly other) => DateTime.CompareTo(other.DateTime);
     public bool Equals(CustomDateOnly other) => DateTime.Equals(other.DateTime);
     public override bool Equals(object obj) => obj is CustomDateOnly other && Equals(other);
     public override int GetHashCode() => DateTime.GetHashCode();
-    public override string ToString() => DateTime.ToString("yyyy-MM-dd");
+    public override string ToString() => DateTime.ToString(Constants.Format.DateFormat);
 
-    
+
 
     public static bool operator ==(CustomDateOnly left, CustomDateOnly right) => left.Equals(right);
     public static bool operator !=(CustomDateOnly left, CustomDateOnly right) => !left.Equals(right);

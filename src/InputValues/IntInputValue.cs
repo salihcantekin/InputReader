@@ -1,6 +1,8 @@
-﻿namespace InputReader;
+﻿using InputReader.InputReaders.Interfaces;
 
-public record IntInputValue(int? Value) : InputValue<int?>(Value)
+namespace InputReader;
+
+public record IntInputValue(int? Value) : InputValue<int?>(Value), IInRangeCompatible<int?>
 {
     public bool Is(int value) => value == Value;
     public bool IsZero() => Is(0);
