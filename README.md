@@ -1,8 +1,11 @@
 ### Nuget
 
-[![](https://img.shields.io/nuget/dt/ConsoleInputReader?style=for-the-badge)](https://www.nuget.org/packages/ConsoleInputReader/)
-[![](https://img.shields.io/nuget/v/ConsoleInputReader?style=for-the-badge)](https://www.nuget.org/packages/ConsoleInputReader/)
-[![](https://img.shields.io/nuget/vpre/ConsoleInputReader?style=for-the-badge)](https://www.nuget.org/packages/ConsoleInputReader/)
+
+| Badge | Description | Link |
+|-------|-------------|------|
+| ![NuGet Downloads](https://img.shields.io/nuget/dt/ConsoleInputReader?style=for-the-badge) | NuGet Downloads | [NuGet Package](https://www.nuget.org/packages/ConsoleInputReader/) |
+| ![NuGet Version](https://img.shields.io/nuget/v/ConsoleInputReader?style=for-the-badge) | NuGet Version | [NuGet Package](https://www.nuget.org/packages/ConsoleInputReader/) |
+| ![NuGet Pre-release Version](https://img.shields.io/nuget/vpre/ConsoleInputReader?style=for-the-badge) | NuGet Pre-release Version | [NuGet Package](https://www.nuget.org/packages/ConsoleInputReader/) |
 
 ### TestConsoleApp - InputReader Usage Sample
 
